@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
+<div
+  class="App"
+>
+  <header
+    class="Header"
+  >
+    PolySwarm Relay
+  </header>
+  <div>
+    
+  </div>
+  <div
+    class="App-Chains"
+  >
+    <div>
+      
+    </div>
+    <div>
+      
+    </div>
+  </div>
+  <div>
+    
+  </div>
+</div>
+`;
