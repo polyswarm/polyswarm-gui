@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // Bounty Manager imports
 // Component imports
+import './styles.css';
+import strings from './strings';
 
 class Header extends Component {
   constructor(props) {
@@ -11,12 +13,14 @@ class Header extends Component {
 
   render() {
     return (
-        <div />
-    )
+        <header className="Header">
+          {strings.title}
+        </header>
+    );
   }
 
 }
 Header.proptypes = {
 
-}
+};
 export default Header;
