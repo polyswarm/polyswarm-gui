@@ -9,9 +9,20 @@ exports[`renders without crashing 1`] = `
   >
     PolySwarm Relay
   </header>
-  <div>
-    
-  </div>
+  <form>
+    <label
+      for="address"
+    >
+      
+    </label>
+    <input
+      id="address"
+      type="text"
+      value=""
+    >
+      
+    </input>
+  </form>
   <div
     class="App-Chains"
   >

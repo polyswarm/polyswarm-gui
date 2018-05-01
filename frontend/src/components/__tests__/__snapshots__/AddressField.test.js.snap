@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
+<form>
+  <label
+    for="address"
+  >
+    
+  </label>
+  <input
+    id="address"
+    type="text"
+    value=""
+  >
+    
+  </input>
+</form>
+`;
