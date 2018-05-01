@@ -1,5 +1,5 @@
 {
-  "name": "PolySwarm_Relay_GUI",
+  "name": "polyswarm_relay",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
