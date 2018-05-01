@@ -1,10 +1,10 @@
 import React from 'react';
-import {shallow, render, mount} from 'enzyme';
-import {renderToJson, shallowToJson} from 'enzyme-to-json';
+import {render} from 'enzyme';
+import {renderToJson} from 'enzyme-to-json';
 import LocalStorage from '../__mocks__/localstorage';
-import App from '../App';
+import Button from '../Button';
 
 it('renders without crashing', () => {
-  const wrapper = render(<App />);
+const wrapper = render(<Button />);
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
