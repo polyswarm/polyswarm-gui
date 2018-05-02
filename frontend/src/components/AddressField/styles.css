@@ -5,10 +5,10 @@
 
 .AddressField-Label {
     color: #a5a5a5;
-    line-height: 18px;
+    line-height: 24px;
     position: relative;
     user-select: none;
-    top: 32px;
+    top: 36px;
 }
 
 .AddressField-Input {
@@ -16,7 +16,7 @@
     border: #e5e5e5 2px solid;
     border-radius: 4px;
     box-sizing: border-box;
-    font-size: 18px;
+    font-size: 24px;
     height: 48px;
     line-height: 48px;
 }
@@ -31,34 +31,34 @@
 
 .label-enter {
     color: #a5a5a5;
-    font-size: 24px;
+    font-size: 36px;
     font-weight: normal;
     transform: translateY(0px);
 }
 .label-enter-active {
     color: rgb(46, 255, 109);
-    font-size: 18px;
+    font-size: 24px;
     font-weight: 300;
-    transform: translateY(-32px);
+    transform: translateY(-36px);
     transition: all 300ms ease-out;
 }
 
 .label-enter-done {
     color: rgb(46, 255, 109);
-    font-size: 18px;
+    font-size: 24px;
     font-weight: 300;
-    transform: translateY(-32px);
+    transform: translateY(-36px);
 }
 
 .label-exit {
     color: rgb(46, 255, 109);
-    font-size: 18px;
+    font-size: 24px;
     font-weight: 300;
-    transform: translateY(-32px);
+    transform: translateY(-36px);
 }
 .label-exit-active {
     color: #a5a5a5;
-    font-size: 24px;
+    font-size: 36px;
     font-weight: normal;
     transform: translateY(0px);
     transition: all 300ms ease-out;
@@ -66,7 +66,7 @@
 
 .label-exit-done {
     color: #a5a5a5;
-    font-size: 24px;
+    font-size: 36px;
     font-weight: normal;
     transform: translateY(0px);
 }
