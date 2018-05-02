@@ -19,7 +19,7 @@ class App extends Component {
     return (
       <div className="App">
         <CSSTransition
-          in={!address}
+          in={address.length == 0}
           classNames='fade'
           unmountOnExit
           timeout={300}>
@@ -27,7 +27,14 @@ class App extends Component {
             <Landing onSetAddress={this.onSetAddress}/>
           )}
         </CSSTransition>
-        <Transfer address={address}/>
+        <CSSTransition
+          in={address.length > 0}
+          classNames='fade'
+          timeout={300}>
+          {() => (
+            <Transfer address={address}/>
+          )}
+        </CSSTransition>
       </div>
     );
   }

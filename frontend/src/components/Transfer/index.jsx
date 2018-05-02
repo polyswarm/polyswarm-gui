@@ -19,14 +19,16 @@ class Transfer extends Component {
     return(
         <div className='Transfer'>
           <Header />
-          <AddressField 
-            onChange={this.onAddressChange}
-            address={address}/>
-          <div >
-            <ChainInfo />
-            <ChainInfo />
+          <div className='Transfer-Content'>
+            <AddressField
+              onChange={this.onAddressChange}
+              address={address}/>
+            <div >
+              <ChainInfo />
+              <ChainInfo />
+            </div>
+            <TransferForm />
           </div>
-          <TransferForm />
         </div>
     );
   }

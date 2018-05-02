@@ -9,3 +9,12 @@
     top: 0;
     width: 100vw;
 }
+
+.Transfer-Content {
+    margin: 20px;
+}
+
+.Transfer-Content > .AddressField {
+    margin: 0 auto;
+    width: 80%;
+}

@@ -42,7 +42,7 @@
 }
 
 .translate-enter {
-    transform: translateY(-48vh);
+    transform: translateY(-46vh);
 }
 
 .translate-enter-active {
@@ -55,10 +55,10 @@
 }
 
 .translate-exit-active {
-    transform: translateY(-48vh);
+    transform: translateY(-46vh);
     transition: all 300ms ease-out;
 }
 
 .translate-exit-done {
-    transform: translateY(-48vh);
+    transform: translateY(-46vh);
 }
