@@ -6,3 +6,7 @@
   height: 100vh;
   width: 100vw;
 }
+
+.App-Contents {
+  padding: 20px;
+}

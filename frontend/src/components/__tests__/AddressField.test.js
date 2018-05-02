@@ -26,3 +26,23 @@ it('calls onchange when address changed', () => {
 
   expect(onChange).toHaveBeenCalledWith('change');
 });
+
+it('sets error to true when set address is too short', () => {
+  const setState = jest.spyOn(AddressField.prototype, 'setState');
+  const wrapper = shallow(<AddressField />);
+  setState.mockClear();
+  
+  wrapper.find('input').simulate('change', {target: {value: 'change'}});
+
+  expect(setState).toHaveBeenCalledWith({address: 'change', error: true});
+});
+
+it('sets error to false when set address is long enough', () => {
+  const setState = jest.spyOn(AddressField.prototype, 'setState');
+  const wrapper = shallow(<AddressField />);
+  setState.mockClear();
+  
+  wrapper.find('input').simulate('change', {target: {value: '012345678901234'}});
+
+  expect(setState).toHaveBeenCalledWith({address: '012345678901234', error: false});
+});
