@@ -15,7 +15,8 @@ it('calls onchange when instance onChange is called', () => {
 
   instance.onChange({target:{value: 'change'}});
 
-  expect(onChange).toHaveBeenCalledWith('change');
+  expect(onChange).toHaveBeenCalledTimes(1);
+  expect(onChange).toHaveBeenCalledWith('change', false);
 });
 
 it('calls onchange when address changed', () => {
@@ -24,7 +25,28 @@ it('calls onchange when address changed', () => {
   
   wrapper.find('input').simulate('change', {target: {value: 'change'}});
 
-  expect(onChange).toHaveBeenCalledWith('change');
+  expect(onChange).toHaveBeenCalledTimes(1);
+  expect(onChange).toHaveBeenCalledWith('change', false);
+});
+
+it('calls onChange with valid:true when length over 14 characters', () => {
+  const onChange = jest.fn();
+  const wrapper = shallow(<AddressField onChange={onChange}/>);
+  
+  wrapper.find('input').simulate('change', {target: {value: '012345678912345'}});
+
+  expect(onChange).toHaveBeenCalledTimes(1);
+  expect(onChange).toHaveBeenCalledWith('012345678912345', true);
+});
+
+it('calls onchange with valid:true when length is 0', () => {
+  const onChange = jest.fn();
+  const wrapper = shallow(<AddressField onChange={onChange}/>);
+  
+  wrapper.find('input').simulate('change', {target: {value: ''}});
+
+  expect(onChange).toHaveBeenCalledTimes(1);
+  expect(onChange).toHaveBeenCalledWith('', true);
 });
 
 it('sets error to true when set address is too short', () => {

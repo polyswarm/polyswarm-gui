@@ -9,9 +9,8 @@ class App extends Component {
     this.state = {
       address: null,
     }
-
-    this.onAddressChange = this.onAddressChange.bind(this);
   }
+
   render() {
     const {state: {address}} = this;
     return (
@@ -20,10 +19,6 @@ class App extends Component {
         {address && <Transfer />}
       </div>
     );
-  }
-
-  onAddressChange(address) {
-    this.setState({address: address});
   }
 }
 

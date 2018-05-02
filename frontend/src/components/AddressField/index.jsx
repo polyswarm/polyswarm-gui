@@ -57,10 +57,11 @@ class AddressField extends Component {
   onChange(e) {
     const {props: {onChange}} = this;
     const address = e.target.value;
+    const valid = this.validateAddress(address)
     if (onChange) {
-      onChange(address);
+      onChange(address, valid);
     }
-    this.setState({address: address, error: !this.validateAddress(address)});
+    this.setState({address: address, error: !valid});
   }
 
   onFocus() {
