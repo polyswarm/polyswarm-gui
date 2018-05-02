@@ -4,12 +4,16 @@ exports[`renders without crashing 1`] = `
 <div
   class="AddressField"
 >
-  <label
-    class="AddressField-Label"
-    for="address"
-  >
-    Enter address
-  </label>
+  <div>
+    <div>
+      <label
+        class="AddressField-Label"
+        for="address"
+      >
+        Enter address
+      </label>
+    </div>
+  </div>
   <input
     class="AddressField-Input"
     id="address"

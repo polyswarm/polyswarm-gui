@@ -21,12 +21,16 @@ exports[`renders without crashing 1`] = `
       <div
         class="AddressField"
       >
-        <label
-          class="AddressField-Label"
-          for="address"
-        >
-          Enter address
-        </label>
+        <div>
+          <div>
+            <label
+              class="AddressField-Label"
+              for="address"
+            >
+              Enter address
+            </label>
+          </div>
+        </div>
         <input
           class="AddressField-Input"
           id="address"
@@ -36,7 +40,9 @@ exports[`renders without crashing 1`] = `
           
         </input>
       </div>
-      <button>
+      <button
+        class="Button"
+      >
         Go!
       </button>
     </div>

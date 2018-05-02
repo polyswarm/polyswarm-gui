@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import {CSSTransition} from 'react-transition-group';
 // Project imports
 // Component imports
 import strings from './strings';
@@ -12,29 +13,45 @@ class AddressField extends Component {
     super(props);
     this.state = {
       address: '',
+      focused: false,
       error: false
     }
 
+    this.onBlur = this.onBlur.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.onFocus = this.onFocus.bind(this);
   }
 
   render() {
-    const {state: {address, error} } = this;
+    const {state: {address, error, focused} } = this;
     const inputClass = classNames('AddressField-Input', {error: error});
     return (
         <div className='AddressField'>
-          <label className='AddressField-Label'
-            htmlFor='address'>
-            {strings.address}
-          </label>
+          <CSSTransition
+            in={address.length > 0 || focused}
+            timeout={300}
+            classNames='label'> 
+            {() => (
+              <label className='AddressField-Label'
+                htmlFor='address'>
+                {strings.address}
+              </label>
+            )}
+          </CSSTransition>
           <input
             className={inputClass}
             id='address'
             type='text'
             value={address}
+            onBlur={this.onBlur}
+            onFocus={this.onFocus}
             onChange={this.onChange}/>
         </div>
     );
+  }
+
+  onBlur() {
+    this.setState({focused: false});
   }
 
   onChange(e) {
@@ -44,6 +61,10 @@ class AddressField extends Component {
       onChange(address);
     }
     this.setState({address: address, error: !this.validateAddress(address)});
+  }
+
+  onFocus() {
+    this.setState({focused: true});
   }
 
   validateAddress(address) {
