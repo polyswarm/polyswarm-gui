@@ -4,44 +4,45 @@ exports[`renders without crashing 1`] = `
 <div
   class="App"
 >
-  <header
-    class="Header"
-  >
-    PolySwarm Relay
-  </header>
   <div
-    class="App-Contents"
+    class="Landing"
   >
     <div
-      class="AddressField"
+      class="Landing-Background"
     >
-      <label
-        class="AddressField-Label"
-        for="address"
-      >
-        Enter address
-      </label>
-      <input
-        class="AddressField-Input"
-        id="address"
-        type="text"
-        value=""
-      >
-        
-      </input>
+      
     </div>
     <div
-      class="App-Chains"
+      class="Landing-Content"
     >
-      <div>
-        
+      <h1>
+        PolySwarm Relay
+      </h1>
+      <div
+        class="Landing-Address"
+      >
+        <div
+          class="AddressField"
+        >
+          <label
+            class="AddressField-Label"
+            for="address"
+          >
+            Enter address
+          </label>
+          <input
+            class="AddressField-Input"
+            id="address"
+            type="text"
+            value=""
+          >
+            
+          </input>
+        </div>
+        <button>
+          Go!
+        </button>
       </div>
-      <div>
-        
-      </div>
-    </div>
-    <div>
-      
     </div>
   </div>
 </div>

@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import Header from '../Header';
-import AddressField from '../AddressField';
-import ChainInfo from '../ChainInfo';
-import TransferForm from '../TransferForm';
-import Button from '../Button';
+import Landing from '../Landing';
+import Transfer from '../Transfer';
 import './styles.css';
 
 class App extends Component {
@@ -16,17 +13,11 @@ class App extends Component {
     this.onAddressChange = this.onAddressChange.bind(this);
   }
   render() {
+    const {state: {address}} = this;
     return (
       <div className="App">
-        <Header />
-        <div className="App-Contents">
-          <AddressField onChange={this.onAddressChange} />
-          <div className="App-Chains">
-            <ChainInfo />
-            <ChainInfo />
-          </div>
-          <TransferForm />
-        </div>
+        {!address && <Landing />}
+        {address && <Transfer />}
       </div>
     );
   }

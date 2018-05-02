@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
+<div
+  class="Landing"
+>
+  <div
+    class="Landing-Background"
+  >
+    
+  </div>
+  <div
+    class="Landing-Content"
+  >
+    <h1>
+      PolySwarm Relay
+    </h1>
+    <div
+      class="Landing-Address"
+    >
+      <div
+        class="AddressField"
+      >
+        <label
+          class="AddressField-Label"
+          for="address"
+        >
+          Enter address
+        </label>
+        <input
+          class="AddressField-Input"
+          id="address"
+          type="text"
+          value=""
+        >
+          
+        </input>
+      </div>
+      <button>
+        Go!
+      </button>
+    </div>
+  </div>
+</div>
+`;

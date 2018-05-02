@@ -1,0 +1,31 @@
+.Landing {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    top: 0;
+    widows: 100%;
+}
+
+.Landing-Content {
+    color: white;
+    z-index: 2;
+}
+
+.Landing-Background {
+    background-color: #8500ff;
+    display: block;
+    height: 100vh;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    z-index: 1;
+}
+
+.Landing-Address {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}

@@ -1,7 +1,7 @@
 // Vendor imports
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// Bounty Manager imports
+// Project imports
 // Component imports
 
 class Button extends Component {
@@ -10,12 +10,17 @@ class Button extends Component {
   }
 
   render() {
+    const {props: {children}} = this;
     return (
-        <div />
+        <button {...this.props} >
+          {children}
+        </button>
     );
   }
 }
 Button.proptypes = {
-
+  disable: PropTypes.bool,
+  onClick: PropTypes.func,
+  children: PropTypes.string
 }
 export default Button;
