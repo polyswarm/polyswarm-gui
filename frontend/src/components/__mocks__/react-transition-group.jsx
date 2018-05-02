@@ -7,13 +7,13 @@ class CSSTransition extends Component {
     const show = this.props.in;
     const {props: {children, enterOnMount}} = this;
     return (
-      <div>
+      <React.Fragment>
         {(show || !enterOnMount) && (
-          <div>
+          <React.Fragment>
             {children('entered')}
-          </div>
+          </React.Fragment>
         )}
-      </div>
+      </React.Fragment>
     );
   }
 
