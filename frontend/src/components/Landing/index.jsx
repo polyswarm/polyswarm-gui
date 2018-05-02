@@ -15,7 +15,7 @@ class Landing extends Component {
     this.state = {
         address: '',
         error: false,
-        hide: false,
+        hide: false
     };
 
     this.onAddressChanged = this.onAddressChanged.bind(this);
@@ -23,52 +23,33 @@ class Landing extends Component {
   }
 
   render() {
-    const {state: {error, address, hide} } = this;
+    const {state: {error, address, hide, finished} } = this;
     return(
       <div className='Landing'>
-        <CSSTransition
-          in={!hide}
-          classNames='fade'
-          unmountOnExit
-          timeout={300}>
-          {() => (
-              <div className='Landing-Background'/>
-          )}
-        </CSSTransition>
+        <div className='Landing-Background'/>
         <div className='Landing-Content'>
-          <CSSTransition
-            in={!hide}
-            classNames='fade'
-            unmountOnExit
-            timeout={300}>
-            {() => (
-              <h1>{strings.title}</h1>
-            )}
-          </CSSTransition>
+          <h1>{strings.title}</h1>
           <div className='Landing-Address'>
             <CSSTransition
               in={!hide}
               classNames='translate'
-              unmountOnExit
-              timeout={500}>
+              onExited={() => {
+                const {props: {onSetAddress}, state: {address}} = this;
+                if (onSetAddress) {
+                  onSetAddress(address);
+                }
+              }}
+              timeout={300}>
               {() => (
                 <AddressField onChange={this.onAddressChanged}
                   address={address} />
               )}
             </CSSTransition>
-            <CSSTransition
-              in={!hide}
-              classNames='fade'
-              unmountOnExit
-              timeout={300}>
-              {() => (
-                <Button
-                  disabled={error || address.length == 0}
-                  onClick={this.onButtonClick} >
-                  {strings.go}
-                </Button>
-              )}
-            </CSSTransition>
+            <Button
+              disabled={error || address.length == 0}
+              onClick={this.onButtonClick} >
+              {strings.go}
+            </Button>
           </div>
         </div>
       </div>
@@ -85,6 +66,6 @@ class Landing extends Component {
 
 }
 Landing.proptypes = {
-
+  onSetAddress: PropTypes.func
 }
 export default Landing;

@@ -7,6 +7,7 @@ import AddressField from '../AddressField';
 import ChainInfo from '../ChainInfo';
 import TransferForm from '../TransferForm';
 // Component imports
+import './styles.css';
 
 class Transfer extends Component {
   constructor(props) {
@@ -14,10 +15,13 @@ class Transfer extends Component {
   }
 
   render() {
+    const {props: {address}} = this;
     return(
-        <div>
-          <Header />  
-          <AddressField onChange={this.onAddressChange} />
+        <div className='Transfer'>
+          <Header />
+          <AddressField 
+            onChange={this.onAddressChange}
+            address={address}/>
           <div >
             <ChainInfo />
             <ChainInfo />
@@ -29,6 +33,6 @@ class Transfer extends Component {
 
 }
 Transfer.proptypes = {
-
+  address: PropTypes.string
 }
 export default Transfer;

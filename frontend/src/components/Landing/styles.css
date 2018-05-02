@@ -41,32 +41,13 @@
     height: 48px;
 }
 
-.fade-enter {
-    opacity: 0.1;
-}
-
-.fade-enter-active {
-    opacity: 1;
-    transition: all 300ms ease-out;
-}
-
-.fade-exit {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.fade-exit-active {
-    opacity: 0.1;
-    transition: all 300ms ease-out;
-}
-
 .translate-enter {
-    transform: translateY(-32vh);
+    transform: translateY(-48vh);
 }
 
 .translate-enter-active {
     transform: translateY(0);
-    transition: all 500ms ease-out;
+    transition: all 300ms ease-out;
 }
 
 .translate-exit {
@@ -74,6 +55,10 @@
 }
 
 .translate-exit-active {
-    transform: translateY(-32vh);
-    transition: all 500ms ease-out;
+    transform: translateY(-48vh);
+    transition: all 300ms ease-out;
+}
+
+.translate-exit-done {
+    transform: translateY(-48vh);
 }
