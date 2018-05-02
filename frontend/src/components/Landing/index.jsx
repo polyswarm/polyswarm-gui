@@ -52,7 +52,8 @@ class Landing extends Component {
               unmountOnExit
               timeout={500}>
               {() => (
-                <AddressField onChange={this.onAddressChanged} />
+                <AddressField onChange={this.onAddressChanged}
+                  address={address} />
               )}
             </CSSTransition>
             <CSSTransition

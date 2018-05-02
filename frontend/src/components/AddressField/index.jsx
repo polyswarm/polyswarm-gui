@@ -12,23 +12,29 @@ class AddressField extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      address: '',
       focused: false,
-      error: false
+      error: false,
+      first: true,
     }
 
     this.onBlur = this.onBlur.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onFocus = this.onFocus.bind(this);
+    this.getAddress = this.getAddress.bind(this);
+  }
+
+  componentDidMount() {
+    this.setState({first: false});
   }
 
   render() {
-    const {state: {address, error, focused} } = this;
+    const {state: {error, focused} } = this;
+    const address = this.getAddress();
     const inputClass = classNames('AddressField-Input', {error: error});
     return (
         <div className='AddressField'>
           <CSSTransition
-            in={address.length > 0 || focused}
+            in={(address && address.length > 0) || focused}
             timeout={300}
             classNames='label'> 
             {() => (
@@ -61,11 +67,24 @@ class AddressField extends Component {
     if (onChange) {
       onChange(address, valid);
     }
-    this.setState({address: address, error: !valid});
+    this.setState({error: !valid});
   }
 
   onFocus() {
     this.setState({focused: true});
+  }
+
+  /**
+   * This triggers a redraw of the element so we get CSSTransition to animate
+   * when the address is set as a prop for the first draw.
+   */
+  getAddress() {
+    const { state: {first}, props: {address}} = this;
+    if (first) {
+      return '';
+    } else {
+      return address;
+    }
   }
 
   validateAddress(address) {
@@ -74,5 +93,6 @@ class AddressField extends Component {
 }
 AddressField.proptypes = {
   onChange: PropTypes.func,
+  address: PropTypes.string
 }
 export default AddressField;

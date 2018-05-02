@@ -56,7 +56,7 @@ it('sets error to true when set address is too short', () => {
   
   wrapper.find('input').simulate('change', {target: {value: 'change'}});
 
-  expect(setState).toHaveBeenCalledWith({address: 'change', error: true});
+  expect(setState).toHaveBeenCalledWith({error: true});
 });
 
 it('sets error to false when set address is long enough', () => {
@@ -66,5 +66,5 @@ it('sets error to false when set address is long enough', () => {
   
   wrapper.find('input').simulate('change', {target: {value: '012345678901234'}});
 
-  expect(setState).toHaveBeenCalledWith({address: '012345678901234', error: false});
+  expect(setState).toHaveBeenCalledWith({error: false});
 });
