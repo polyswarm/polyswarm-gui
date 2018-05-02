@@ -14,6 +14,7 @@ class Landing extends Component {
     this.state = {
         address: '',
         error: false,
+        hide: false,
     };
   }
 

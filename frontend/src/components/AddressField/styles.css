@@ -12,9 +12,9 @@
     border: #e5e5e5 2px solid;
     border-radius: 4px;
     box-sizing: border-box;
-    font-size: 24px;
-    height: 36px;
-    line-height: 36px;
+    font-size: 18px;
+    height: 48px;
+    line-height: 48px;
 }
 
 .error {

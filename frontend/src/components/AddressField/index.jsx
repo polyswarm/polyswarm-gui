@@ -47,7 +47,7 @@ class AddressField extends Component {
   }
 
   validateAddress(address) {
-    return address.length > 14;
+    return address.length == 0 || address.length > 14;
   }
 }
 AddressField.proptypes = {
