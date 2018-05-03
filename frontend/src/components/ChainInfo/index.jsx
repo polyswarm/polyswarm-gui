@@ -17,15 +17,13 @@ class ChainInfo extends Component {
   render() {
     const {props: {name, transfer, balance, sender}} = this;
     const remaining = sender ? Number(balance) - Number(transfer) : Number(balance) + Number(transfer);
-    const source = classNames('Balance',{'Sender': sender});
+    const source = classNames('ChainInfo', {'Source': sender});
     return (
-        <div className='ChainInfo'
+        <div className={source}
           onClick={this.onClick}>
-          <h3>{name}</h3>
-          <p>{strings.current}</p>
-          <p>{balance}</p>
-          <p>{strings.adjusted}</p>
-          <p className={source}>{remaining}</p>
+            <h2>{name}</h2>
+            <p>{strings.current}{balance}</p>
+            <p>{strings.adjusted}{remaining}</p>
         </div>
     )
   }

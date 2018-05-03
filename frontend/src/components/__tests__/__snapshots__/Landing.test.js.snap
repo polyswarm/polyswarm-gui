@@ -18,45 +18,29 @@ exports[`renders without crashing 1`] = `
       class="Landing-Chain"
     >
       <div
-        class="ChainInfo"
+        class="ChainInfo Source"
       >
-        <h3>
+        <h2>
           Mainnet
-        </h3>
+        </h2>
         <p>
-          Current Balance
+          Current Balance: 10
         </p>
         <p>
-          10
-        </p>
-        <p>
-          Balance after Transfer
-        </p>
-        <p
-          class="Balance Sender"
-        >
-          9.5
+          Balance after Transfer: 9.5
         </p>
       </div>
       <div
         class="ChainInfo"
       >
-        <h3>
+        <h2>
           PolySwarm sidechain
-        </h3>
+        </h2>
         <p>
-          Current Balance
+          Current Balance: 0
         </p>
         <p>
-          0
-        </p>
-        <p>
-          Balance after Transfer
-        </p>
-        <p
-          class="Balance"
-        >
-          0.5
+          Balance after Transfer: 0.5
         </p>
       </div>
     </div>

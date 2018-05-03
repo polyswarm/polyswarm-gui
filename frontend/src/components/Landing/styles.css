@@ -19,7 +19,8 @@
 
 .Landing-Chain {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 .Landing-Nectar {

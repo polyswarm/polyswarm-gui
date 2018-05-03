@@ -14,7 +14,8 @@
 .NectarField-Input {
     background-color: rgba(0, 0, 0, 0);
     border: none;
-    border-bottom: #000000 2px solid;
+    border-bottom: white 2px solid;
+    color: white;
     box-sizing: border-box;
     font-size: 24px;
     height: 48px;
