@@ -4,6 +4,8 @@ exports[`renders without crashing 1`] = `
 <header
   class="Header"
 >
-  PolySwarm Relay
+  <h2>
+    PolySwarm Relay
+  </h2>
 </header>
 `;

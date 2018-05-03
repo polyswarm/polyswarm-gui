@@ -11,21 +11,21 @@ it('renders without crashing', () => {
 it('calls onNectarChanged when NectarField is changed', () => {
   const onNectarChanged = jest.spyOn(Landing.prototype, 'onNectarChanged');
   const wrapper = mount(<Landing />);
-  wrapper.find('.NectarField').find('input').simulate('change', {target: {value: 'a'}});
+  wrapper.find('.NectarField').find('input').simulate('change', {target: {value: '1'}});
 
-  expect(onNectarChanged).toHaveBeenCalledWith('a', false);
+  expect(onNectarChanged).toHaveBeenCalledWith('1', true);
 });
 
-it('disables the Go button when 0 < length < requirements in NectarField ', () => {
+it('disables the button when nectar is negative', () => {
   const wrapper = mount(<Landing />);
-  wrapper.find('.NectarField').find('input').simulate('change', {target: {value: 'a'}});
+  wrapper.find('.NectarField').find('input').simulate('change', {target: {value: '-1'}});
 
   expect(wrapper.find('.Button').props().disabled).toBeTruthy();
 });
 
 it('enables the Go button when nectar meets length requirements in NectarField', () => {
   const wrapper = mount(<Landing />);
-  wrapper.find('.NectarField').find('input').simulate('change', {target: {value: '012345678912345'}});
+  wrapper.find('.NectarField').find('input').simulate('change', {target: {value: '1'}});
 
   expect(wrapper.find('.Button').props().disabled).toBeFalsy();
 });
@@ -41,37 +41,44 @@ it('calls setstate with the nectar when nectar modified', () => {
   const setState = jest.spyOn(Landing.prototype, 'setState');
   const wrapper = mount(<Landing />);
 
-  wrapper.find('.NectarField').find('input').simulate('change', {target: {value: '012345678912345'}});
+  wrapper.find('.NectarField').find('input').simulate('change', {target: {value: '1'}});
 
-  expect(setState).toHaveBeenCalledWith({nectar: '012345678912345', error: false});
+  expect(setState).toHaveBeenCalledWith({nectar: '1', error: false});
 });
 
 it('calls setstate with the nectar & error true when nectar modified with invalid value', () => {
   const setState = jest.spyOn(Landing.prototype, 'setState');
   const wrapper = mount(<Landing />);
+  setState.mockClear();
+  wrapper.find('.NectarField').find('input').simulate('change', {target: {value: '0'}});
 
-  wrapper.find('.NectarField').find('input').simulate('change', {target: {value: '012345912345'}});
-
-  expect(setState).toHaveBeenCalledWith({nectar: '012345912345', error: true});
+  expect(setState).toHaveBeenCalledWith({nectar: '0', error: true});
 });
 
-it('sets hide to true when button is clicked', () => {
-  const setState = jest.spyOn(Landing.prototype, 'setState');
-  const wrapper = mount(<Landing />);
+it('calls onTransfer button is clicked', () => {
+  const onTransfer = jest.fn();
+  const wrapper = mount(<Landing onTransfer={onTransfer} />);
   wrapper.setState({nectar: '0123456789123456'});
-  setState.mockClear();
   wrapper.find('button').simulate('click');
 
-  expect(setState).toHaveBeenCalledWith({hide: true});
+  expect(onTransfer).toHaveBeenCalledWith('0123456789123456', 0);
 });
 
-it('should call onSetNectar when transition finishes', () => {
-  const onSetNectar = jest.fn();
-  const wrapper = mount(<Landing onSetNectar={onSetNectar} />);
-  wrapper.setState({nectar: '0123456789123456'});
+it('calls select when ChainInfo clicked', () => {
+  const select = jest.spyOn(Landing.prototype, 'select');
+  const wrapper = mount(<Landing />);
+  
+  wrapper.find('.ChainInfo').last().simulate('click');
 
-  const instance = wrapper.find('CSSTransition').first().instance();
-  instance.onExited();
+  expect(select).toHaveBeenCalledWith(1);
+});
 
-  expect(onSetNectar).toHaveBeenCalledWith('0123456789123456');
+
+it('changes selected when ChainInfo selected', () => {
+  const setState = jest.spyOn(Landing.prototype, 'setState');
+  const wrapper = mount(<Landing />);
+  setState.mockClear();
+  wrapper.find('.ChainInfo').last().simulate('click');
+
+  expect(setState).toHaveBeenCalledWith({selected: 1});
 });

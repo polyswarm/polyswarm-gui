@@ -4,19 +4,64 @@ exports[`renders without crashing 1`] = `
 <div
   class="Landing"
 >
-  <div
-    class="Landing-Background"
+  <header
+    class="Header"
   >
-    
-  </div>
+    <h2>
+      PolySwarm Relay
+    </h2>
+  </header>
   <div
     class="Landing-Content"
   >
-    <h1>
-      PolySwarm Relay
-    </h1>
     <div
-      class="Landing-nectar"
+      class="Landing-Chain"
+    >
+      <div
+        class="ChainInfo"
+      >
+        <h3>
+          Mainnet
+        </h3>
+        <p>
+          Current Balance
+        </p>
+        <p>
+          10
+        </p>
+        <p>
+          Balance after Transfer
+        </p>
+        <p
+          class="Balance Sender"
+        >
+          9.5
+        </p>
+      </div>
+      <div
+        class="ChainInfo"
+      >
+        <h3>
+          PolySwarm sidechain
+        </h3>
+        <p>
+          Current Balance
+        </p>
+        <p>
+          0
+        </p>
+        <p>
+          Balance after Transfer
+        </p>
+        <p
+          class="Balance"
+        >
+          0.5
+        </p>
+      </div>
+    </div>
+    <div
+      class="Landing-Nectar"
     >
       <div
         class="NectarField"
@@ -30,7 +75,7 @@ exports[`renders without crashing 1`] = `
         <input
           class="NectarField-Input"
           id="nectar"
-          type="text"
+          type="number"
           value=""
         >
           
@@ -38,9 +83,8 @@ exports[`renders without crashing 1`] = `
       </div>
       <button
         class="Button"
-        disabled=""
       >
-        Go!
+        Transfer!
       </button>
     </div>
   </div>

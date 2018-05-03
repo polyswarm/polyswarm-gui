@@ -1,6 +1,6 @@
 const strings = {
   title: 'PolySwarm Relay',
-  go: 'Go!'
+  transfer: 'Transfer!'
 };
 
 export default strings;

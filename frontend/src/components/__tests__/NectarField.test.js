@@ -29,42 +29,72 @@ it('calls onchange when nectar changed', () => {
   expect(onChange).toHaveBeenCalledWith('change', false);
 });
 
-it('calls onChange with valid:true when length over 14 characters', () => {
+it('calls onChange with valid:true when value is over 0 ', () => {
   const onChange = jest.fn();
   const wrapper = shallow(<NectarField onChange={onChange}/>);
   
-  wrapper.find('input').simulate('change', {target: {value: '012345678912345'}});
+  wrapper.find('input').simulate('change', {target: {value: .0000000000000001}});
 
   expect(onChange).toHaveBeenCalledTimes(1);
-  expect(onChange).toHaveBeenCalledWith('012345678912345', true);
+  expect(onChange).toHaveBeenCalledWith(.0000000000000001, true);
 });
 
-it('calls onchange with valid:true when length is 0', () => {
+it('calls onchange with valid:false when empty', () => {
   const onChange = jest.fn();
   const wrapper = shallow(<NectarField onChange={onChange}/>);
   
   wrapper.find('input').simulate('change', {target: {value: ''}});
 
   expect(onChange).toHaveBeenCalledTimes(1);
-  expect(onChange).toHaveBeenCalledWith('', true);
+  expect(onChange).toHaveBeenCalledWith('', false);
 });
 
-it('sets error to true when set nectar is too short', () => {
+it('calls onchange with valid:false value is 0', () => {
+  const onChange = jest.fn();
+  const wrapper = shallow(<NectarField onChange={onChange}/>);
+  
+  wrapper.find('input').simulate('change', {target: {value: 0}});
+
+  expect(onChange).toHaveBeenCalledTimes(1);
+  expect(onChange).toHaveBeenCalledWith(0, false);
+});
+
+it('calls onchange with valid:false value is less than 0', () => {
+  const onChange = jest.fn();
+  const wrapper = shallow(<NectarField onChange={onChange}/>);
+  
+  wrapper.find('input').simulate('change', {target: {value: -1}});
+
+  expect(onChange).toHaveBeenCalledTimes(1);
+  expect(onChange).toHaveBeenCalledWith(-1, false);
+});
+
+it('sets error to true when set nectar is 0', () => {
   const setState = jest.spyOn(NectarField.prototype, 'setState');
   const wrapper = shallow(<NectarField />);
   setState.mockClear();
   
-  wrapper.find('input').simulate('change', {target: {value: 'change'}});
+  wrapper.find('input').simulate('change', {target: {value: 0}});
 
   expect(setState).toHaveBeenCalledWith({error: true});
 });
 
-it('sets error to false when set nectar is long enough', () => {
+it('sets error to true when set nectar is less than 0', () => {
   const setState = jest.spyOn(NectarField.prototype, 'setState');
   const wrapper = shallow(<NectarField />);
   setState.mockClear();
   
-  wrapper.find('input').simulate('change', {target: {value: '012345678901234'}});
+  wrapper.find('input').simulate('change', {target: {value: -1}});
+
+  expect(setState).toHaveBeenCalledWith({error: true});
+});
+
+it('sets error to false when set nectar is greater than 0', () => {
+  const setState = jest.spyOn(NectarField.prototype, 'setState');
+  const wrapper = shallow(<NectarField />);
+  setState.mockClear();
+  
+  wrapper.find('input').simulate('change', {target: {value: '1'}});
 
   expect(setState).toHaveBeenCalledWith({error: false});
 });

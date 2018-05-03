@@ -14,7 +14,7 @@ class Header extends Component {
   render() {
     return (
         <header className="Header">
-          {strings.title}
+          <h2>{strings.title}</h2>
         </header>
     );
   }

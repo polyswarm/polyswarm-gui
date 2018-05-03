@@ -5,6 +5,8 @@ import {CSSTransition} from 'react-transition-group';
 // Project imports
 import NectarField from '../NectarField';
 import Button from '../Button';
+import ChainInfo from '../ChainInfo';
+import Header from '../Header';
 // Component imports
 import strings from  './strings.js';
 import './styles.css';
@@ -14,41 +16,42 @@ class Landing extends Component {
     super(props);
     this.state = {
         nectar: '0.5',
+        selected: 0,
         error: false,
-        hide: false
     };
 
     this.onNectarChanged = this.onNectarChanged.bind(this);
     this.onButtonClick = this.onButtonClick.bind(this);
+    this.select = this.select.bind(this);
   }
 
   render() {
-    const {state: {error, nectar, hide, finished} } = this;
+    const {state: {error, nectar, selected} } = this;
     return(
       <div className='Landing'>
-        <div className='Landing-Background'/>
-        <div className='Landing-Content'>
+        <Header>
           <h1>{strings.title}</h1>
-          <div className='Landing-nectar'>
-            <CSSTransition
-              in={!hide}
-              classNames='translate'
-              onExited={() => {
-                const {props: {onSetNectar}, state: {nectar}} = this;
-                if (onSetNectar) {
-                  onSetNectar(nectar);
-                }
-              }}
-              timeout={300}>
-              {() => (
-                <NectarField onChange={this.onNectarChanged}
-                  nectar={nectar} />
-              )}
-            </CSSTransition>
+        </Header>
+        <div className='Landing-Content'>
+          <div className='Landing-Chain'>
+            <ChainInfo onClick={() => this.select(0)}
+              name={'Mainnet'}
+              balance={'10'}
+              transfer={nectar}
+              sender={selected == 0}/>
+            <ChainInfo onClick={() => this.select(1)}
+              name={'PolySwarm sidechain'}
+              balance={'0'}
+              transfer={nectar}
+              sender={selected == 1}/>
+          </div>
+          <div className='Landing-Nectar'>
+            <NectarField onChange={this.onNectarChanged}
+              nectar={nectar} />
             <Button
               disabled={error || nectar == 0}
               onClick={this.onButtonClick} >
-              {strings.go}
+              {strings.transfer}
             </Button>
           </div>
         </div>
@@ -61,11 +64,18 @@ class Landing extends Component {
   }
 
   onButtonClick() {
-    this.setState({hide: true});
+    const {props: {onTransfer}, state: {nectar, selected}} = this;
+    if (onTransfer) {
+      onTransfer(nectar, selected);
+    }
+  }
+
+  select(index) {
+    this.setState({selected: index});
   }
 
 }
 Landing.proptypes = {
-  onSetNectar: PropTypes.func
+  onTransfer: PropTypes.func
 }
 export default Landing;

@@ -1,7 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders without crashing 1`] = `
-<div>
-  
+<div
+  class="ChainInfo"
+>
+  <h3>
+    
+  </h3>
+  <p>
+    Current Balance
+  </p>
+  <p>
+    0
+  </p>
+  <p>
+    Balance after Transfer
+  </p>
+  <p
+    class="Balance"
+  >
+    0
+  </p>
 </div>
 `;

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {CSSTransition} from 'react-transition-group';
 import Landing from '../Landing';
-import Transfer from '../Transfer';
 import './styles.css';
 
 class App extends Component {
@@ -18,23 +17,7 @@ class App extends Component {
     const {state: {nectar}} = this;
     return (
       <div className="App">
-        <CSSTransition
-          in={nectar.length == 0}
-          classNames='fade'
-          unmountOnExit
-          timeout={300}>
-          {() => (
-            <Landing onSetNectar={this.onSetNectar}/>
-          )}
-        </CSSTransition>
-        <CSSTransition
-          in={nectar.length > 0}
-          classNames='fade'
-          timeout={300}>
-          {() => (
-            <Transfer nectar={nectar}/>
-          )}
-        </CSSTransition>
+        <Landing onSetNectar={this.onSetNectar}/>
       </div>
     );
   }

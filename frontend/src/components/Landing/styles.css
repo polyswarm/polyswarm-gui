@@ -1,42 +1,37 @@
 .Landing {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    justify-content: center;
+    background-color: #8500ff;
+    display: inline-block;
+    height: 100vh;
     left: 0;
     top: 0;
-    widows: 100%;
+    width: 100vw;
 }
 
 .Landing-Content {
     color: white;
-    font-size: 2em;
+    display: flex;
+    flex-direction: column;
+    height: 50%;
+    justify-content: flex-end;
     margin: 0 auto;
     width: 80%;
-    z-index: 2;
 }
 
-.Landing-Background {
-    background-color: #8500ff;
-    display: block;
-    height: 100vh;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100vw;
-    z-index: 1;
+.Landing-Chain {
+    display: flex;
+    justify-content: space-between;
 }
 
-.Landing-nectar {
+.Landing-Nectar {
     display: flex;
     flex-direction: row;
 }
 
-.Landing-nectar > .NectarField {
+.Landing-Nectar > .NectarField {
     flex-grow: 8
 }
 
-.Landing-nectar > .Button {
+.Landing-Nectar > .Button {
     margin-top: auto;
     height: 48px;
 }
