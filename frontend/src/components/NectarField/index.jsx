@@ -47,7 +47,7 @@ class NectarField extends Component {
           <input
             className={inputClass}
             id='nectar'
-            type='text'
+            type='number'
             value={nectar}
             onBlur={this.onBlur}
             onFocus={this.onFocus}
