@@ -13,7 +13,7 @@ class Landing extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        nectar: '',
+        nectar: '0.5',
         error: false,
         hide: false
     };
@@ -46,7 +46,7 @@ class Landing extends Component {
               )}
             </CSSTransition>
             <Button
-              disabled={error || nectar.length == 0}
+              disabled={error || nectar == 0}
               onClick={this.onButtonClick} >
               {strings.go}
             </Button>

@@ -88,7 +88,7 @@ class NectarField extends Component {
   }
 
   validateNectar(nectar) {
-    return nectar.length == 0 || nectar.length > 14;
+    return nectar > 0;
   }
 }
 NectarField.proptypes = {
