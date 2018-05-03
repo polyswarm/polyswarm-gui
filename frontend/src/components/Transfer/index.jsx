@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // Project imports
 import Header from '../Header';
-import AddressField from '../AddressField';
+import NectarField from '../NectarField';
 import ChainInfo from '../ChainInfo';
 import TransferForm from '../TransferForm';
 // Component imports
@@ -15,14 +15,14 @@ class Transfer extends Component {
   }
 
   render() {
-    const {props: {address}} = this;
+    const {props: {nectar}} = this;
     return(
         <div className='Transfer'>
           <Header />
           <div className='Transfer-Content'>
-            <AddressField
-              onChange={this.onAddressChange}
-              address={address}/>
+            <NectarField
+              onChange={this.onNectarChange}
+              nectar={nectar}/>
             <div >
               <ChainInfo />
               <ChainInfo />
@@ -35,6 +35,6 @@ class Transfer extends Component {
 
 }
 Transfer.proptypes = {
-  address: PropTypes.string
+  nectar: PropTypes.string
 }
 export default Transfer;

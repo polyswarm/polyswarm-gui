@@ -1,9 +1,9 @@
-.AddressField {
+.NectarField {
     display: flex;
     flex-direction: column;
 }
 
-.AddressField-Label {
+.NectarField-Label {
     color: #a5a5a5;
     line-height: 24px;
     position: relative;
@@ -11,7 +11,7 @@
     top: 36px;
 }
 
-.AddressField-Input {
+.NectarField-Input {
     background-color: #efefef;
     border: #e5e5e5 2px solid;
     border-radius: 4px;

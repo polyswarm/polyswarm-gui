@@ -8,7 +8,7 @@ import {CSSTransition} from 'react-transition-group';
 import strings from './strings';
 import './styles.css';
 
-class AddressField extends Component {
+class NectarField extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,7 +20,7 @@ class AddressField extends Component {
     this.onBlur = this.onBlur.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onFocus = this.onFocus.bind(this);
-    this.getAddress = this.getAddress.bind(this);
+    this.getNectar = this.getNectar.bind(this);
   }
 
   componentDidMount() {
@@ -29,26 +29,26 @@ class AddressField extends Component {
 
   render() {
     const {state: {error, focused} } = this;
-    const address = this.getAddress();
-    const inputClass = classNames('AddressField-Input', {error: error});
+    const nectar = this.getNectar();
+    const inputClass = classNames('NectarField-Input', {error: error});
     return (
-        <div className='AddressField'>
+        <div className='NectarField'>
           <CSSTransition
-            in={(address && address.length > 0) || focused}
+            in={(nectar && nectar.length > 0) || focused}
             timeout={300}
             classNames='label'> 
             {() => (
-              <label className='AddressField-Label'
-                htmlFor='address'>
-                {strings.address}
+              <label className='NectarField-Label'
+                htmlFor='nectar'>
+                {strings.nectar}
               </label>
             )}
           </CSSTransition>
           <input
             className={inputClass}
-            id='address'
+            id='nectar'
             type='text'
-            value={address}
+            value={nectar}
             onBlur={this.onBlur}
             onFocus={this.onFocus}
             onChange={this.onChange}/>
@@ -62,10 +62,10 @@ class AddressField extends Component {
 
   onChange(e) {
     const {props: {onChange}} = this;
-    const address = e.target.value;
-    const valid = this.validateAddress(address)
+    const nectar = e.target.value;
+    const valid = this.validateNectar(nectar)
     if (onChange) {
-      onChange(address, valid);
+      onChange(nectar, valid);
     }
     this.setState({error: !valid});
   }
@@ -76,23 +76,23 @@ class AddressField extends Component {
 
   /**
    * This triggers a redraw of the element so we get CSSTransition to animate
-   * when the address is set as a prop for the first draw.
+   * when the nectar is set as a prop for the first draw.
    */
-  getAddress() {
-    const { state: {first}, props: {address}} = this;
+  getNectar() {
+    const { state: {first}, props: {nectar}} = this;
     if (first) {
       return '';
     } else {
-      return address;
+      return nectar;
     }
   }
 
-  validateAddress(address) {
-    return address.length == 0 || address.length > 14;
+  validateNectar(nectar) {
+    return nectar.length == 0 || nectar.length > 14;
   }
 }
-AddressField.proptypes = {
+NectarField.proptypes = {
   onChange: PropTypes.func,
-  address: PropTypes.string
+  nectar: PropTypes.string
 }
-export default AddressField;
+export default NectarField;

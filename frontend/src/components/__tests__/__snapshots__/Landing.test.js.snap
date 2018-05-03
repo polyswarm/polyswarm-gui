@@ -16,20 +16,20 @@ exports[`renders without crashing 1`] = `
       PolySwarm Relay
     </h1>
     <div
-      class="Landing-Address"
+      class="Landing-nectar"
     >
       <div
-        class="AddressField"
+        class="NectarField"
       >
         <label
-          class="AddressField-Label"
-          for="address"
+          class="NectarField-Label"
+          for="nectar"
         >
-          Enter address
+          Enter nectar
         </label>
         <input
-          class="AddressField-Input"
-          id="address"
+          class="NectarField-Input"
+          id="nectar"
           type="text"
           value=""
         >

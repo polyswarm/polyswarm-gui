@@ -2,17 +2,17 @@
 
 exports[`renders without crashing 1`] = `
 <div
-  class="AddressField"
+  class="NectarField"
 >
   <label
-    class="AddressField-Label"
-    for="address"
+    class="NectarField-Label"
+    for="nectar"
   >
-    Enter address
+    Enter nectar
   </label>
   <input
-    class="AddressField-Input"
-    id="address"
+    class="NectarField-Input"
+    id="nectar"
     type="text"
     value=""
   >

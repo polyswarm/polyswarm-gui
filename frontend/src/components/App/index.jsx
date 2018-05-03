@@ -8,39 +8,39 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      address: '',
+      nectar: '',
     }
 
-    this.onSetAddress = this.onSetAddress.bind(this);
+    this.onSetNectar = this.onSetNectar.bind(this);
   }
 
   render() {
-    const {state: {address}} = this;
+    const {state: {nectar}} = this;
     return (
       <div className="App">
         <CSSTransition
-          in={address.length == 0}
+          in={nectar.length == 0}
           classNames='fade'
           unmountOnExit
           timeout={300}>
           {() => (
-            <Landing onSetAddress={this.onSetAddress}/>
+            <Landing onSetNectar={this.onSetNectar}/>
           )}
         </CSSTransition>
         <CSSTransition
-          in={address.length > 0}
+          in={nectar.length > 0}
           classNames='fade'
           timeout={300}>
           {() => (
-            <Transfer address={address}/>
+            <Transfer nectar={nectar}/>
           )}
         </CSSTransition>
       </div>
     );
   }
 
-  onSetAddress(address) {
-    this.setState({address: address});
+  onSetNectar(nectar) {
+    this.setState({nectar: nectar});
   }
 }
 

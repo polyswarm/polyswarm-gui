@@ -27,16 +27,16 @@
     z-index: 1;
 }
 
-.Landing-Address {
+.Landing-nectar {
     display: flex;
     flex-direction: row;
 }
 
-.Landing-Address > .AddressField {
+.Landing-nectar > .NectarField {
     flex-grow: 8
 }
 
-.Landing-Address > .Button {
+.Landing-nectar > .Button {
     margin-top: auto;
     height: 48px;
 }

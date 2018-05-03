@@ -1,16 +1,16 @@
 import React from 'react';
 import {render, shallow} from 'enzyme';
 import {renderToJson} from 'enzyme-to-json';
-import AddressField from '../AddressField';
+import NectarField from '../NectarField';
 
 it('renders without crashing', () => {
-  const wrapper = render(<AddressField />);
+  const wrapper = render(<NectarField />);
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
 
 it('calls onchange when instance onChange is called', () => {
   const onChange = jest.fn();
-  const wrapper = shallow(<AddressField onChange={onChange}/>);
+  const wrapper = shallow(<NectarField onChange={onChange}/>);
   const instance = wrapper.instance();
 
   instance.onChange({target:{value: 'change'}});
@@ -19,9 +19,9 @@ it('calls onchange when instance onChange is called', () => {
   expect(onChange).toHaveBeenCalledWith('change', false);
 });
 
-it('calls onchange when address changed', () => {
+it('calls onchange when nectar changed', () => {
   const onChange = jest.fn();
-  const wrapper = shallow(<AddressField onChange={onChange}/>);
+  const wrapper = shallow(<NectarField onChange={onChange}/>);
   
   wrapper.find('input').simulate('change', {target: {value: 'change'}});
 
@@ -31,7 +31,7 @@ it('calls onchange when address changed', () => {
 
 it('calls onChange with valid:true when length over 14 characters', () => {
   const onChange = jest.fn();
-  const wrapper = shallow(<AddressField onChange={onChange}/>);
+  const wrapper = shallow(<NectarField onChange={onChange}/>);
   
   wrapper.find('input').simulate('change', {target: {value: '012345678912345'}});
 
@@ -41,7 +41,7 @@ it('calls onChange with valid:true when length over 14 characters', () => {
 
 it('calls onchange with valid:true when length is 0', () => {
   const onChange = jest.fn();
-  const wrapper = shallow(<AddressField onChange={onChange}/>);
+  const wrapper = shallow(<NectarField onChange={onChange}/>);
   
   wrapper.find('input').simulate('change', {target: {value: ''}});
 
@@ -49,9 +49,9 @@ it('calls onchange with valid:true when length is 0', () => {
   expect(onChange).toHaveBeenCalledWith('', true);
 });
 
-it('sets error to true when set address is too short', () => {
-  const setState = jest.spyOn(AddressField.prototype, 'setState');
-  const wrapper = shallow(<AddressField />);
+it('sets error to true when set nectar is too short', () => {
+  const setState = jest.spyOn(NectarField.prototype, 'setState');
+  const wrapper = shallow(<NectarField />);
   setState.mockClear();
   
   wrapper.find('input').simulate('change', {target: {value: 'change'}});
@@ -59,9 +59,9 @@ it('sets error to true when set address is too short', () => {
   expect(setState).toHaveBeenCalledWith({error: true});
 });
 
-it('sets error to false when set address is long enough', () => {
-  const setState = jest.spyOn(AddressField.prototype, 'setState');
-  const wrapper = shallow(<AddressField />);
+it('sets error to false when set nectar is long enough', () => {
+  const setState = jest.spyOn(NectarField.prototype, 'setState');
+  const wrapper = shallow(<NectarField />);
   setState.mockClear();
   
   wrapper.find('input').simulate('change', {target: {value: '012345678901234'}});

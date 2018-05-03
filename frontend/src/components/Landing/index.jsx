@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {CSSTransition} from 'react-transition-group';
 // Project imports
-import AddressField from '../AddressField';
+import NectarField from '../NectarField';
 import Button from '../Button';
 // Component imports
 import strings from  './strings.js';
@@ -13,40 +13,40 @@ class Landing extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        address: '',
+        nectar: '',
         error: false,
         hide: false
     };
 
-    this.onAddressChanged = this.onAddressChanged.bind(this);
+    this.onNectarChanged = this.onNectarChanged.bind(this);
     this.onButtonClick = this.onButtonClick.bind(this);
   }
 
   render() {
-    const {state: {error, address, hide, finished} } = this;
+    const {state: {error, nectar, hide, finished} } = this;
     return(
       <div className='Landing'>
         <div className='Landing-Background'/>
         <div className='Landing-Content'>
           <h1>{strings.title}</h1>
-          <div className='Landing-Address'>
+          <div className='Landing-nectar'>
             <CSSTransition
               in={!hide}
               classNames='translate'
               onExited={() => {
-                const {props: {onSetAddress}, state: {address}} = this;
-                if (onSetAddress) {
-                  onSetAddress(address);
+                const {props: {onSetNectar}, state: {nectar}} = this;
+                if (onSetNectar) {
+                  onSetNectar(nectar);
                 }
               }}
               timeout={300}>
               {() => (
-                <AddressField onChange={this.onAddressChanged}
-                  address={address} />
+                <NectarField onChange={this.onNectarChanged}
+                  nectar={nectar} />
               )}
             </CSSTransition>
             <Button
-              disabled={error || address.length == 0}
+              disabled={error || nectar.length == 0}
               onClick={this.onButtonClick} >
               {strings.go}
             </Button>
@@ -56,8 +56,8 @@ class Landing extends Component {
     );
   }
 
-  onAddressChanged(address, valid) {
-    this.setState({address: address, error: !valid});
+  onNectarChanged(nectar, valid) {
+    this.setState({nectar: nectar, error: !valid});
   }
 
   onButtonClick() {
@@ -66,6 +66,6 @@ class Landing extends Component {
 
 }
 Landing.proptypes = {
-  onSetAddress: PropTypes.func
+  onSetNectar: PropTypes.func
 }
 export default Landing;
