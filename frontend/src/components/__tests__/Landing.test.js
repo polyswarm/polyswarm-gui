@@ -3,7 +3,7 @@ import {render, shallow, mount} from 'enzyme';
 import {renderToJson} from 'enzyme-to-json';
 import Landing from '../Landing';
 
-const chain = {name:'asdf', balance:'1'};
+const chain = {name:'asdf', balance:1};
 
 it('renders without crashing', () => {
   const wrapper = render(<Landing homechain={chain} sidechain={chain}/>);
@@ -64,4 +64,13 @@ it('calls onTransfer button is clicked', () => {
   wrapper.find('button').simulate('click');
 
   expect(onTransfer).toHaveBeenCalledWith('0123456789123456', 0);
+});
+
+it('updates the after field balances when nectar amount entered', () => {
+  const wrapper = mount(<Landing homechain={chain} sidechain={chain} />);
+  wrapper.setState({nectar: .5});
+
+
+  expect(wrapper.find('.ChainInfo').last().find('li').first().text()).toEqual('asdf: 0.5');
+  expect(wrapper.find('.ChainInfo').last().find('li').last().text()).toEqual('asdf: 1.5');
 });

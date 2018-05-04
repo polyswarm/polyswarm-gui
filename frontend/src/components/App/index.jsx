@@ -11,14 +11,14 @@ class App extends Component {
         name: 'Mainnet',
         networkId: 1,
         relayAddress: '0x5af8bcc6127afde967279dc04661f599a5c0cafa',
-        balance: 10
+        balance: 1
 
       },
       side: {
         name: 'PolySwarm Sidechain',
         networkId: 39347,
         relayAddress: '0x7e7087c25df885f97aeacbfae84ea12016799eee',
-        balance: 10
+        balance: 1
       }
     }
   }

@@ -14,7 +14,7 @@ class Landing extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        nectar: '0.5',
+        nectar: 0.5,
         selected: 0,
         error: false,
     };
@@ -26,6 +26,8 @@ class Landing extends Component {
 
   render() {
     const {state: {error, nectar, selected}, props: {homechain, sidechain, address} } = this;
+    const homeAltered = selected == 0 ? homechain.balance - Number(nectar) : homechain.balance + Number(nectar);
+    const sideAltered = selected == 0 ? sidechain.balance + Number(nectar) : sidechain.balance - Number(nectar);
     return(
       <div className='Landing'>
         <Header>
@@ -41,9 +43,9 @@ class Landing extends Component {
               sideBalance={sidechain.balance} />
             <ChainInfo title={strings.after}
               homeName={homechain.name}
-              homeBalance={homechain.balance}
+              homeBalance={homeAltered}
               sideName={sidechain.name}
-              sideBalance={sidechain.balance} />
+              sideBalance={sideAltered} />
           </div>
           <div className='Landing-Nectar'>
             <NectarField onChange={this.onNectarChanged}

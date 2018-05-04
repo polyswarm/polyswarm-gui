@@ -73,13 +73,13 @@ exports[`renders without crashing 1`] = `
               <b>
                 asdf
               </b>
-              : 1
+              : 0.5
             </li>
             <li>
               <b>
                 asdf
               </b>
-              : 1
+              : 1.5
             </li>
           </ul>
         </div>
