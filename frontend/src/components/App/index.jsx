@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import {CSSTransition} from 'react-transition-group';
 import Landing from '../Landing';
 import './styles.css';
 
@@ -7,23 +6,38 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      nectar: '',
-    }
+      address: '0x6322c188b4b353acb89c0db66672f0bac421c9e8',
+      home: {
+        name: 'Mainnet',
+        networkId: 1,
+        relayAddress: '0x5af8bcc6127afde967279dc04661f599a5c0cafa',
+        balance: 10
 
-    this.onSetNectar = this.onSetNectar.bind(this);
+      },
+      side: {
+        name: 'PolySwarm Sidechain',
+        networkId: 39347,
+        relayAddress: '0x7e7087c25df885f97aeacbfae84ea12016799eee',
+        balance: 10
+      }
+    }
   }
 
   render() {
-    const {state: {nectar}} = this;
+    const {state: {address, home, side}} = this;
     return (
       <div className="App">
-        <Landing onSetNectar={this.onSetNectar}/>
+        <Landing
+          address={address}
+          homechain={home}
+          sidechain={side}
+          onTransfer={this.onTransfer}/>
       </div>
     );
   }
 
-  onSetNectar(nectar) {
-    this.setState({nectar: nectar});
+  onTransfer(nectar, network) {
+    // If metamask, create transfer event
   }
 }
 

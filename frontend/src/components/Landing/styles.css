@@ -17,10 +17,14 @@
     width: 80%;
 }
 
+.Landing-Content > h2 {
+    text-align: center;
+}
+
 .Landing-Chain {
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .Landing-Nectar {

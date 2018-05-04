@@ -14,34 +14,75 @@ exports[`renders without crashing 1`] = `
   <div
     class="Landing-Content"
   >
+    <h2>
+      
+    </h2>
     <div
       class="Landing-Chain"
     >
       <div
-        class="ChainInfo Source"
+        class="ChainInfo"
       >
-        <h2>
-          Mainnet
-        </h2>
-        <p>
-          Current Balance: 10
-        </p>
-        <p>
-          Balance after Transfer: 9.5
-        </p>
+        <div
+          class="ChainInfo-Title"
+        >
+          <h2>
+            Before Transfer
+          </h2>
+        </div>
+        <div
+          class="ChainInfo-Content"
+        >
+          <p>
+            
+          </p>
+          <ul>
+            <li>
+              <b>
+                asdf
+              </b>
+              : 1
+            </li>
+            <li>
+              <b>
+                asdf
+              </b>
+              : 1
+            </li>
+          </ul>
+        </div>
       </div>
       <div
         class="ChainInfo"
       >
-        <h2>
-          PolySwarm sidechain
-        </h2>
-        <p>
-          Current Balance: 0
-        </p>
-        <p>
-          Balance after Transfer: 0.5
-        </p>
+        <div
+          class="ChainInfo-Title"
+        >
+          <h2>
+            After Transfer
+          </h2>
+        </div>
+        <div
+          class="ChainInfo-Content"
+        >
+          <p>
+            
+          </p>
+          <ul>
+            <li>
+              <b>
+                asdf
+              </b>
+              : 1
+            </li>
+            <li>
+              <b>
+                asdf
+              </b>
+              : 1
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <div
@@ -54,7 +95,7 @@ exports[`renders without crashing 1`] = `
           class="NectarField-Label"
           for="nectar"
         >
-          Enter nectar
+          Amount of Nectar
         </label>
         <input
           class="NectarField-Input"

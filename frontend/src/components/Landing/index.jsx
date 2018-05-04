@@ -1,7 +1,6 @@
 // Vendor imports
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {CSSTransition} from 'react-transition-group';
 // Project imports
 import NectarField from '../NectarField';
 import Button from '../Button';
@@ -26,30 +25,31 @@ class Landing extends Component {
   }
 
   render() {
-    const {state: {error, nectar, selected} } = this;
+    const {state: {error, nectar, selected}, props: {homechain, sidechain, address} } = this;
     return(
       <div className='Landing'>
         <Header>
           <h1>{strings.title}</h1>
         </Header>
         <div className='Landing-Content'>
+          <h2>{address}</h2>
           <div className='Landing-Chain'>
-            <ChainInfo onClick={() => this.select(0)}
-              name={'Mainnet'}
-              balance={'10'}
-              transfer={nectar}
-              sender={selected == 0}/>
-            <ChainInfo onClick={() => this.select(1)}
-              name={'PolySwarm sidechain'}
-              balance={'0'}
-              transfer={nectar}
-              sender={selected == 1}/>
+            <ChainInfo title={strings.before}
+              homeName={homechain.name}
+              homeBalance={homechain.balance}
+              sideName={sidechain.name}
+              sideBalance={sidechain.balance} />
+            <ChainInfo title={strings.after}
+              homeName={homechain.name}
+              homeBalance={homechain.balance}
+              sideName={sidechain.name}
+              sideBalance={sidechain.balance} />
           </div>
           <div className='Landing-Nectar'>
             <NectarField onChange={this.onNectarChanged}
               nectar={nectar} />
             <Button
-              disabled={error || nectar == 0}
+              disabled={error || nectar === 0}
               onClick={this.onButtonClick} >
               {strings.transfer}
             </Button>
@@ -76,6 +76,8 @@ class Landing extends Component {
 
 }
 Landing.proptypes = {
-  onTransfer: PropTypes.func
+  onTransfer: PropTypes.func,
+  homechain: PropTypes.object,
+  sidechain: PropTypes.object
 }
 export default Landing;

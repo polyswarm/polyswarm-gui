@@ -1,47 +1,36 @@
 // Vendor imports
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 // Project imports
 // Component imports
 import strings from './strings.js';
 import './styles.css';
 
 class ChainInfo extends Component {
-  constructor(props) {
-    super(props);
-
-    this.onClick = this.onClick.bind(this);
-  }
-
   render() {
-    const {props: {name, transfer, balance, sender}} = this;
-    const remaining = sender ? Number(balance) - Number(transfer) : Number(balance) + Number(transfer);
-    const source = classNames('ChainInfo', {'Source': sender});
+    const {props: {title, homeName, homeBalance, sideName, sideBalance}} = this;
     return (
-        <div className={source}
-          onClick={this.onClick}>
-            <h2>{name}</h2>
-            <p>{strings.current}{balance}</p>
-            <p>{strings.adjusted}{remaining}</p>
+        <div className='ChainInfo'>
+          <div className='ChainInfo-Title'>
+            <h2>{title}</h2>
+          </div>
+          <div className='ChainInfo-Content'>
+            <p>{strings.balances}</p>
+            <ul>
+              <li><b>{homeName}</b>{': '}{homeBalance}</li>
+              <li><b>{sideName}</b>{': '}{sideBalance}</li>
+            </ul>
+          </div>
         </div>
     )
   }
-
-  onClick() {
-    const {props: {onClick}} = this;
-    if (onClick) {
-      onClick();
-    }
-  }
-
 }
 
 ChainInfo.proptypes = {
-  onClick: PropTypes.func,
-  balance: PropTypes.number,
-  name: PropTypes.string,
-  sender: PropTypes.bool,
-  transfer: PropTypes.number,
+  title: PropTypes.string,
+  homeName: PropTypes.string,
+  homeBalance: PropTypes.string,
+  sideName: PropTypes.string,
+  sideBalance: PropTypes.string
 }
 export default ChainInfo;

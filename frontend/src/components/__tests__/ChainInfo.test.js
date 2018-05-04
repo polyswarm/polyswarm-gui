@@ -8,26 +8,25 @@ it('renders without crashing', () => {
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
 
-it('computes and display the balance after the transaction', () => {
-  const wrapper = render(<ChainInfo balance={12} transfer={1} sender/>);
+it('displays the name of the networks', () => {
+  const wrapper = render(<ChainInfo homeName={'home'} sideName={'side'}/>);
   
-  expect(wrapper.find('p').last().text()).toEqual('Balance after Transfer: 11');
+  expect(wrapper.find('li').first().text()).toEqual('home: ');
+  expect(wrapper.find('li').last().text()).toEqual('side: ');
 });
 
-it('adds to the balance when not sender', () => {
-  const wrapper = render(<ChainInfo balance={12} transfer={1}/>);
+it('displays the current balances', () => {
+  const wrapper = render(<ChainInfo homeName={'home'}
+    homeBalance={1}
+    sideName={'side'}
+    sideBalance={2}/>);
   
-  expect(wrapper.find('p').last().text()).toEqual('Balance after Transfer: 13');
+    expect(wrapper.find('li').first().text()).toEqual('home: 1');
+    expect(wrapper.find('li').last().text()).toEqual('side: 2');
 });
 
-it('displays the name of the network', () => {
-  const wrapper = render(<ChainInfo name={'main'} balance={12} transfer={0}/>);
-  
-  expect(wrapper.find('h2').text()).toEqual('main');
-});
+it('displays the title', () => {
+  const wrapper = render(<ChainInfo title={'Title'}/>);
 
-it('displays the current balance', () => {
-  const wrapper = render(<ChainInfo balance={12} transfer={0}/>);
-  
-  expect(wrapper.find('p').first().text()).toEqual('Current Balance: 12');
+  expect(wrapper.find('h2').text()).toEqual('Title');
 });
