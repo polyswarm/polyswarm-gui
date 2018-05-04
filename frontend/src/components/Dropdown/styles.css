@@ -11,7 +11,7 @@
 }
 
 .Dropdown:after {
-    border-top: 10px white solid;
+    border-top: 10px #8500ff solid;
     border-left: 5px transparent solid;
     border-right: 5px transparent solid;
     content: '';
@@ -29,6 +29,7 @@
 }
 
 .Dropdown > p {
+    color: #8500ff;
     font-size: 20px;
     height: 20px;
     line-height: 20px;
