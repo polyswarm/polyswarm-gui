@@ -74,3 +74,12 @@ it('updates the after field balances when nectar amount entered', () => {
   expect(wrapper.find('.ChainInfo').last().find('li').first().text()).toEqual('asdf: 0.5');
   expect(wrapper.find('.ChainInfo').last().find('li').last().text()).toEqual('asdf: 1.5');
 });
+
+it('Changes the balances when selected index is changed', () => {
+  const wrapper = mount(<Landing homechain={chain} sidechain={chain} />);
+  wrapper.setState({nectar: .5, selected: 1});
+
+
+  expect(wrapper.find('.ChainInfo').last().find('li').first().text()).toEqual('asdf: 1.5');
+  expect(wrapper.find('.ChainInfo').last().find('li').last().text()).toEqual('asdf: 0.5');
+});

@@ -20,9 +20,9 @@ class Landing extends Component {
         error: false,
     };
 
-    this.onNectarChanged = this.onNectarChanged.bind(this);
     this.onButtonClick = this.onButtonClick.bind(this);
-    this.select = this.select.bind(this);
+    this.onNectarChanged = this.onNectarChanged.bind(this);
+    this.onSelectionChanged = this.onSelectionChanged.bind(this);
   }
 
   render() {
@@ -49,7 +49,7 @@ class Landing extends Component {
               sideBalance={sideAltered} />
           </div>
           <div className='Landing-Nectar'>
-            <Dropdown />
+            <Dropdown onSelectionChanged={this.onSelectionChanged}/>
             <NectarField onChange={this.onNectarChanged}
               nectar={nectar} />
             <Button
@@ -67,17 +67,16 @@ class Landing extends Component {
     this.setState({nectar: nectar, error: !valid});
   }
 
+  onSelectionChanged(index) {
+    this.setState({selected: index});
+  }
+
   onButtonClick() {
     const {props: {onTransfer}, state: {nectar, selected}} = this;
     if (onTransfer) {
       onTransfer(nectar, selected);
     }
   }
-
-  select(index) {
-    this.setState({selected: index});
-  }
-
 }
 Landing.proptypes = {
   onTransfer: PropTypes.func,
