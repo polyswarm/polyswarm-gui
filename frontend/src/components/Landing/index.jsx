@@ -27,8 +27,8 @@ class Landing extends Component {
 
   render() {
     const {state: {error, nectar, selected}, props: {homechain, sidechain, address} } = this;
-    const homeAltered = selected == 0 ? homechain.balance - nectar : homechain.balance + nectar;
-    const sideAltered = selected == 0 ? sidechain.balance + nectar : sidechain.balance - nectar;
+    const homeAltered = Number(homechain.balance) - (Number(nectar) * (selected? -1: 1));
+    const sideAltered = Number(sidechain.balance) + (Number(nectar) * (selected? -1: 1));
     return(
       <div className='Landing'>
         <Header>

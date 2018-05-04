@@ -46,13 +46,13 @@ input[type=number]::-webkit-outer-spin-button {
     color: #a5a5a5;
     font-size: 36px;
     font-weight: normal;
-    transform: translateY(0px);
+    transform: translateX(0px);
 }
 .label-enter-active {
     color: rgb(46, 255, 109);
     font-size: 24px;
     font-weight: 300;
-    transform: translateY(-36px);
+    transform: translateX(65%);
     transition: all 300ms ease-out;
 }
 
@@ -60,20 +60,20 @@ input[type=number]::-webkit-outer-spin-button {
     color: rgb(46, 255, 109);
     font-size: 24px;
     font-weight: 300;
-    transform: translateY(-36px);
+    transform: translateX(65%);
 }
 
 .label-exit {
     color: rgb(46, 255, 109);
     font-size: 24px;
     font-weight: 300;
-    transform: translateY(-36px);
+    transform: translateX(65%);
 }
 .label-exit-active {
     color: #a5a5a5;
     font-size: 36px;
     font-weight: normal;
-    transform: translateY(0px);
+    transform: translateX(0px);
     transition: all 300ms ease-out;
 }
 

@@ -34,7 +34,7 @@ class NectarField extends Component {
     return (
         <div className='NectarField'>
           <CSSTransition
-            in={nectar > 0 || focused}
+            in={nectar || focused}
             timeout={300}
             classNames='label'> 
             {() => (

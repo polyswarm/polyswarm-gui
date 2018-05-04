@@ -1,5 +1,5 @@
 const strings = {
-  nectar: 'Amount of Nectar'
+  nectar: 'Nectar (NCT)'
 };
 
 export default strings;
