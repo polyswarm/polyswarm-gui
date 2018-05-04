@@ -10,5 +10,5 @@ it('renders without crashing', () => {
 
 it('Uses title PolySwarm ', () => {
   const wrapper = shallow(<Header/>);
-  expect(wrapper.text()).toEqual('PolySwarm Relay');
+  expect(wrapper.text()).toEqual('PolySwarm Nectar Relay');
 });

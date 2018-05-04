@@ -11,7 +11,7 @@ exports[`renders without crashing 1`] = `
       class="Header"
     >
       <h2>
-        PolySwarm Relay
+        PolySwarm Nectar Relay
       </h2>
     </header>
     <div

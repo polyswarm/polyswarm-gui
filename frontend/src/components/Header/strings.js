@@ -1,4 +1,4 @@
 const strings = {
-  title: "PolySwarm Relay"
+  title: "PolySwarm Nectar Relay"
 }
 export default strings;
