@@ -2,10 +2,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // Project imports
-import NectarField from '../NectarField';
 import Button from '../Button';
 import ChainInfo from '../ChainInfo';
+import Dropdown from '../Dropdown';
 import Header from '../Header';
+import NectarField from '../NectarField';
 // Component imports
 import strings from  './strings.js';
 import './styles.css';
@@ -48,6 +49,7 @@ class Landing extends Component {
               sideBalance={sideAltered} />
           </div>
           <div className='Landing-Nectar'>
+            <Dropdown />
             <NectarField onChange={this.onNectarChanged}
               nectar={nectar} />
             <Button

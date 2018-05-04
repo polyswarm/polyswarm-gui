@@ -92,6 +92,25 @@ exports[`renders without crashing 1`] = `
         class="Landing-Nectar"
       >
         <div
+          class="Dropdown"
+        >
+          <p
+            class="Dropdown-Selection"
+          >
+            Deposit
+          </p>
+          <div
+            class="Dropdown-Choices"
+          >
+            <p>
+              Deposit
+            </p>
+            <p>
+              Withdraw
+            </p>
+          </div>
+        </div>
+        <div
           class="NectarField"
         >
           <label

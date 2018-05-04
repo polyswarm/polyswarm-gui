@@ -14,7 +14,7 @@
     height: 50%;
     justify-content: flex-end;
     margin: 0 auto;
-    width: 30%;
+    width: 40%;
 }
 
 .Landing-Content > h2 {
@@ -25,6 +25,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    width: 100%;
 }
 
 .Landing-Nectar {
@@ -33,10 +34,11 @@
 }
 
 .Landing-Nectar > .NectarField {
-    flex-grow: 9
+    flex-grow: 1
 }
 
 .Landing-Nectar > .Button {
     margin-top: auto;
+    margin-left: 8px;
     height: 48px;
 }
