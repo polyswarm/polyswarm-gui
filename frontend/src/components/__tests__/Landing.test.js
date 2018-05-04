@@ -3,7 +3,7 @@ import {render, shallow, mount} from 'enzyme';
 import {renderToJson} from 'enzyme-to-json';
 import Landing from '../Landing';
 
-const chain = {name:'asdf', balance:1};
+const chain = {name:'asdf', balance: 1};
 
 it('renders without crashing', () => {
   const wrapper = render(<Landing homechain={chain} sidechain={chain}/>);
@@ -82,4 +82,34 @@ it('Changes the balances when selected index is changed', () => {
 
   expect(wrapper.find('.ChainInfo').last().find('li').first().text()).toEqual('asdf: 1.5');
   expect(wrapper.find('.ChainInfo').last().find('li').last().text()).toEqual('asdf: 0.5');
+});
+
+it('Disbales the button when error set to true', () => {
+  const wrapper = mount(<Landing homechain={chain} sidechain={chain} />);
+  wrapper.setState({error: true});
+
+  expect(wrapper.find('.Button').props().disabled).toBeTruthy();
+});
+
+it('Disables the button when nectar is greater than the homechain balance in deposit', () => {
+  const setState = jest.spyOn(Landing.prototype, 'setState');
+  const wrapper = mount(<Landing homechain={chain} sidechain={chain} />);
+  wrapper.setState({selected: 0});
+  const instance = wrapper.instance();
+  setState.mockClear();
+
+  instance.onNectarChanged(2, true);
+
+  expect(setState).toHaveBeenCalledWith({nectar: 2, error: true});
+});
+
+it('Disables the button when nectar is greater than the sidechain balance in withdrawal', () => {
+  const setState = jest.spyOn(Landing.prototype, 'setState');
+  const wrapper = mount(<Landing homechain={chain} sidechain={chain} />);
+  wrapper.setState({selected: 1});
+  const instance = wrapper.instance();
+
+  instance.onNectarChanged(2, true);
+
+  expect(setState).toHaveBeenCalledWith({nectar: 2, error: true});
 });

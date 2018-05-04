@@ -64,7 +64,13 @@ class Landing extends Component {
   }
 
   onNectarChanged(nectar, valid) {
-    this.setState({nectar: nectar, error: !valid});
+    const {state: {selected}, props: {homechain, sidechain}} = this;
+    let max = selected == 0 ? homechain.balance : sidechain.balance;
+    let error = !valid;
+    if (nectar > max) {
+      error = true;
+    }
+    this.setState({nectar: nectar, error: error});
   }
 
   onSelectionChanged(index) {
