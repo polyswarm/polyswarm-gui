@@ -14,7 +14,7 @@
     height: 50%;
     justify-content: flex-end;
     margin: 0 auto;
-    width: 80%;
+    width: 30%;
 }
 
 .Landing-Content > h2 {
@@ -24,7 +24,7 @@
 .Landing-Chain {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 .Landing-Nectar {
@@ -33,32 +33,10 @@
 }
 
 .Landing-Nectar > .NectarField {
-    flex-grow: 8
+    flex-grow: 9
 }
 
 .Landing-Nectar > .Button {
     margin-top: auto;
     height: 48px;
-}
-
-.translate-enter {
-    transform: translateY(-46vh);
-}
-
-.translate-enter-active {
-    transform: translateY(0);
-    transition: all 300ms ease-out;
-}
-
-.translate-exit {
-    transform: translateY(0);
-}
-
-.translate-exit-active {
-    transform: translateY(-46vh);
-    transition: all 300ms ease-out;
-}
-
-.translate-exit-done {
-    transform: translateY(-46vh);
 }
