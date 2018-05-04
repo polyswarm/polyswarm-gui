@@ -27,7 +27,7 @@ exports[`renders without crashing 1`] = `
           class="ChainInfo-Title"
         >
           <h2>
-            Before Transfer
+            Current
           </h2>
         </div>
         <div
@@ -59,7 +59,7 @@ exports[`renders without crashing 1`] = `
           class="ChainInfo-Title"
         >
           <h2>
-            After Transfer
+            Preview
           </h2>
         </div>
         <div
@@ -114,7 +114,7 @@ exports[`renders without crashing 1`] = `
           class="NectarField-Label"
           for="nectar"
         >
-          Amount of Nectar
+          Nectar (NCT)
         </label>
         <input
           class="NectarField-Input"

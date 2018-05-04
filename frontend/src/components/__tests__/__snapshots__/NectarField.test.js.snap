@@ -8,7 +8,7 @@ exports[`renders without crashing 1`] = `
     class="NectarField-Label"
     for="nectar"
   >
-    Amount of Nectar
+    Nectar (NCT)
   </label>
   <input
     class="NectarField-Input"

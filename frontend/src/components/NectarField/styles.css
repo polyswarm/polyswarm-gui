@@ -4,7 +4,7 @@
 }
 
 .NectarField-Label {
-    color: #a5a5a5;
+    color: #dedede;
     line-height: 36px;
     position: relative;
     user-select: none;
@@ -43,7 +43,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .label-enter {
-    color: #a5a5a5;
+    color: #dedede;
     font-size: 36px;
     font-weight: normal;
     transform: translateX(0px);
@@ -70,7 +70,7 @@ input[type=number]::-webkit-outer-spin-button {
     transform: translateX(65%);
 }
 .label-exit-active {
-    color: #a5a5a5;
+    color: #dedede;
     font-size: 36px;
     font-weight: normal;
     transform: translateX(0px);
@@ -78,7 +78,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .label-exit-done {
-    color: #a5a5a5;
+    color: #dedede;
     font-size: 36px;
     font-weight: normal;
     transform: translateY(0px);

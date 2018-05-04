@@ -11,12 +11,12 @@
 }
 
 .Dropdown:after {
-    border-top: 8px white solid;
-    border-left: 4px transparent solid;
-    border-right: 4px transparent solid;
+    border-top: 10px white solid;
+    border-left: 5px transparent solid;
+    border-right: 5px transparent solid;
     content: '';
     right: -85%;
-    bottom: 19px;
+    bottom: 18px;
     height: 0;
     position: relative;
     width: 0;
@@ -61,5 +61,10 @@
 
 .Dropdown-Choices > p:hover {
     background-color: #a64ef8;
+    color: white;
+}
+
+.Dropdown-Choices > p:active {
+    background-color: #9125f7;
     color: white;
 }
