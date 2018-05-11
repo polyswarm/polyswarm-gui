@@ -5,7 +5,8 @@ import {CSSTransition} from 'react-transition-group';
 // Bounty imports
 import BountyCreate from '../BountyCreate';
 import BountyInfo from '../BountyInfo';
-import Sidebar from '../Sidebar';
+import BountyList from '../BountyList';
+import Card from '../Card';
 import Header from '../Header';
 import Welcome from '../Welcome';
 import Snackbar from '../Snackbar';
@@ -22,7 +23,7 @@ class App extends Component {
     this.state = {
       isUnlocked: false,
       walletList: [],
-      active: 0,
+      active: -1,
       bounties: bounties,
       create: false,
       first: first,
@@ -87,16 +88,11 @@ class App extends Component {
         </CSSTransition>
         {!first && (
           <React.Fragment>
-            <Sidebar bounties={bounties}
-              active={active}
-              requests={requestsInProgress}
-              remove={this.onRemoveBounty}
-              select={this.onSelectBounty}/>
             <Header title={(bounties.length === 0 || create || active < 0) ? strings.create : bounties[active].guid}
               create={create || bounties.length === 0 || active < 0}
               onClick={this.onCreateBounty}/>
             <div className='App-Content'>
-              { (bounties.length === 0 || create || active < 0 ) && (
+              { (bounties.length === 0 || create ) && (
                 <BountyCreate url={url}
                   isUnlocked={isUnlocked}
                   walletList={walletList}
@@ -105,6 +101,9 @@ class App extends Component {
                   addBounty={this.onAddBounty}
                   addRequest={this.addRequest}
                   removeRequest={this.removeRequest}/>
+              )}
+              { !create && active < 0 && (
+                <BountyList bounties={bounties}/>
               )}
               { !create && active >=0 && active < bounties.length && (
                 <BountyInfo bounty={bounties[active]}/>

@@ -1,0 +1,17 @@
+.BountyList {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: start;
+    overflow-y: scroll;
+    width: 100%;
+}
+
+.BountyList-Placeholder {
+    color: #e5e5e5;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    width: 100%;
+}
