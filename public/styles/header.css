@@ -1,18 +1,33 @@
 .Header {
   align-items: center;
-  background-color: #f5f5f5;
-  background-image: url('../img/gray_hexgrid_2x.png');
+  background-color: #8500ff;
+  background-image: url('../img/hexgrid_2x.png');
   background-size: 74px 85px;
   border-bottom: 1px solid #dfdfdf;
   box-sizing: border-box;
-  color: #8500ff;
+  color: white;
   display: flex;
   justify-content: space-between;
-  padding: 0 20px;
+  padding: 0 20px 0 8px;
   white-space: nowrap;
+}
+
+.Header-Title {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
 }
 
 .Header > button {
   max-width: 120px;
   padding: 0;
+}
+
+.Header-Logo {
+  box-sizing: border-box;
+  display: inline-block;
+  height: inherit;
+  margin: auto 0;
+  padding: 0 10px;
+  height: 45%;
 }

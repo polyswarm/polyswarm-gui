@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
+<div
+  class="BountyList"
+>
+  <ul>
+    
+  </ul>
+  <div
+    class="BountyList-Placeholder"
+  >
+    <h3>
+      You haven't posted any bounties. Click '+ BOUNTY' to post one.
+    </h3>
+  </div>
+</div>
+`;

@@ -3,25 +3,20 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 // Bounty Management Imports
 
-// Component Imports
-import strings from './strings';
-
 class Card extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
 
-    render() {
-        const {props: {children}} = this;
-        return (
-            <div className='Card'>
-                {children}
-            </div>
-        );
-    }
+  render() {
+    const {props: {onClick, children}} = this;
+    return (
+      <li onClick={onClick}>
+        <div className='Card'>
+          {children}
+        </div>
+      </li>
+    );
+  }
 }
 Card.proptypes = {
-    
-}
+  onClick: PropTypes.func,
+};
 export default Card;

@@ -37,4 +37,4 @@ exports[`renders without crashing 1`] = `
 </div>
 `;
 
-exports[`shows create when no bounties found 1`] = `null`;
+exports[`shows empty bounty list when no bounties found 1`] = `null`;

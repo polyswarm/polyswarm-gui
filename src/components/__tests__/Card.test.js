@@ -20,8 +20,8 @@ it('shows the children passed', () => {
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
 
-it('shows multpe children when passed', () => {
-  const wrapper = render(
+it('shows multiple children when passed', () => {
+  const wrapper = mount(
     <Card>
       <p>Child</p>
       <p>Second</p>

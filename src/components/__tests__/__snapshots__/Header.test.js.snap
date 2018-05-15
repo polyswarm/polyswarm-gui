@@ -4,9 +4,19 @@ exports[`renders without crashing 1`] = `
 <header
   class="Header"
 >
-  <h3>
-    
-  </h3>
+  <div
+    class="Header-Title"
+  >
+    <img
+      class="Header-Logo"
+      src="../public/img/polyswarm.svg"
+    >
+      
+    </img>
+    <h3>
+      
+    </h3>
+  </div>
   <button
     class="Button"
   >
@@ -19,9 +29,19 @@ exports[`shows title props 1`] = `
 <header
   class="Header"
 >
-  <h3>
-    Title
-  </h3>
+  <div
+    class="Header-Title"
+  >
+    <img
+      class="Header-Logo"
+      src="../public/img/polyswarm.svg"
+    >
+      
+    </img>
+    <h3>
+      Title
+    </h3>
+  </div>
   <button
     class="Button"
   >

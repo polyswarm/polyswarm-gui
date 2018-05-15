@@ -10,36 +10,36 @@ it('renders without crashing', () => {
 
 it('shows all bounties passed as cards', () => {
   const bounties = [
-    {name: 'asdf'},
-    {name: 'fdsa'}
+    {guid: 'asdf'},
+    {guid: 'fdsa'}
   ];
-  const wrapper = render(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList bounties={bounties}/>);
 
   expect(wrapper.find('Card')).toHaveLength(2);
   expect(wrapper.find('Card').first().text()).toBe('asdf');
   expect(wrapper.find('Card').last().text()).toBe('fdsa');
 });
 
-it('selects the bounty when the BountyList is clicked', () => {
-  const onSelectBounty = jest.spyOn(BountyList.prototype, 'onSelectBounty');
+it('selects the bounty when the card is clicked', () => {
+  const onBountySelected = jest.spyOn(BountyList.prototype, 'onBountySelected');
   const bounties = [
-    {name: 'asdf'},
-    {name: 'fdsa'}
+    {guid: 'asdf'},
+    {guid: 'fdsa'}
   ];
-  const wrapper = render(<BountyList bounties={bounties} onSelectBounty={onSelectBounty}/>);
-  wrapper.find('BountyList').first().simulate('click');
+  const wrapper = mount(<BountyList bounties={bounties}/>);
+  wrapper.find('Card').first().simulate('click');
 
-  expect(onSelectBounty).toHaveBeenCalled(0);
+  expect(onBountySelected).toHaveBeenCalledWith(0);
 });
 
-it('calls prop onSelectBounty when BountyList is clicked', () => {
-  const onSelectBounty = jest.fn();
+it('calls prop onSelectBounty when card is clicked', () => {
+  const onBountySelected = jest.fn();
   const bounties = [
-    {name: 'asdf'},
-    {name: 'fdsa'}
+    {guid: 'asdf'},
+    {guid: 'fdsa'}
   ];
-  const wrapper = render(<BountyList bounties={bounties} onSelectBounty={onSelectBounty}/>);
-  wrapper.find('BountyList').first().simulate('click');
+  const wrapper = mount(<BountyList bounties={bounties} onBountySelected={onBountySelected}/>);
+  wrapper.find('Card').first().simulate('click');
 
-  expect(onSelectBounty).toHaveBeenCalled(0);
+  expect(onBountySelected).toHaveBeenCalledWith(0);
 });

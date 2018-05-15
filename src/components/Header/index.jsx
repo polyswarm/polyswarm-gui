@@ -15,7 +15,12 @@ class Header extends Component {
     const { props: { title, create } } = this;
     return (
       <header className='Header'>
-        <h3>{title}</h3>
+        <div className='Header-Title'>
+          <img className='Header-Logo'
+              src='../public/img/polyswarm.svg'
+              alt={strings.logo}/>
+          <h3>{title}</h3>
+        </div>
         {!create && (
           <Button className='Header-Button' onClick={this.onClickHandler}>
             {strings.newBounty}

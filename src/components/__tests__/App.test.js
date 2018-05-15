@@ -73,10 +73,10 @@ it('renders without crashing', () => {
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
 
-it('shows create when no bounties found', () => {
+it('shows empty bounty list when no bounties found', () => {
   const wrapper = mount(<App />);
   wrapper.setState({first: false});
-  expect(wrapper.find('.Bounty-Create')).toHaveLength(1);
+  expect(wrapper.find('.BountyList')).toHaveLength(1);
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
 
@@ -135,13 +135,13 @@ it('shows BountyInfo when at least one bounty & active selects it', () => {
   expect(wrapper.find('.Bounty-Info')).toHaveLength(1);
 });
 
-it('shows BountyInfo when at least one bounty & active is negative', () => {
+it('shows BountyList when at least one bounty & active is negative', () => {
   const wrapper = mount(<App />);
   const bounties = [{guid:'asdf'}];
   const active = -1;
   wrapper.setState({first: false, bounties: bounties, active: active});
 
-  expect(wrapper.find('.Bounty-Create')).toHaveLength(1);
+  expect(wrapper.find('.BountyList')).toHaveLength(1);
 });
 
 it('shows welcome screen on first load', () => {
@@ -155,14 +155,14 @@ it('stores seen true when welcome closed', () => {
   expect(JSON.parse(localStorage.getItem('seen'))).toBeTruthy();
 });
 
-it('calls select when a sidebar item is clicked', () => {
+it('calls select when a card is clicked', () => {
   const select = jest.spyOn(App.prototype, 'onSelectBounty');
   const wrapper = mount(<App />);
   const bounties = [{guid:'asdf'}, {guid:'demo'}];
-  const active = 0;
+  const active = -1;
   wrapper.setState({first: false, bounties: bounties, active: active});
 
-  wrapper.find('.item-0').find('.ListItem-Child').simulate('click');
+  wrapper.find('.Card').first().simulate('click');
   expect(select).toHaveBeenCalledTimes(1);
   expect(select).toHaveBeenCalledWith(0);
 });
@@ -247,7 +247,7 @@ it('does not update the state when onSelectBounty called with out of bounds',() 
   expect(setState).toHaveBeenCalledTimes(0);
 });
 
-it('calls remove when a sidebar item remove is clicked', () => {
+it('calls remove when a card remove is clicked', () => {
   const remove = jest.spyOn(App.prototype, 'onRemoveBounty');
   const wrapper = mount(<App />);
   const bounties = [{guid:'asdf'}, {guid:'demo'}];

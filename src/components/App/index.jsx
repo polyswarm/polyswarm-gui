@@ -73,7 +73,14 @@ class App extends Component {
     const {host: url} = config;
     const { state: { active, bounties, create, first, isUnlocked, walletList,
       errorMessage, requestsInProgress } } = this;
-
+      let header;
+      if (!create && active >= 0) {
+        header = bounties[active].guid;
+      } else if (!create) {
+        header = strings.list;
+      } else {
+        header = strings.create;
+      }
     return (
       <div className='App'>
         <CSSTransition
@@ -88,11 +95,11 @@ class App extends Component {
         </CSSTransition>
         {!first && (
           <React.Fragment>
-            <Header title={(bounties.length === 0 || create || active < 0) ? strings.create : bounties[active].guid}
-              create={create || bounties.length === 0 || active < 0}
+            <Header title={header}
+              create={create}
               onClick={this.onCreateBounty}/>
             <div className='App-Content'>
-              { (bounties.length === 0 || create ) && (
+              { create && (
                 <BountyCreate url={url}
                   isUnlocked={isUnlocked}
                   walletList={walletList}
@@ -103,9 +110,9 @@ class App extends Component {
                   removeRequest={this.removeRequest}/>
               )}
               { !create && active < 0 && (
-                <BountyList bounties={bounties}/>
+                <BountyList bounties={bounties} onBountySelected={this.onSelectBounty}/>
               )}
-              { !create && active >=0 && active < bounties.length && (
+              { !create && active >=0 && (
                 <BountyInfo bounty={bounties[active]}/>
               )}
             </div>
