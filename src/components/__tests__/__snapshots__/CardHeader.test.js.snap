@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
+<div
+  class="CardHeader"
+>
+  
+</div>
+`;
+
+exports[`shows the title when passed 1`] = `null`;

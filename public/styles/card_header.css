@@ -1,0 +1,10 @@
+.CardHeader {
+  border-bottom: 2px #8500ff solid;
+  box-sizing: border-box;
+  color: #8500ff;
+  font-size: 24px;
+  height: 48px;
+  line-height: 48px;
+  padding: 5px 20px 0 20px;
+  width: 100%;
+}

@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 // Bounty Management Imports
 import Card from '../Card';
+import CardHeader from '../CardHeader';
 
 // Component Imports
 import strings from './strings';
@@ -23,7 +24,7 @@ class BountyList extends Component {
                 <Card
                   key={bounty.guid}
                   onClick={() => this.onBountySelected(index)}>
-                  {bounty.guid}
+                    <CardHeader title={bounty.guid}/>
                 </Card>
               );
           })}
