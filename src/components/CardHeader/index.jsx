@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 // Bounty Management Imports
 
 // Component Imports
-import strings from './strings';
 
 class CardHeader extends Component {
     render() {
