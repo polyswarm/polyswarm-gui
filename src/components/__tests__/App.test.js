@@ -155,14 +155,14 @@ it('stores seen true when welcome closed', () => {
   expect(JSON.parse(localStorage.getItem('seen'))).toBeTruthy();
 });
 
-it('calls select when a card is clicked', () => {
+it('calls select when a view button on card is clicked', () => {
   const select = jest.spyOn(App.prototype, 'onSelectBounty');
   const wrapper = mount(<App />);
   const bounties = [{guid:'asdf'}, {guid:'demo'}];
   const active = -1;
   wrapper.setState({first: false, bounties: bounties, active: active});
 
-  wrapper.find('.Card').first().simulate('click');
+  wrapper.find('.Card').first().find('.Button').first().simulate('click');
   expect(select).toHaveBeenCalledTimes(1);
   expect(select).toHaveBeenCalledWith(0);
 });
@@ -251,10 +251,11 @@ it('calls remove when a card remove is clicked', () => {
   const remove = jest.spyOn(App.prototype, 'onRemoveBounty');
   const wrapper = mount(<App />);
   const bounties = [{guid:'asdf'}, {guid:'demo'}];
-  const active = 0;
+  const active = -1;
   wrapper.setState({first: false, bounties: bounties, active: active});
-  wrapper.find('.item-0').find('li').simulate('mouseEnter');
-  wrapper.find('.Remove-Button').simulate('click');
+
+  wrapper.find('.Card').first().find('.Button').last().simulate('click');
+
   expect(remove).toHaveBeenCalledTimes(1);
   expect(remove).toHaveBeenCalledWith(0);
 });

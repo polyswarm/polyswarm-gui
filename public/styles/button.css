@@ -32,7 +32,7 @@
 }
 
 .flat {
-  background-color: rgba(0, 0, 0, 0);;
+  background-color: rgba(0, 0, 0, 0);
   box-shadow: 0 0 0 white;
   box-sizing: border-box;
   color: #8500ff;
@@ -44,7 +44,7 @@
 }
 
 .flat-cancel {
-  background-color: #f5f5f5;
+  background-color: rgba(0, 0, 0, 0);
   box-shadow: 0 0 0 white;
   box-sizing: border-box;
   color: #ff1a00;

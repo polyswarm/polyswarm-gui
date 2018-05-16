@@ -1,4 +1,6 @@
 .CardHeader {
+  background-image: url('../img/gray_hexgrid_2x.png');
+  background-size: 36px 43px;
   border-bottom: 2px #8500ff solid;
   box-sizing: border-box;
   color: #8500ff;

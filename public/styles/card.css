@@ -1,5 +1,7 @@
 .Card {
     background-color: #fafafa;
     box-shadow: 0 4px 16px rgba(0, 0, 0, .3);
+    display: flex;
+    flex-direction: column;
     margin-bottom: 15px;
 }

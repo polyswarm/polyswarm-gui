@@ -110,7 +110,9 @@ class App extends Component {
                   removeRequest={this.removeRequest}/>
               )}
               { !create && active < 0 && (
-                <BountyList bounties={bounties} onBountySelected={this.onSelectBounty}/>
+                <BountyList bounties={bounties}
+                  onBountySelected={this.onSelectBounty}
+                  onBountyRemoved={this.onRemoveBounty}/>
               )}
               { !create && active >=0 && (
                 <BountyInfo bounty={bounties[active]}/>
