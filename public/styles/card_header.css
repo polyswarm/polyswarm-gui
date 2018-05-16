@@ -1,5 +1,4 @@
 .CardHeader {
-  background-color: #fafafa;
   background-image: url('../img/gray_hexgrid_2x.png');
   background-size: 36px 43px;
   border-bottom: 1px #e5e5e5 solid;
@@ -9,11 +8,16 @@
   min-height: 48px;
   line-height: 20px;
   padding: 5px 20px 5px 20px;
+  transition: background-color 0.25s ease;
   width: 100%;
 }
 
+.update {
+  background-color: rgba(46, 255, 109, .3);
+}
+
 .CardSubHeader {
-  color: black;
+  color: #858585;
   font-size: 16px;
   line-height: 18px;
   margin: 0;

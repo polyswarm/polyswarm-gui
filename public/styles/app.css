@@ -60,14 +60,14 @@ em {
 }
 
 ::-webkit-scrollbar-track {
-  background: none;
+  background-color: #dedede;
 }
 
 ::-webkit-scrollbar-thumb {
   border-radius: 8px;
-  color: #a5a5a5;
+  background-color: #a5a5a5;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  color: #555555;
+::-webkit-scrollbar-thumb:active {
+  background-color: #555555;
 }

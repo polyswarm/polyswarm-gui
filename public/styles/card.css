@@ -4,4 +4,9 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 15px;
+    transition: background-color 0.25s ease;
+}
+
+.Card:hover {
+    background-color: #eeeeee;
 }

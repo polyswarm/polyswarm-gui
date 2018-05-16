@@ -186,3 +186,21 @@ it('adds (EXPIRED) when a bounty has passed it\'s expiration block', () => {
 
   expect(wrapper.find('.CardHeader').text()).toEqual('asdf (EXPIRED)');
 });
+
+it('adds update to CardHeaders where bounty.updated is true', () => {
+  const bounties = [
+    {
+      updated: true,
+      amount: 123,
+      guid: 'asdf',
+      assertions: [],
+      author: 'author',
+      resolved: false,
+      expired: true,
+      artifacts: [{'name':'file'}, {'name':'other'}],
+    }
+  ];
+  const wrapper = mount(<BountyList bounties={bounties}/>);
+
+  expect(wrapper.find('.CardHeader').hasClass('update')).toBeTruthy();
+});

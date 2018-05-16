@@ -45,9 +45,10 @@ class BountyList extends Component {
               assertions = bounty.assertions.length;
             }
             return (
-              <Card
+              <Card onClick={() => this.onBountySelected(index)}
                 key={title}>
                   <CardHeader title={title}
+                    update={bounty.updated}
                     subhead={subheader}/>
                   <CardContent>
                     <ul>
@@ -59,19 +60,6 @@ class BountyList extends Component {
                         content={files}/>
                     </ul>
                   </CardContent>
-                  <CardButtonRow>
-                    <Button 
-                      flat
-                      onClick={() => this.onBountySelected(index)}>
-                      {strings.view}
-                    </Button>
-                    <Button 
-                        flat
-                        cancel
-                        onClick={() => this.onBountyRemoved(index)}>
-                        {strings.delete}
-                      </Button>
-                  </CardButtonRow>
               </Card>
             );
           })}

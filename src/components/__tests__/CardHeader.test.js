@@ -34,3 +34,11 @@ it('shows subhead when added', () => {
   expect(wrapper.find('.CardSubHeader').text()).toEqual('subhead');
 });
 
+it('applies updated class when updated prop is set', () => {
+  const wrapper = mount(
+    <CardHeader title='asdf' update/>
+  );
+
+  expect(wrapper.find('.CardHeader').hasClass('update')).toBeTruthy();
+});
+
