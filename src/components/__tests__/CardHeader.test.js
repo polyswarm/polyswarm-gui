@@ -17,3 +17,20 @@ it('shows the title when passed', () => {
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
 
+it('does not show subhead when no subhead added', () =>{
+  const wrapper = mount(
+    <CardHeader title='asdf'/>
+  );
+
+  expect(wrapper.find('.CardSubHeader')).toHaveLength(0);
+});
+
+it('shows subhead when added', () => {
+  const wrapper = mount(
+    <CardHeader title='asdf' subhead='subhead'/>
+  );
+
+  expect(wrapper.find('.CardSubHeader')).toHaveLength(1);
+  expect(wrapper.find('.CardSubHeader').text()).toEqual('subhead');
+});
+

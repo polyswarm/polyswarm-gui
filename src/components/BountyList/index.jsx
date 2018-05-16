@@ -5,7 +5,9 @@ import PropTypes from 'prop-types';
 import Button from '../Button'
 import Card from '../Card';
 import CardButtonRow from '../CardButtonRow';
+import CardContent from '../CardContent';
 import CardHeader from '../CardHeader';
+import StatRow from '../StatRow';
 
 // Component Imports
 import strings from './strings';
@@ -21,26 +23,57 @@ class BountyList extends Component {
     return (
       <div className='BountyList'>
         <ul>
-          {bounties && bounties.length > 0 && bounties.map((bounty, index) => {
-              return (
-                <Card
-                  key={bounty.guid}>
-                    <CardHeader title={bounty.guid}/>
-                    <CardButtonRow>
-                      <Button 
+          {bounties && bounties.map((bounty, index) => {
+            let title = bounty.guid;
+            if (bounty.resolved) {
+              title += strings.resolved;
+            } else if (bounty.expired) {
+              title += strings.expired;
+            } else {
+              title += strings.active;
+            }
+            let subheader = null;
+            if (typeof bounty.amount != 'undefined') {
+              subheader = bounty.amount + strings.nct;
+            }
+            let files = '';
+            if (bounty.artifacts && bounty.artifacts.length > 0) {
+              files = bounty.artifacts.map((artifact) => artifact.name).reduce((csv, name) => csv + ', ' + name)
+            }
+            let assertions = 0;
+            if (bounty && bounty.assertions) {
+              assertions = bounty.assertions.length;
+            }
+            return (
+              <Card
+                key={title}>
+                  <CardHeader title={title}
+                    subhead={subheader}/>
+                  <CardContent>
+                    <ul>
+                      <StatRow title={strings.author}
+                        content={bounty.author}/>
+                      <StatRow title={strings.assertions}
+                        content={assertions}/>
+                      <StatRow title={strings.files}
+                        content={files}/>
+                    </ul>
+                  </CardContent>
+                  <CardButtonRow>
+                    <Button 
+                      flat
+                      onClick={() => this.onBountySelected(index)}>
+                      {strings.view}
+                    </Button>
+                    <Button 
                         flat
-                        onClick={() => this.onBountySelected(index)}>
-                        {strings.view}
+                        cancel
+                        onClick={() => this.onBountyRemoved(index)}>
+                        {strings.delete}
                       </Button>
-                      <Button 
-                          flat
-                          cancel
-                          onClick={() => this.onBountyRemoved(index)}>
-                          {strings.delete}
-                        </Button>
-                    </CardButtonRow>
-                </Card>
-              );
+                  </CardButtonRow>
+              </Card>
+            );
           })}
         </ul>
         {(!bounties || bounties.length === 0) && (

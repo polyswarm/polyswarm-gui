@@ -44,6 +44,11 @@ class HttpApp {
       })
       .then(response => response.json())
       .then(json => json.result)
+      .then(bounty => {
+        const amount = new BigNumber(bounty.amount).dividedBy(new BigNumber('1000000000000000000')).toNumber();
+        bounty.amount = amount;
+        return bounty;
+      })
       .then(bounty => this.getAssertionsForBounty(bounty))
       .then(bountyAssertions => this.getArtifactsForBounty(bountyAssertions))
       .then(bounty => {
