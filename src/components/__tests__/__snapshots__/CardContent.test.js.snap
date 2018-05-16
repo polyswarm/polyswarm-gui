@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
+<div
+  class="CardContent"
+>
+  
+</div>
+`;
+
+exports[`shows multiple children when passed 1`] = `null`;
+
+exports[`shows the children passed 1`] = `
+<div
+  class="CardContent"
+>
+  <p>
+    Child
+  </p>
+</div>
+`;
