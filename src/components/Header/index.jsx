@@ -9,25 +9,38 @@ class Header extends Component {
   constructor(props) {
     super(props);
     this.onClickHandler = this.onClickHandler.bind(this);
+    this.onBack = this.onBack.bind(this);
   }
 
   render() {
-    const { props: { title, create } } = this;
+    const { props: { title, create, active } } = this;
+    let image_path = '../public/img/polyswarm-white.svg';
+    if (create || active >= 0) {
+      image_path = '../public/img/back-arrow.svg';
+    }
     return (
       <header className='Header'>
         <div className='Header-Title'>
-          <img className='Header-Logo'
-              src='../public/img/polyswarm.svg'
-              alt={strings.logo}/>
+          <img onClick={this.onBack} 
+            className='Header-Logo'
+            src={image_path}
+            alt={strings.logo}/>
           <h3>{title}</h3>
         </div>
-        {!create && (
+        {active < 0 && !create && (
           <Button className='Header-Button' onClick={this.onClickHandler}>
             {strings.newBounty}
           </Button>
         )}
       </header>
     );
+  }
+
+  onBack() {
+    const { props: { onBack } } = this;
+    if(onBack) {
+      onBack();
+    } 
   }
 
   onClickHandler() {
@@ -41,6 +54,7 @@ class Header extends Component {
 Header.propTypes = {
   title: PropTypes.string,
   onClick: PropTypes.func,
+  onBack: PropTypes.func,
   create: PropTypes.bool,
 };
 export default Header;

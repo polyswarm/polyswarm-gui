@@ -32,6 +32,7 @@ class App extends Component {
     };
 
     this.onAddBounty = this.onAddBounty.bind(this);
+    this.onBackPressed = this.onBackPressed.bind(this);
     this.onRemoveBounty = this.onRemoveBounty.bind(this);
     this.onSelectBounty = this.onSelectBounty.bind(this);
     this.onCreateBounty = this.onCreateBounty.bind(this);
@@ -96,7 +97,9 @@ class App extends Component {
         {!first && (
           <React.Fragment>
             <Header title={header}
+              active={active}
               create={create}
+              onBack={this.onBackPressed}
               onClick={this.onCreateBounty}/>
             <div className='App-Content'>
               { create && (
@@ -145,6 +148,10 @@ class App extends Component {
       .then(() => {
         this.removeRequest(strings.requestGetBounty, result.guid);
       });
+  }
+
+  onBackPressed() {
+    this.setState({active: -1, create: false});
   }
 
   onCreateBounty() {

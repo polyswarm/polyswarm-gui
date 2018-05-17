@@ -107,7 +107,7 @@ it('calls onCreateBounty when header button is clicked.', () => {
   const onCreateBounty = jest.spyOn(App.prototype, 'onCreateBounty');
   const wrapper = mount(<App />);
   const bounties = [{guid:'asdf'}];
-  const active = 0;
+  const active = -1;
   wrapper.setState({first: false, bounties: bounties, active: active});
 
   wrapper.find('.Header-Button').simulate('click');
@@ -118,7 +118,7 @@ it('calls onCreateBounty when header button is clicked.', () => {
 it('shows create when header "+ Bounty" is clicked', () => {
   const wrapper = mount(<App />);
   const bounties = [{guid:'asdf'}];
-  const active = 0;
+  const active = -1;
   wrapper.setState({first: false, bounties: bounties, active: active});
 
   wrapper.find('.Header-Button').simulate('click');
@@ -931,4 +931,14 @@ it('shows a Snackbar when there is an error', (done) => {
       done.fail(error);
     }
   });
+});
+
+it('sets state with active -1 and create false when onBackPressed called', () => {
+  const setState = jest.spyOn(App.prototype, 'setState');
+  const wrapper = mount(<App />);
+  const instance = wrapper.instance();
+  setState.mockClear();
+  instance.onBackPressed();
+
+  expect(setState).toHaveBeenCalledWith({active: -1, create: false});
 });

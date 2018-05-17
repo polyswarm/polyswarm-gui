@@ -9,7 +9,7 @@ exports[`renders without crashing 1`] = `
   >
     <img
       class="Header-Logo"
-      src="../public/img/polyswarm.svg"
+      src="../public/img/polyswarm-white.svg"
     >
       
     </img>
@@ -17,11 +17,6 @@ exports[`renders without crashing 1`] = `
       
     </h3>
   </div>
-  <button
-    class="Button"
-  >
-    + Bounty
-  </button>
 </header>
 `;
 
@@ -34,7 +29,7 @@ exports[`shows title props 1`] = `
   >
     <img
       class="Header-Logo"
-      src="../public/img/polyswarm.svg"
+      src="../public/img/polyswarm-white.svg"
     >
       
     </img>
@@ -42,10 +37,5 @@ exports[`shows title props 1`] = `
       Title
     </h3>
   </div>
-  <button
-    class="Button"
-  >
-    + Bounty
-  </button>
 </header>
 `;
