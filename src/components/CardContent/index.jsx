@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-// Bounty Manager imports
+// Project imports
 
 // Component imports
 

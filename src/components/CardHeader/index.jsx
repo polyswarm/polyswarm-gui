@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-// Bounty Management Imports
+// Project Imports
 import Dropdown from '../Dropdown';
 // Component Imports
 import strings from './strings';

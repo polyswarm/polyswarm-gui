@@ -1,5 +1,5 @@
 {
-  "name": "bounty-management",
+  "name": "polyswarm-gui",
   "description": "Tool to post and manage bounties on the PolySwarm Marketplace running on Ethereum.",
   "author": "Swarm Technologies",
   "version": "0.2.0",
@@ -101,7 +101,7 @@
         "icon": "./public/favicon.ico",
         "win32metadata": {
           "CompanyName": "PolySwarm",
-          "ProductName": "Bounty Management"
+          "ProductName": "PolySwarm Gui"
         },
         "packageManager": "yarn",
         "afterCopy": [
@@ -109,17 +109,17 @@
         ]
       },
       "electronWinstallerConfig": {
-        "name": "BountyManagement"
+        "name": "PolySwarmGui"
       },
       "electronInstallerDebian": {},
       "electronInstallerRedhat": {},
       "github_repository": {
         "owner": "polyswarm",
-        "name": "bounty-management"
+        "name": "polyswarm-gui"
       },
       "windowsStoreConfig": {
         "packageName": "",
-        "name": "bountymanagement"
+        "name": "polyswarmgui"
       }
     }
   }

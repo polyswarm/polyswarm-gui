@@ -1,6 +1,6 @@
 {
-  "short_name": "Bounty Management",
-  "name": "PolySwarm Bounty Management",
+  "short_name": "PolySwarm Gui",
+  "name": "PolySwarm Gui",
   "icons": [
     {
       "src": "favicon.ico",

@@ -1,7 +1,7 @@
 // Vendor Imports
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-// Bounty Management Imports
+// Project Imports
 
 // Component Imports
 

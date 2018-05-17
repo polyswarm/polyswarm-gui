@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {CSSTransition} from 'react-transition-group';
-// Bounty Manager imports
+// Project imports
 import Button from '../Button';
 // Component imports
 import strings from './strings';
