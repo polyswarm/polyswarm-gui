@@ -15,9 +15,33 @@ it('shows all bounties passed as cards', () => {
   ];
   const wrapper = mount(<BountyList bounties={bounties}/>);
 
-  expect(wrapper.find('Card')).toHaveLength(2);
-  expect(wrapper.find('CardHeader').first().text()).toBe('asdf (ACTIVE)');
-  expect(wrapper.find('CardHeader').last().text()).toBe('fdsa (ACTIVE)');
+  expect(wrapper.find('.Card')).toHaveLength(2);
+  expect(wrapper.find('.CardHeader-Title').first().text()).toBe('asdf (ACTIVE)');
+  expect(wrapper.find('.CardHeader-Title').last().text()).toBe('fdsa (ACTIVE)');
+});
+
+it('selects the bounty when the card is clicked', () => {
+  const onBountySelected = jest.spyOn(BountyList.prototype, 'onBountySelected');
+  const bounties = [
+    {guid: 'asdf'},
+    {guid: 'fdsa'}
+  ];
+  const wrapper = mount(<BountyList bounties={bounties}/>);
+  wrapper.find('.Card').first().simulate('click');
+
+  expect(onBountySelected).toHaveBeenCalledWith(0);
+});
+
+it('calls prop onBountySelected when the card is clicked', () => {
+  const onBountySelected = jest.fn();
+  const bounties = [
+    {guid: 'asdf'},
+    {guid: 'fdsa'}
+  ];
+  const wrapper = mount(<BountyList bounties={bounties} onBountySelected={onBountySelected}/>);
+  wrapper.find('.Card').first().simulate('click');
+
+  expect(onBountySelected).toHaveBeenCalledWith(0);
 });
 
 it('selects the bounty when view on the card is clicked', () => {
@@ -27,7 +51,7 @@ it('selects the bounty when view on the card is clicked', () => {
     {guid: 'fdsa'}
   ];
   const wrapper = mount(<BountyList bounties={bounties}/>);
-  wrapper.find('Card').first().find('Button').first().simulate('click');
+  wrapper.find('.Dropdown-Choices').first().find('p').first().simulate('click');
 
   expect(onBountySelected).toHaveBeenCalledWith(0);
 });
@@ -39,7 +63,7 @@ it('calls prop onBountySelected when view on the card is clicked', () => {
     {guid: 'fdsa'}
   ];
   const wrapper = mount(<BountyList bounties={bounties} onBountySelected={onBountySelected}/>);
-  wrapper.find('Card').first().find('Button').first().simulate('click');
+  wrapper.find('.Dropdown-Choices').first().find('p').first().simulate('click');
 
   expect(onBountySelected).toHaveBeenCalledWith(0);
 });
@@ -51,7 +75,7 @@ it('calls method onBountyRemoved when remove on the card is clicked', () => {
     {guid: 'fdsa'}
   ];
   const wrapper = mount(<BountyList bounties={bounties}/>);
-  wrapper.find('Card').first().find('Button').last().simulate('click');
+  wrapper.find('.Dropdown-Choices').first().find('p').last().simulate('click');
 
   expect(onBountyRemoved).toHaveBeenCalledWith(0);
 });
@@ -63,7 +87,7 @@ it('calls prop onBountyRemoved when remove on the card is clicked', () => {
     {guid: 'fdsa'}
   ];
   const wrapper = mount(<BountyList bounties={bounties} onBountyRemoved={onBountyRemoved}/>);
-  wrapper.find('Card').first().find('Button').last().simulate('click');
+  wrapper.find('.Dropdown-Choices').first().find('p').last().simulate('click');
 
   expect(onBountyRemoved).toHaveBeenCalledWith(0);
 });
@@ -74,8 +98,8 @@ it('puts a subheader on the CardHeader when amount is valid', () => {
   ];
   const wrapper = mount(<BountyList bounties={bounties}/>);
 
-  expect(wrapper.find('.CardSubHeader')).toHaveLength(1);
-  expect(wrapper.find('.CardSubHeader').text()).toEqual('123 Nectar (NCT)');
+  expect(wrapper.find('.CardHeader-Sub')).toHaveLength(1);
+  expect(wrapper.find('.CardHeader-Sub').text()).toEqual('123 Nectar (NCT)');
 });
 
 it('adds 3 statrows per bounty', () => {
@@ -136,7 +160,7 @@ it('adds (ACTIVE) to Card headers when neither expired for resolved', () => {
   ];
   const wrapper = mount(<BountyList bounties={bounties}/>);
 
-  expect(wrapper.find('.CardHeader').text()).toEqual('asdf (ACTIVE)');
+  expect(wrapper.find('.CardHeader-Title').text()).toEqual('asdf (ACTIVE)');
 });
 
 it('adds (CLOSED) when a bounty is resolved', () => {
@@ -152,7 +176,7 @@ it('adds (CLOSED) when a bounty is resolved', () => {
   ];
   const wrapper = mount(<BountyList bounties={bounties}/>);
 
-  expect(wrapper.find('.CardHeader').text()).toEqual('asdf (CLOSED)');
+  expect(wrapper.find('.CardHeader-Title').text()).toEqual('asdf (CLOSED)');
 });
 
 it('adds (CLOSED) when a bounty is resolved, even if expired', () => {
@@ -168,7 +192,7 @@ it('adds (CLOSED) when a bounty is resolved, even if expired', () => {
   ];
   const wrapper = mount(<BountyList bounties={bounties}/>);
 
-  expect(wrapper.find('.CardHeader').text()).toEqual('asdf (CLOSED)');
+  expect(wrapper.find('.CardHeader-Title').text()).toEqual('asdf (CLOSED)');
 });
 
 it('adds (EXPIRED) when a bounty has passed it\'s expiration block', () => {
@@ -184,7 +208,7 @@ it('adds (EXPIRED) when a bounty has passed it\'s expiration block', () => {
   ];
   const wrapper = mount(<BountyList bounties={bounties}/>);
 
-  expect(wrapper.find('.CardHeader').text()).toEqual('asdf (EXPIRED)');
+  expect(wrapper.find('.CardHeader-Title').text()).toEqual('asdf (EXPIRED)');
 });
 
 it('adds update to CardHeaders where bounty.updated is true', () => {

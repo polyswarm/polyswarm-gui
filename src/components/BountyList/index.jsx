@@ -45,21 +45,24 @@ class BountyList extends Component {
               assertions = bounty.assertions.length;
             }
             return (
-              <Card onClick={() => this.onBountySelected(index)}
-                key={title}>
-                  <CardHeader title={title}
-                    update={bounty.updated}
-                    subhead={subheader}/>
-                  <CardContent>
-                    <ul>
-                      <StatRow title={strings.author}
-                        content={bounty.author}/>
-                      <StatRow title={strings.assertions}
-                        content={assertions}/>
-                      <StatRow title={strings.files}
-                        content={files}/>
-                    </ul>
-                  </CardContent>
+              <Card key={title}
+                onClick={() => this.onBountySelected(index)}>
+                <CardHeader title={title}
+                  update={bounty.updated}
+                  subhead={subheader}
+                  remove={() => this.onBountyRemoved(index)}
+                  view={() => this.onBountySelected(index)}
+                  />
+                <CardContent>
+                  <ul>
+                    <StatRow title={strings.author}
+                      content={bounty.author}/>
+                    <StatRow title={strings.assertions}
+                      content={assertions}/>
+                    <StatRow title={strings.files}
+                      content={files}/>
+                  </ul>
+                </CardContent>
               </Card>
             );
           })}

@@ -13,7 +13,7 @@ it('shows the title when passed', () => {
     <CardHeader title='asdf'/>
   );
 
-  expect(wrapper.text()).toEqual('asdf');
+  expect(wrapper.find('.CardHeader-Title').text()).toEqual('asdf');
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
 
@@ -22,7 +22,7 @@ it('does not show subhead when no subhead added', () =>{
     <CardHeader title='asdf'/>
   );
 
-  expect(wrapper.find('.CardSubHeader')).toHaveLength(0);
+  expect(wrapper.find('.CardHeader-Sub')).toHaveLength(0);
 });
 
 it('shows subhead when added', () => {
@@ -30,8 +30,8 @@ it('shows subhead when added', () => {
     <CardHeader title='asdf' subhead='subhead'/>
   );
 
-  expect(wrapper.find('.CardSubHeader')).toHaveLength(1);
-  expect(wrapper.find('.CardSubHeader').text()).toEqual('subhead');
+  expect(wrapper.find('.CardHeader-Sub')).toHaveLength(1);
+  expect(wrapper.find('.CardHeader-Sub').text()).toEqual('subhead');
 });
 
 it('applies updated class when updated prop is set', () => {

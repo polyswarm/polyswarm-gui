@@ -4,7 +4,34 @@ exports[`renders without crashing 1`] = `
 <header
   class="CardHeader"
 >
-  
+  <div
+    class="CardHeader-Title"
+  >
+    
+  </div>
+  <div
+    class="Dropdown"
+  >
+    <img
+      alt="menu"
+      class="Dropdown-Icon"
+      height="24px"
+      src="../public/img/menu.svg"
+      width="7px"
+    >
+      
+    </img>
+    <div
+      class="Dropdown-Choices"
+    >
+      <p>
+        View
+      </p>
+      <p>
+        Delete
+      </p>
+    </div>
+  </div>
 </header>
 `;
 

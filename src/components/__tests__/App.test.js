@@ -155,14 +155,28 @@ it('stores seen true when welcome closed', () => {
   expect(JSON.parse(localStorage.getItem('seen'))).toBeTruthy();
 });
 
-it('calls select when a view button on card is clicked', () => {
+it('calls select when card is clicked', () => {
   const select = jest.spyOn(App.prototype, 'onSelectBounty');
   const wrapper = mount(<App />);
   const bounties = [{guid:'asdf'}, {guid:'demo'}];
   const active = -1;
   wrapper.setState({first: false, bounties: bounties, active: active});
 
-  wrapper.find('.Card').first().find('.Button').first().simulate('click');
+  wrapper.find('.Card').first().simulate('click');
+
+  expect(select).toHaveBeenCalledTimes(1);
+  expect(select).toHaveBeenCalledWith(0);
+});
+
+it('calls select when card menu view button is clicked', () => {
+  const select = jest.spyOn(App.prototype, 'onSelectBounty');
+  const wrapper = mount(<App />);
+  const bounties = [{guid:'asdf'}, {guid:'demo'}];
+  const active = -1;
+  wrapper.setState({first: false, bounties: bounties, active: active});
+
+  wrapper.find('.Dropdown-Choices').first().find('p').first().simulate('click');
+
   expect(select).toHaveBeenCalledTimes(1);
   expect(select).toHaveBeenCalledWith(0);
 });
@@ -247,14 +261,14 @@ it('does not update the state when onSelectBounty called with out of bounds',() 
   expect(setState).toHaveBeenCalledTimes(0);
 });
 
-it('calls remove when a card remove is clicked', () => {
+it('calls remove when a card delete is clicked', () => {
   const remove = jest.spyOn(App.prototype, 'onRemoveBounty');
   const wrapper = mount(<App />);
   const bounties = [{guid:'asdf'}, {guid:'demo'}];
   const active = -1;
   wrapper.setState({first: false, bounties: bounties, active: active});
 
-  wrapper.find('.Card').first().find('.Button').last().simulate('click');
+  wrapper.find('.Dropdown-Choices').first().find('p').last().simulate('click');
 
   expect(remove).toHaveBeenCalledTimes(1);
   expect(remove).toHaveBeenCalledWith(0);
@@ -264,27 +278,27 @@ it('updates the state when onRemoveBounty called',() => {
   const setState = jest.spyOn(App.prototype, 'setState');
   const wrapper = shallow(<App />);
   const bounties = [{guid:'asdf'}, {guid:'demo'}];
-  const active = 0;
+  const active = -1;
   wrapper.setState({first: false, bounties: bounties, active: active});
   setState.mockClear();
 
   const instance = wrapper.instance();
   instance.onRemoveBounty(1);
 
-  expect(setState).toHaveBeenCalledWith({bounties:[{guid:'asdf'}]});
+  expect(setState).toHaveBeenCalledWith({active: -1, bounties:[{guid:'asdf'}]});
 });
 
 it('removes the value at the index passed in onRemoveBounty', () => {
   const setState = jest.spyOn(App.prototype, 'setState');
   const wrapper = shallow(<App />);
   const bounties = [{guid:'asdf'}, {guid:'demo'}];
-  const active = 0;
+  const active = -1;
   wrapper.setState({bounties: bounties, active: active});
   setState.mockClear();
   const instance = wrapper.instance();
   instance.onRemoveBounty(0);
 
-  expect(setState).toHaveBeenCalledWith({bounties:[{guid:'demo'}]});
+  expect(setState).toHaveBeenCalledWith({active: -1, bounties:[{guid:'demo'}]});
 });
 
 it('doesn\'t remove anything if onRemoveBounty called with negative', () => {
@@ -693,7 +707,7 @@ it('calls setState during onRemoveBounty', () => {
 
   instance.onRemoveBounty(0);
 
-  expect(setState).toHaveBeenCalledWith({bounties:[]});
+  expect(setState).toHaveBeenCalledWith({active: -1, bounties:[]});
 });
 
 it('calls storeBounties after onRemoveBounty', () => {

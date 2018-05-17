@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
+<div
+  class="Dropdown"
+>
+  <img
+    alt="menu"
+    class="Dropdown-Icon"
+    height="24px"
+    src="../public/img/menu.svg"
+    width="7px"
+  >
+    
+  </img>
+  <div
+    class="Dropdown-Choices"
+  >
+    
+  </div>
+</div>
+`;

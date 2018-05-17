@@ -74,7 +74,7 @@ class App extends Component {
     const { state: { active, bounties, create, first, isUnlocked, walletList,
       errorMessage, requestsInProgress } } = this;
       let header;
-      if (!create && active >= 0) {
+      if (!create && active >= 0 && bounties.length > active) {
         header = bounties[active].guid;
       } else if (!create) {
         header = strings.list;
@@ -166,9 +166,14 @@ class App extends Component {
 
   onRemoveBounty(index) {
     const bounties = this.state.bounties.slice();
+    const { state: {active}} = this;
     if (index !== null && index >= 0 && index < bounties.length) {
       bounties.splice(index, 1);
-      this.setState({bounties: bounties});
+      let activeValue = active;
+      if (active >= bounties.length) {
+        activeValue = active - 1;
+      }
+      this.setState({active: activeValue, bounties: bounties});
     }
   }
 
