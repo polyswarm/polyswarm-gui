@@ -3,6 +3,7 @@ import {shallow, render, mount} from 'enzyme';
 import {renderToJson} from 'enzyme-to-json';
 import BountyCreate from '../BountyCreate';
 import Http from '../BountyCreate/http';
+import { isJSDocNonNullableType } from 'typescript';
 
 const mockUploadFiles = jest.fn().mockImplementation(() => {
   return new Promise(resolve => {
@@ -363,19 +364,98 @@ it('disables button when there are no files', () => {
   const wrapper = mount(<BountyCreate url={'url'}/>);
   const files = [
   ];
-  wrapper.setState({files: files, uploading: false});
-
-  expect(wrapper.find('.Bounty-Create-Upload').props().disabled).toBeTruthy();
+  const state = {
+    files: files,
+    uploading: false,
+    next: true,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
+  
+    expect(wrapper.find('.Bounty-Create-Upload').find('button').props().disabled).toBeTruthy();
 });
 
-it('enables button when there are files, a url and not uploading ', () => {
+it('disables the button when reward is not set', () => {
   const wrapper = mount(<BountyCreate url={'url'}/>);
   const files = [
     {name: 'demo'},
     {name: 'omed'},
   ];
-  wrapper.setState({files: files, uploading: false});
-  expect(wrapper.find('.Bounty-Create-Upload').props().disabled).toBeFalsy();
+  const state = {
+    files: files,
+    uploading: false,
+    next: true,
+    duration: '1',
+  };
+  wrapper.setState(state);
+
+  expect(wrapper.find('.Bounty-Create-Upload').find('button').props().disabled).toBeTruthy();
+});
+
+it('disables the button when reward_error is set', () => {
+  const wrapper = mount(<BountyCreate url={'url'}/>);
+  const files = [
+    {name: 'demo'},
+    {name: 'omed'},
+  ];
+  const state = {
+    files: files,
+    uploading: false,
+    next: true,
+    reward:'5',
+    duration: '1',
+    reward_error: 'asdf'
+  };
+  wrapper.setState(state);
+
+  expect(wrapper.find('.Bounty-Create-Upload').find('button').props().disabled).toBeTruthy();
+});
+
+it('disables the button when duration is not set', () => {
+  const wrapper = mount(<BountyCreate url={'url'}/>);
+  const files = [
+    {name: 'demo'},
+    {name: 'omed'},
+  ];
+  const state = {
+    files: files,
+    uploading: false,
+    next: true,
+    reward:'5',
+  };
+  wrapper.setState(state);
+
+  expect(wrapper.find('.Bounty-Create-Upload').find('button').props().disabled).toBeTruthy();
+});
+
+it('disables the button when duration_err is set', () => {
+  const wrapper = mount(<BountyCreate url={'url'}/>);
+  const files = [
+    {name: 'demo'},
+    {name: 'omed'},
+  ];
+  const state = {
+    files: files,
+    uploading: false,
+    next: true,
+    reward:'5',
+    duration: '1',
+    duration_error: 'asdf'
+  };
+  wrapper.setState(state);
+
+  expect(wrapper.find('.Bounty-Create-Upload').find('button').props().disabled).toBeTruthy();
+});
+
+it('enables button when there are files, a url, and reward & duration have valid values ', () => {
+  const wrapper = mount(<BountyCreate url={'url'}/>);
+  const files = [
+    {name: 'demo'},
+    {name: 'omed'},
+  ];
+  wrapper.setState({files: files, uploading: false, next: true, reward: 0.0625, duration: 1});
+  expect(wrapper.find('.Bounty-Create-Upload').find('button').props().disabled).toBeFalsy();
 });
 
 it('opens the modal if isUnlocked not set on create click', () => {
@@ -391,11 +471,77 @@ it('opens the modal if isUnlocked not set on create click', () => {
     {name: 'demo'},
     {name: 'omed'},
   ];
-  wrapper.setState({files: files, uploading: false});
+  const state = {
+    files: files,
+    uploading: false,
+    next: true,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
 
-  wrapper.find('.Bounty-Create-Upload').simulate('click');
+  wrapper.find('.Bounty-Create-Upload').find('.Button').simulate('click');
 
   expect(wrapper.find('.ModalContent')).toHaveLength(1);
+});
+
+it('calls onBountyPosted when modal exits on successful unlock', () => {
+  const onBountyPosted = jest.spyOn(BountyCreate.prototype, 'onBountyPosted');
+  const onWalletChange = jest.fn();
+  const walletList = [];
+  const wrapper = mount(
+    <BountyCreate url={'url'}
+      onWalletChange={onWalletChange}
+      walletList={walletList}
+      isUnlocked={false}/>
+  );
+  const files = [
+    {name: 'demo'},
+    {name: 'omed'},
+  ];
+  const state = {
+    files: files,
+    uploading: false,
+    next: true,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
+  const instance = wrapper.instance();
+
+  instance.onWalletChangeHandler(true, false);
+
+  expect(onBountyPosted).toHaveBeenCalledTimes(1);
+});
+
+it('calls prop onBountyPosted when modal exits on successful unlock', () => {
+  const onBountyPosted = jest.fn();
+  const onWalletChange = jest.fn();
+  const walletList = [];
+  const wrapper = mount(
+    <BountyCreate url={'url'}
+      onWalletChange={onWalletChange}
+      walletList={walletList}
+      onBountyPosted={onBountyPosted}
+      isUnlocked={false}/>
+  );
+  const files = [
+    {name: 'demo'},
+    {name: 'omed'},
+  ];
+  const state = {
+    files: files,
+    uploading: false,
+    next: true,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
+  const instance = wrapper.instance();
+
+  instance.onWalletChangeHandler(true, false);
+
+  expect(onBountyPosted).toHaveBeenCalledTimes(1);
 });
 
 it('calls create after modal is successfully closed & returns unlocked', () => {
@@ -620,4 +766,356 @@ it('should call addRequest and removeRequest in createBounty', (done) => {
         done.fail(error);
       }
     });
+});
+
+it('enables next button when at least one file is entered', () => {
+  const onWalletChange = jest.fn();
+  const walletList = [];
+  const wrapper = mount(
+    <BountyCreate url={'url'}
+      onWalletChange={onWalletChange}
+      walletList={walletList}
+      isUnlocked={false}/>
+  );
+
+  const instance = wrapper.instance();
+  instance.onMultipleFilesSelected([{name: 'demo'}]);
+
+  expect(wrapper.find('BountyCreate-Header-Buttons').last().disabled).toBeFalsy();
+});
+
+it('sets next: true when next button pushed', () => {
+  const setState = jest.spyOn(BountyCreate.prototype, 'setState');
+  const onWalletChange = jest.fn();
+  const walletList = [];
+  const wrapper = mount(
+    <BountyCreate url={'url'}
+      onWalletChange={onWalletChange}
+      walletList={walletList}
+      isUnlocked={false}/>
+  );
+  const files = [
+    {name: 'demo'},
+    {name: 'omed'},
+  ];
+  const state = {
+    files: files,
+    uploading: false,
+    next: false,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
+  setState.mockClear();
+
+  wrapper.find('.BountyCreate-Header-Buttons').find('button').last().simulate('click');
+
+  expect(setState).toHaveBeenCalledWith({next: true});
+});
+
+it('shows the reward/duration page when next clicked', () => {
+  const setState = jest.spyOn(BountyCreate.prototype, 'setState');
+  const onWalletChange = jest.fn();
+  const walletList = [];
+  const wrapper = mount(
+    <BountyCreate url={'url'}
+      onWalletChange={onWalletChange}
+      walletList={walletList}
+      isUnlocked={false}/>
+  );
+  const files = [
+    {name: 'demo'},
+    {name: 'omed'},
+  ];
+  const state = {
+    files: files,
+    uploading: false,
+    next: false,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
+  setState.mockClear();
+
+  wrapper.find('.BountyCreate-Header-Buttons').find('button').last().simulate('click');
+
+  expect(wrapper.find('.Bounty-Values')).toHaveLength(1);
+});
+
+it('enables the previous button when on next is true', () => {
+  const onWalletChange = jest.fn();
+  const walletList = [];
+  const wrapper = mount(
+    <BountyCreate url={'url'}
+      onWalletChange={onWalletChange}
+      walletList={walletList}
+      isUnlocked={false}/>
+  );
+  const files = [
+    {name: 'demo'},
+    {name: 'omed'},
+  ];
+  const state = {
+    files: files,
+    uploading: false,
+    next: true,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
+
+  expect(wrapper.find('.BountyCreate-Header-Buttons').find('button').first().props().disabled).toBeFalsy();
+});
+
+it('sets next: false when previous is clicked', () => {
+  const setState = jest.spyOn(BountyCreate.prototype, 'setState');
+  const onWalletChange = jest.fn();
+  const walletList = [];
+  const wrapper = mount(
+    <BountyCreate url={'url'}
+      onWalletChange={onWalletChange}
+      walletList={walletList}
+      isUnlocked={false}/>
+  );
+  const files = [
+    {name: 'demo'},
+    {name: 'omed'},
+  ];
+  const state = {
+    files: files,
+    uploading: false,
+    next: true,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
+
+  wrapper.find('.BountyCreate-Header-Buttons').find('button').first().simulate('click');
+
+  expect(setState).toHaveBeenCalledWith({next: false});
+});
+
+it('shows file list & drop target when next is false', () => {
+  const setState = jest.spyOn(BountyCreate.prototype, 'setState');
+  const onWalletChange = jest.fn();
+  const walletList = [];
+  const wrapper = mount(
+    <BountyCreate url={'url'}
+      onWalletChange={onWalletChange}
+      walletList={walletList}
+      isUnlocked={false}/>
+  );
+  const files = [
+    {name: 'demo'},
+    {name: 'omed'},
+  ];
+  const state = {
+    files: files,
+    uploading: false,
+    next: false,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
+
+  expect(wrapper.find('.Drop-Target')).toHaveLength(1);
+});
+
+it('shows the error when reward_error set', () => {
+  const setState = jest.spyOn(BountyCreate.prototype, 'setState');
+  const onWalletChange = jest.fn();
+  const walletList = [];
+  const wrapper = mount(
+    <BountyCreate url={'url'}
+      onWalletChange={onWalletChange}
+      walletList={walletList}
+      isUnlocked={false}/>
+  );
+  const files = [
+    {name: 'demo'},
+    {name: 'omed'},
+  ];
+  const state = {
+    files: files,
+    uploading: false,
+    next: true,
+    reward:'5',
+    duration: '1',
+    reward_error: 'asdf'
+  };
+  wrapper.setState(state);
+
+  expect(wrapper.find('.AnimatedInput').first().find('p').text()).toEqual('asdf');
+});
+
+it('shows the error when duration_error set', () => {
+  const setState = jest.spyOn(BountyCreate.prototype, 'setState');
+  const onWalletChange = jest.fn();
+  const walletList = [];
+  const wrapper = mount(
+    <BountyCreate url={'url'}
+      onWalletChange={onWalletChange}
+      walletList={walletList}
+      isUnlocked={false}/>
+  );
+  const files = [
+    {name: 'demo'},
+    {name: 'omed'},
+  ];
+  const state = {
+    files: files,
+    uploading: false,
+    next: true,
+    reward:'5',
+    duration: '1',
+    duration_error: 'asdf'
+  };
+  wrapper.setState(state);
+
+  expect(wrapper.find('.AnimatedInput').last().find('p').text()).toEqual('asdf');
+});
+
+it('calls setState with reward_error message when reward changed to less than 0.0625', () => {
+  const setState = jest.spyOn(BountyCreate.prototype, 'setState');
+  const onWalletChange = jest.fn();
+  const walletList = [];
+  const wrapper = mount(
+    <BountyCreate url={'url'}
+      onWalletChange={onWalletChange}
+      walletList={walletList}
+      isUnlocked={false}/>
+  );
+  const files = [
+    {name: 'demo'},
+    {name: 'omed'},
+  ];
+  const state = {
+    files: files,
+    uploading: false,
+    next: true,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
+  wrapper.find('.AnimatedInput-Input').first().simulate('change', {target: {value: '0'}});
+
+  const instance = wrapper.instance();
+
+  expect(instance.state.reward_error).toEqual('Reward below 0.0625 minumum.');
+});
+
+it('calls setState with reward_error null when reward changed to more than 0.0625', () => {
+  const setState = jest.spyOn(BountyCreate.prototype, 'setState');
+  const onWalletChange = jest.fn();
+  const walletList = [];
+  const wrapper = mount(
+    <BountyCreate url={'url'}
+      onWalletChange={onWalletChange}
+      walletList={walletList}
+      isUnlocked={false}/>
+  );
+  const files = [
+    {name: 'demo'},
+    {name: 'omed'},
+  ];
+  const state = {
+    files: files,
+    uploading: false,
+    next: true,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
+  wrapper.find('.AnimatedInput-Input').first().simulate('change', {target: {value: '1'}});
+
+  const instance = wrapper.instance();
+
+  expect(instance.state.reward_error).toEqual(null);
+});
+
+it('calls setState with duration_error message when duration error changed to less than 1', () => {
+  const setState = jest.spyOn(BountyCreate.prototype, 'setState');
+  const onWalletChange = jest.fn();
+  const walletList = [];
+  const wrapper = mount(
+    <BountyCreate url={'url'}
+      onWalletChange={onWalletChange}
+      walletList={walletList}
+      isUnlocked={false}/>
+  );
+  const files = [
+    {name: 'demo'},
+    {name: 'omed'},
+  ];
+  const state = {
+    files: files,
+    uploading: false,
+    next: true,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
+  wrapper.find('.AnimatedInput-Input').last().simulate('change', {target: {value: '0'}});
+
+  const instance = wrapper.instance();
+
+  expect(instance.state.duration_error).toEqual('Duration below 1.');
+});
+
+it('calls setState with duration_error message when duration set to a float', () => {
+  const setState = jest.spyOn(BountyCreate.prototype, 'setState');
+  const onWalletChange = jest.fn();
+  const walletList = [];
+  const wrapper = mount(
+    <BountyCreate url={'url'}
+      onWalletChange={onWalletChange}
+      walletList={walletList}
+      isUnlocked={false}/>
+  );
+  const files = [
+    {name: 'demo'},
+    {name: 'omed'},
+  ];
+  const state = {
+    files: files,
+    uploading: false,
+    next: true,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
+  wrapper.find('.AnimatedInput-Input').last().simulate('change', {target: {value: '1.2'}});
+
+  const instance = wrapper.instance();
+
+  expect(instance.state.duration_error).toEqual('Duration must be integer.');
+});
+
+it('calls setState with duration_error null when duration changed to more than 0', () => {
+  const setState = jest.spyOn(BountyCreate.prototype, 'setState');
+  const onWalletChange = jest.fn();
+  const walletList = [];
+  const wrapper = mount(
+    <BountyCreate url={'url'}
+      onWalletChange={onWalletChange}
+      walletList={walletList}
+      isUnlocked={false}/>
+  );
+  const files = [
+    {name: 'demo'},
+    {name: 'omed'},
+  ];
+  const state = {
+    files: files,
+    uploading: false,
+    next: true,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
+  wrapper.find('.AnimatedInput-Input').last().simulate('change', {target: {value: '1'}});
+
+  const instance = wrapper.instance();
+
+  expect(instance.state.duration_error).toEqual(null);
 });

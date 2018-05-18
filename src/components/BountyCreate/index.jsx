@@ -26,6 +26,7 @@ class BountyCreate extends Component {
     };
 
     this.onBackClick = this.onBackClick.bind(this);
+    this.onBountyPosted = this.onBountyPosted.bind(this);
     this.onClearAll = this.onClearAll.bind(this);
     this.onClickHandler = this.onClickHandler.bind(this);
     this.onDurationChanged = this.onDurationChanged.bind(this);
@@ -117,6 +118,13 @@ class BountyCreate extends Component {
   onBackClick() {
     this.setState({next: false});
   }
+
+  onBountyPosted() {
+    const {props: {onBountyPosted}} = this;
+    if (onBountyPosted) {
+      onBountyPosted();
+    }
+  }
   
   onClearAll() {
     this.setState({ files: [], error: null });
@@ -177,6 +185,7 @@ class BountyCreate extends Component {
 
     const http = this.http;
     if (files && files.length > 0) {
+      this.onBountyPosted();
       const uuid = Uuid();
       this.addCreateBountyRequest(uuid);
       this.setState({ files: [], error: null });
@@ -232,10 +241,10 @@ class BountyCreate extends Component {
   validateFields() {
     const {state: {duration, reward}} = this;
 
-    if (duration < 0) {
-      this.setState({duration_error: 'Duration below 0.'})
+    if (duration < 1) {
+      this.setState({duration_error: 'Duration below 1.'})
     } else if (duration && !Number.isInteger(Number(duration))) {
-      this.setState({duration_error: 'Duration must be integer'});
+      this.setState({duration_error: 'Duration must be integer.'});
     } else {
       this.setState({duration_error: null});
     }

@@ -110,7 +110,8 @@ class App extends Component {
                   onError={this.onPostError}
                   addBounty={this.onAddBounty}
                   addRequest={this.addRequest}
-                  removeRequest={this.removeRequest}/>
+                  removeRequest={this.removeRequest}
+                  onBountyPosted={this.onBackPressed}/>
               )}
               { !create && active < 0 && (
                 <BountyList bounties={bounties}

@@ -12,64 +12,90 @@ exports[`renders without crashing 1`] = `
     </div>
   </div>
   <div
-    class="Container"
+    class="BountyCreate-Content"
   >
     <div
-      class="File-List"
+      class="BountyCreate-Header"
     >
-      <header
-        class="File-List-Header"
+      <h2>
+        1. Select Files
+      </h2>
+      <div
+        class="BountyCreate-Header-Buttons"
       >
-        <p
-          class="File-List-Title"
-        >
-          0 Files
-        </p>
         <button
-          class="Button"
+          class="Button flat-cancel"
           disabled=""
         >
-          - Clear
+          Previous
         </button>
-      </header>
-      <ul
-        class="List"
-      >
-        <div>
-          
-        </div>
-      </ul>
-    </div>
-    <div
-      class="Drop-Target"
-    >
-      <div>
-        <p>
-          Drag and drop your files here, or 
-        </p>
-        <form>
-          <input
-            class="hidden"
-            id="file"
-            multiple=""
-            type="file"
-          >
-            
-          </input>
-          <label
-            for="file"
-          >
-            click here.
-          </label>
-        </form>
+        <button
+          class="Button flat"
+          disabled=""
+        >
+          Next
+        </button>
       </div>
     </div>
-    <button
-      class="Button"
-      disabled=""
+    <div
+      class="Bounty-Files"
     >
-      Create Bounty
-    </button>
+      <div
+        class="Bounty-Button"
+      >
+        
+      </div>
+      <div
+        class="Drop-Target"
+      >
+        <div>
+          <p>
+            Drag and drop your files here, or 
+          </p>
+          <form>
+            <input
+              class="hidden"
+              id="file"
+              multiple=""
+              type="file"
+            >
+              
+            </input>
+            <label
+              for="file"
+            >
+              click here.
+            </label>
+          </form>
+        </div>
+      </div>
+      <div
+        class="File-List"
+      >
+        <header
+          class="File-List-Header"
+        >
+          <p
+            class="File-List-Title"
+          >
+            0 Files
+          </p>
+          <button
+            class="Button flat-cancel"
+            disabled=""
+          >
+            Clear
+          </button>
+        </header>
+        <ul
+          class="List"
+        >
+          <div>
+            
+          </div>
+        </ul>
+      </div>
+    </div>
   </div>
 </div>
 `;

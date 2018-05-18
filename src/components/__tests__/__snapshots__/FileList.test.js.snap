@@ -25,16 +25,18 @@ exports[`calls remove when FileProgress remove button clicked 1`] = `
         Files
       </p>
       <Button
+        cancel={true}
         className="Clear-Button"
         disabled={false}
+        flat={true}
         onClick={[Function]}
       >
         <button
-          className="Button"
+          className="Button flat-cancel"
           disabled={false}
           onClick={[Function]}
         >
-          - Clear
+          Clear
         </button>
       </Button>
     </header>
@@ -124,9 +126,9 @@ exports[`contains 3 FileProgress when 3 added 1`] = `
       3 Files
     </p>
     <button
-      class="Button"
+      class="Button flat-cancel"
     >
-      - Clear
+      Clear
     </button>
   </header>
   <ul
@@ -235,16 +237,18 @@ exports[`does not mark the ListItem as alternate when active is negative. 1`] = 
         Files
       </p>
       <Button
+        cancel={true}
         className="Clear-Button"
         disabled={false}
+        flat={true}
         onClick={[Function]}
       >
         <button
-          className="Button"
+          className="Button flat-cancel"
           disabled={false}
           onClick={[Function]}
         >
-          - Clear
+          Clear
         </button>
       </Button>
     </header>
@@ -374,16 +378,18 @@ exports[`does not mark the ListItem as alternate when active is out of bounds. 1
         Files
       </p>
       <Button
+        cancel={true}
         className="Clear-Button"
         disabled={false}
+        flat={true}
         onClick={[Function]}
       >
         <button
-          className="Button"
+          className="Button flat-cancel"
           disabled={false}
           onClick={[Function]}
         >
-          - Clear
+          Clear
         </button>
       </Button>
     </header>
@@ -513,16 +519,18 @@ exports[`marks the ListItem as alternate when active is set. 1`] = `
         Files
       </p>
       <Button
+        cancel={true}
         className="Clear-Button"
         disabled={false}
+        flat={true}
         onClick={[Function]}
       >
         <button
-          className="Button"
+          className="Button flat-cancel"
           disabled={false}
           onClick={[Function]}
         >
-          - Clear
+          Clear
         </button>
       </Button>
     </header>
@@ -652,16 +660,18 @@ exports[`marks the ListItem as alternate when active is set. 2`] = `
         Files
       </p>
       <Button
+        cancel={true}
         className="Clear-Button"
         disabled={false}
+        flat={true}
         onClick={[Function]}
       >
         <button
-          className="Button"
+          className="Button flat-cancel"
           disabled={false}
           onClick={[Function]}
         >
-          - Clear
+          Clear
         </button>
       </Button>
     </header>
@@ -856,10 +866,10 @@ exports[`renders without crashing 1`] = `
       0 Files
     </p>
     <button
-      class="Button"
+      class="Button flat-cancel"
       disabled=""
     >
-      - Clear
+      Clear
     </button>
   </header>
   <ul
