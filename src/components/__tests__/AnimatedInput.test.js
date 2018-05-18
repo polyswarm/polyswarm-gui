@@ -29,44 +29,15 @@ it('calls onchange when value changed', () => {
   expect(onChange).toHaveBeenCalledWith('change');
 });
 
-it('calls onChange with valid:true when value is over 0 ', () => {
-  const onChange = jest.fn();
-  const wrapper = shallow(<AnimatedInput type='number' onChange={onChange}/>);
-  
-  wrapper.find('input').simulate('change', {target: {value: .0000000000000001}});
+it('calls setState when value changed', () => {
+  const setState = jest.spyOn(AnimatedInput.prototype, 'setState');
+  const wrapper = shallow(<AnimatedInput type='number'/>);
+  setState.mockClear();
 
-  expect(onChange).toHaveBeenCalledTimes(1);
-  expect(onChange).toHaveBeenCalledWith(.0000000000000001,);
-});
+  wrapper.find('input').simulate('change', {target: {value: 'change'}});
 
-it('calls onchange with valid:false when empty', () => {
-  const onChange = jest.fn();
-  const wrapper = shallow(<AnimatedInput type='number' onChange={onChange}/>);
-  
-  wrapper.find('input').simulate('change', {target: {value: ''}});
-
-  expect(onChange).toHaveBeenCalledTimes(1);
-  expect(onChange).toHaveBeenCalledWith('');
-});
-
-it('calls onchange with valid:false value is 0', () => {
-  const onChange = jest.fn();
-  const wrapper = shallow(<AnimatedInput type='number' onChange={onChange}/>);
-  
-  wrapper.find('input').simulate('change', {target: {value: 0}});
-
-  expect(onChange).toHaveBeenCalledTimes(1);
-  expect(onChange).toHaveBeenCalledWith(0);
-});
-
-it('calls onchange with valid:false value is less than 0', () => {
-  const onChange = jest.fn();
-  const wrapper = shallow(<AnimatedInput type='number' onChange={onChange}/>);
-  
-  wrapper.find('input').simulate('change', {target: {value: -1}});
-
-  expect(onChange).toHaveBeenCalledTimes(1);
-  expect(onChange).toHaveBeenCalledWith(-1);
+  expect(setState).toHaveBeenCalledTimes(1);
+  expect(setState).toHaveBeenCalledWith({value: 'change'});
 });
 
 it('adds error class when error is set in props', () => {

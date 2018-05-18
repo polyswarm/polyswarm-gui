@@ -26,6 +26,8 @@ class FileList  extends React.Component {
           </p>
           {!readonly && (
             <Button className='Clear-Button'
+              flat
+              cancel
               disabled={files.length === 0}
               onClick={this.onClearClickHandler}>
               {strings.clearAll}

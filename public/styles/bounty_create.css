@@ -1,44 +1,46 @@
 .Bounty-Create {
+  color: #8500ff;
   display: block;
   height: 100%;
-  position: relative;
+  overflow-y: scroll;
   width: 100%;
 }
 
-.Container {
-  display: grid;
-  grid-template-rows: 1fr 30px 40px;
-  grid-template-columns: 300px 1fr;
-  height: 100%;
+.BountyCreate-Content {
+  display: block;
+  margin: 0 auto;
+  width: 75%;
 }
 
-.Container > .File-List {
-  grid-column: 1;
-  grid-row: 1 / 5;
+.Bounty-Values {
+  display: block;
 }
 
-.Container > .Drop-Target {
-  grid-column: 2;
-  grid-row: 1;
+.Bounty-Values > .AnimatedInput {
+  margin: 0 auto;
 }
 
-.Container > p {
+.Bounty-Create-Upload {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.Bounty-Files {
+  box-sizing: border-box;
+  margin: 20px;
+  width: 100%;
+}
+
+.BountyCreate-Header {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  margin: 0;
-}
-
-.Bounty-Create-Error {
-  color: #ff1a00;
-  grid-column: 2;
-  grid-row: 2;
+  margin: 20px;
   width: 100%;
 }
 
-.Button {
-  grid-column: 2;
-  grid-row: 3;
-  margin-top: 0;
-  width: 100%;
+.BountyCreate-Header-Buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

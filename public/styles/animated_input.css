@@ -1,25 +1,29 @@
 .AnimatedInput {
   display: flex;
   flex-direction: column;
+  width: 700px;
 }
 
 .AnimatedInput-Label {
-  color: #dedede;
-  line-height: 36px;
+  color: #555555;
+  line-height: 18px;
+  font-size: 18px;
   position: relative;
   user-select: none;
-  top: 42px;
+  top: 25px;
 }
 
 .AnimatedInput-Input {
   background-color: rgba(0, 0, 0, 0);
   border: none;
-  border-bottom: white 2px solid;
-  color: white;
+  border-bottom: #555555 2px solid;
+  color: black;
   box-sizing: border-box;
-  font-size: 24px;
-  height: 48px;
-  line-height: 48px;
+  font-size: 18px;
+  height: 36px;
+  line-height: 36px;
+  margin-bottom: 32px;
+  padding-left: 8px;
 }
 
 .AnimatedInput-Input:focus {
@@ -27,20 +31,24 @@
   outline-color: rgba(0,0,0,0);
 }
 
+ .AnimatedInput-Input:focus + .AnimatedInput-Label {
+  color: rgb(46, 255, 109);
+}
+
 .AnimatedInput-ErrorLabel {
   font-size: 10px;
   color: #ff1a00;
-
 }
 
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button { 
--webkit-appearance: none; 
-margin: 0; 
+  -webkit-appearance: none; 
+  margin: 0; 
 }
 
 .AnimatedInput-Error {
   border-bottom: #ff1a00 2px solid;
+  margin-bottom: 0px;
 }
 
 .AnimatedInput-Error:focus {
@@ -49,43 +57,37 @@ margin: 0;
 }
 
 .label-enter {
-  color: #dedede;
-  font-size: 36px;
+  font-size: 18px;
   font-weight: normal;
-  transform: translateX(0px);
+  transform: translateY(0);
 }
 .label-enter-active {
-  color: rgb(46, 255, 109);
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 300;
-  transform: translateX(65%);
+  transform: translateY(-25px);
   transition: all 300ms ease-out;
 }
 
 .label-enter-done {
-  color: rgb(46, 255, 109);
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 300;
-  transform: translateX(65%);
+  transform: translateY(-25px);
 }
 
 .label-exit {
-  color: rgb(46, 255, 109);
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 300;
-  transform: translateX(65%);
+  transform: translateY(-25px);
 }
 .label-exit-active {
-  color: #dedede;
-  font-size: 36px;
+  font-size: 18px;
   font-weight: normal;
-  transform: translateX(0px);
+  transform: translateY(0);
   transition: all 300ms ease-out;
 }
 
 .label-exit-done {
-  color: #dedede;
-  font-size: 36px;
+  font-size: 18px;
   font-weight: normal;
-  transform: translateY(0px);
+  transform: translateY(0);
 }

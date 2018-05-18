@@ -12,15 +12,17 @@ class FileButton extends Component {
 
   render() {
     return(
-      <form>
-        <input id='file'
-          ref={((input)=> this.input = input)}
-          className='hidden'
-          type='file'
-          onChange={this.onFileChanged}
-          multiple/>
-        <label htmlFor='file'>{strings.selectFile}</label>
-      </form>
+      <React.Fragment>
+        <form>
+          <input id='file'
+            ref={((input)=> this.input = input)}
+            className='hidden'
+            type='file'
+            onChange={this.onFileChanged}
+            multiple/>
+          <label htmlFor='file'>{strings.selectFile}</label>
+        </form>
+      </React.Fragment>
     );
   }
 

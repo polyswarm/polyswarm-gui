@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import {CSSTransition} from 'react-transition-group';
 // Project imports
 // Component imports
-import strings from './strings';
 
 class AnimatedInput extends Component {
   constructor(props) {
@@ -22,20 +21,18 @@ class AnimatedInput extends Component {
   }
 
   componentDidMount() {
-    let {props: {value}} = this;
-    value = value || ''; 
-    this.setState({first: false, value: value});
+    this.setState({first: false});
   }
-  value
+
   render() {
     const {state: {focused, value, first}, props: {placeholder, error, input_id, type} } = this;
-    const edited_type = type || 'text';
-    const altered = this.getValue(first, value);
+    const guaranteedType = type || 'text';
+    const valueWithFix = this.getValue(first, value);
     const inputClass = classNames('AnimatedInput-Input', {'AnimatedInput-Error': error});
     return (
         <div className='AnimatedInput'>
           <CSSTransition
-            in={value || focused}
+            in={(valueWithFix != null && typeof valueWithFix != 'undefined' && valueWithFix.length > 0) || focused}
             timeout={300}
             classNames='label'> 
             {() => (
@@ -48,8 +45,8 @@ class AnimatedInput extends Component {
           <input
             className={inputClass}
             id={input_id}
-            type={edited_type}
-            value={altered}
+            type={guaranteedType}
+            value={valueWithFix}
             onBlur={this.onBlur}
             onFocus={this.onFocus}
             onChange={this.onChange}/>
@@ -72,6 +69,7 @@ class AnimatedInput extends Component {
     if (onChange) {
       onChange(value);
     }
+    this.setState({value: value});
   }
 
   onFocus() {

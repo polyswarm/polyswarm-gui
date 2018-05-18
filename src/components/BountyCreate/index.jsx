@@ -2,7 +2,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Uuid from 'uuid/v4';
+import BigNumber from 'bignumber.js';
 // Bounty imports
+import AnimatedInput from '../AnimatedInput';
 import DropTarget from '../DropTarget';
 import FileList from '../FileList';
 import Button from '../Button';
@@ -15,17 +17,28 @@ class BountyCreate extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      files: []
+      files: [],
+      reward_error: null,
+      reward: null,
+      duration: null,
+      duration_error: null,
+      next: false,
     };
-    this.onMultipleFilesSelected = this.onMultipleFilesSelected.bind(this);
-    this.onFileRemoved = this.onFileRemoved.bind(this);
-    this.createBounty = this.createBounty.bind(this);
-    this.onClickHandler = this.onClickHandler.bind(this);
+
+    this.onBackClick = this.onBackClick.bind(this);
     this.onClearAll = this.onClearAll.bind(this);
+    this.onClickHandler = this.onClickHandler.bind(this);
+    this.onDurationChanged = this.onDurationChanged.bind(this);
+    this.onFileRemoved = this.onFileRemoved.bind(this);
+    this.onMultipleFilesSelected = this.onMultipleFilesSelected.bind(this);
+    this.onNextClick = this.onNextClick.bind(this);
+    this.onRewardChanged = this.onRewardChanged.bind(this);
+    this.createBounty = this.createBounty.bind(this);
     this.cancel = this.cancel.bind(this);
     this.onWalletChangeHandler = this.onWalletChangeHandler.bind(this);
     this.addCreateBountyRequest = this.addCreateBountyRequest.bind(this);
     this.removeCreateBountyRequest = this.removeCreateBountyRequest.bind(this);
+    this.validateFields = this.validateFields.bind(this);
   }
 
   componentDidMount() {
@@ -34,7 +47,7 @@ class BountyCreate extends Component {
   }
 
   render() {
-    const { state: { files } } = this;
+    const { state: { files, reward, reward_error, duration, duration_error, next } } = this;
     const { props: { url, walletList, addRequest, removeRequest } } = this;
     return (
       <div className='Bounty-Create'>
@@ -45,29 +58,80 @@ class BountyCreate extends Component {
           onWalletChange={this.onWalletChangeHandler}
           addRequest={addRequest}
           removeRequest={removeRequest}/>
-        <div className='Container'>
-          <FileList
-            files={files}
-            clear={this.onClearAll}
-            removeFile={this.onFileRemoved}/>
-          <DropTarget onFilesSelected={this.onMultipleFilesSelected} />
-          <Button
-            className='Bounty-Create-Upload'
-            disabled={!files || files.length === 0}
-            onClick={this.onClickHandler}>
-            {strings.createBounty}
-          </Button>
-        </div>
+          <div className='BountyCreate-Content'>
+            <div className='BountyCreate-Header'>
+              <h2>{!next ? strings.first : strings.last}</h2>
+              <div className='BountyCreate-Header-Buttons'>
+                <Button flat
+                    cancel
+                    disabled={!next}
+                    onClick={this.onBackClick}>
+                    {strings.back}
+                  </Button>
+                <Button flat
+                    disabled={next || !files || files.length == 0}
+                    onClick={this.onNextClick}>
+                    {strings.next}
+                  </Button>
+              </div>
+            </div>
+            {next && (
+              <React.Fragment>
+                <form className='Bounty-Values'>
+                  <AnimatedInput type='number'
+                    onChange={this.onRewardChanged}
+                    error={reward_error}
+                    placeholder={strings.reward}
+                    input_id='reward'/>
+                  <AnimatedInput type='number'
+                    onChange={this.onDurationChanged}
+                    error={duration_error}
+                    placeholder={strings.duration}
+                    input_id='duration'/>
+              </form>
+              <div className='Bounty-Create-Upload'>
+                <Button
+                  disabled={!reward || !duration || reward_error || duration_error || !files || files.length == 0}
+                  onClick={this.onClickHandler}>
+                  {`Create ${files.length} file bounty`}
+                </Button>
+              </div>
+              </React.Fragment>
+            )}
+            {!next && (
+              <div className='Bounty-Files'>
+                <div className='Bounty-Button'>
+                </div>
+                <DropTarget onFilesSelected={this.onMultipleFilesSelected} />
+                <FileList
+                  files={files}
+                  clear={this.onClearAll}
+                  removeFile={this.onFileRemoved}/>
+              </div>
+            )}
+          </div>
       </div>
     );
   }
 
-  onMultipleFilesSelected(files) {
-    const f = this.state.files.slice();
-    const combined = f.concat(files);
-    this.setState({ files: combined });
+  onBackClick() {
+    this.setState({next: false});
   }
-
+  
+  onClearAll() {
+    this.setState({ files: [], error: null });
+  }
+  
+  onClickHandler() {
+    this.modal.open();
+  }
+  
+  onDurationChanged(duration) {
+    this.setState({duration: duration}, () => {
+      this.validateFields();
+    });
+  }
+  
   onFileRemoved(index) {
     const files = this.state.files.slice();
     if (index >= 0 && index < files.length) {
@@ -75,11 +139,23 @@ class BountyCreate extends Component {
       this.setState({ files: files, error: null });
     }
   }
-
-  onClickHandler() {
-    this.modal.open();
+  
+  onMultipleFilesSelected(files) {
+    const f = this.state.files.slice();
+    const combined = f.concat(files);
+    this.setState({ files: combined });
   }
-
+  
+  onNextClick() {
+    this.setState({next: true});
+  }
+  
+  onRewardChanged(reward) {
+    this.setState({reward: reward}, () => {
+      this.validateFields();
+    });
+  }
+  
   onWalletChangeHandler(didUnlock, store) {
     const { props: { onWalletChange } } = this;
     if (onWalletChange) {
@@ -90,17 +166,13 @@ class BountyCreate extends Component {
     }
   }
 
-  onClearAll() {
-    this.setState({ files: [], error: null });
-  }
-
   cancel() {
     const { http } = this;
     http.cancel();
   }
 
   createBounty() {
-    const { props: { addBounty } } = this;
+    const { state: {reward, duration} ,props: { addBounty } } = this;
     const files = this.state.files.slice();
 
     const http = this.http;
@@ -154,6 +226,25 @@ class BountyCreate extends Component {
     const { removeRequest } = this.props;
     if (removeRequest) {
       removeRequest(strings.requestCreateBounty, id);
+    }
+  }
+
+  validateFields() {
+    const {state: {duration, reward}} = this;
+
+    if (duration < 0) {
+      this.setState({duration_error: 'Duration below 0.'})
+    } else if (duration && !Number.isInteger(Number(duration))) {
+      this.setState({duration_error: 'Duration must be integer'});
+    } else {
+      this.setState({duration_error: null});
+    }
+
+    const min = new BigNumber('0.0625');
+    if (reward && new BigNumber(reward).comparedTo(min) < 0 ) {
+      this.setState({reward_error: 'Reward below 0.0625 minumum.'});
+    } else {
+      this.setState({reward_error: null});
     }
   }
 }
