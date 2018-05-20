@@ -152,7 +152,14 @@ it('calls uploadFiles when all parameters are met (files, addBounty, url)', () =
     {name: 'demo'},
     {name: 'omed'},
   ];
-  wrapper.setState({files: files});
+  const state = {
+    files: files,
+    uploading: false,
+    next: false,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
 
   // act
   instance.createBounty();
@@ -165,6 +172,13 @@ it('doesn\'t call uploadFiles when parameters are missing', () => {
   const wrapper = mount(<BountyCreate />);
   const instance = wrapper.instance();
 
+  const state = {
+    uploading: false,
+    next: false,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
   // act
   instance.createBounty();
   // assert
@@ -197,7 +211,14 @@ it('doesn\'t call uploadBounty when uploadFiles fails', () => {
     {name: 'demo'},
     {name: 'omed'},
   ];
-  wrapper.setState({files: files});
+  const state = {
+    files: files,
+    uploading: false,
+    next: false,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
 
   // act
   instance.createBounty();
@@ -232,7 +253,14 @@ it('calls uploadBounty when uploadFiles succeeds', (done) => {
     {name: 'demo'},
     {name: 'omed'},
   ];
-  wrapper.setState({files: files});
+  const state = {
+    files: files,
+    uploading: false,
+    next: false,
+    reward:'0.0625',
+    duration: '300',
+  };
+  wrapper.setState(state);
 
   // act
   instance.createBounty()
@@ -280,7 +308,14 @@ it('calls addBounty when upload bounty is a success', (done) => {
     {name: 'demo'},
     {name: 'omed'},
   ];
-  wrapper.setState({files: files});
+  const state = {
+    files: files,
+    uploading: false,
+    next: false,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
 
   // act
   instance.createBounty()
@@ -312,7 +347,14 @@ it('sets errors to null when uploads complete', (done) => {
     {name: 'demo'},
     {name: 'omed'},
   ];
-  wrapper.setState({files});
+  const state = {
+    files: files,
+    uploading: false,
+    next: false,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
   const setStateMock = jest.spyOn(BountyCreate.prototype, 'setState');
 
   instance.createBounty()
@@ -344,7 +386,14 @@ it('has uploading true after calling createBounty', (done) => {
     {name: 'demo'},
     {name: 'omed'},
   ];
-  wrapper.setState({files});
+  const state = {
+    files: files,
+    uploading: false,
+    next: false,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
   setState.mockClear();
 
   // act
@@ -558,7 +607,14 @@ it('calls create after modal is successfully closed & returns unlocked', () => {
     {name: 'demo'},
     {name: 'omed'},
   ];
-  wrapper.setState({files: files, uploading: false});
+  const state = {
+    files: files,
+    uploading: false,
+    next: false,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
   const instance = wrapper.instance();
 
   instance.onWalletChangeHandler(true, false);
@@ -579,7 +635,14 @@ it('calls onWalletChange when modal closed and password checked', () => {
     {name: 'demo'},
     {name: 'omed'},
   ];
-  wrapper.setState({files: files, uploading: false});
+  const state = {
+    files: files,
+    uploading: false,
+    next: false,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
   const instance = wrapper.instance();
 
   instance.onWalletChangeHandler(true, true);
@@ -641,7 +704,14 @@ it('calls onWalletChange with false when upload bounty returns 401', (done) => {
     {name: 'demo'},
     {name: 'omed'},
   ];
-  wrapper.setState({files: files});
+  const state = {
+    files: files,
+    uploading: false,
+    next: false,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
 
   // act
   instance.createBounty()
@@ -687,7 +757,14 @@ it('calls on error when something goes wrong in the upload', (done) => {
     {name: 'demo'},
     {name: 'omed'},
   ];
-  wrapper.setState({files: files});
+  const state = {
+    files: files,
+    uploading: false,
+    next: false,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
 
   // act
   instance.createBounty()
@@ -718,7 +795,14 @@ it('should call addCreateBountyRequest and removeCreateBountyRequest in createBo
     {name: 'demo'},
     {name: 'omed'},
   ];
-  wrapper.setState({files: files});
+  const state = {
+    files: files,
+    uploading: false,
+    next: false,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
 
   // act
   instance.createBounty()
@@ -751,7 +835,14 @@ it('should call addRequest and removeRequest in createBounty', (done) => {
     {name: 'demo'},
     {name: 'omed'},
   ];
-  wrapper.setState({files: files});
+  const state = {
+    files: files,
+    uploading: false,
+    next: false,
+    reward:'5',
+    duration: '1',
+  };
+  wrapper.setState(state);
 
   // act
   instance.createBounty()
