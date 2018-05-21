@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  overflow-wrap: break-word;
 }
 
 .StatTitle {
@@ -14,4 +15,5 @@
 
 .StatContent {
   margin: 4px 0;
+  word-wrap: break-word;
 }

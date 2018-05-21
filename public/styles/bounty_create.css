@@ -9,10 +9,17 @@
 .BountyCreate-Content {
   display: block;
   margin: 0 auto;
-  width: 75%;
+  width: 100%;
+}
+
+@media only screen and (min-width: 900px) {
+  .BountyCreate-Content {
+      width: 70%;
+  }
 }
 
 .Bounty-Values {
+  box-sizing: border-box;
   display: block;
 }
 
@@ -28,14 +35,15 @@
 
 .Bounty-Files {
   box-sizing: border-box;
-  margin: 20px;
+  padding: 20px;
   width: 100%;
 }
 
 .BountyCreate-Header {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  margin: 20px;
+  padding: 20px;
   width: 100%;
 }
 
