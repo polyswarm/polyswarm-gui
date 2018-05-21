@@ -193,7 +193,7 @@ class BountyCreate extends Component {
       this.setState({ files: [], error: null });
       return http.uploadFiles(files)
         .then(artifact =>
-          http.uploadBounty(rewardWei.toString(), artifact, Number(duration))
+          http.uploadBounty(rewardWei.toString(), artifact, duration)
         )
         .then(result => {
           if (addBounty) {

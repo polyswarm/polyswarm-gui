@@ -1,7 +1,7 @@
 .Assertion-Malignant {
-  color: #ff1a00;
+  background-color: rgba(255, 26, 0, .1);
 }
 
 .Assertion-Benign {
-  color: rgb(46, 255, 109);
+  background-color: rgba(46, 255, 109, .1);
 }

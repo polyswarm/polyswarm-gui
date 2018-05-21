@@ -7,49 +7,14 @@ exports[`renders without crashing 1`] = `
   <div
     class="Bounty-Info-Container"
   >
-    <div
-      class="File-List"
-    >
-      <header
-        class="File-List-Header"
-      >
-        <p
-          class="File-List-Title"
-        >
-          0 Files
-        </p>
-      </header>
-      <ul
-        class="List"
-      >
-        <div>
-          
-        </div>
-      </ul>
+    <div>
+      
     </div>
-    <table
-      class="AssertionTable"
+    <ul
+      class="AssertionList"
     >
-      <thead>
-        <tr>
-          <th>
-            Author
-          </th>
-          <th>
-            Verdict
-          </th>
-          <th>
-            Metadata
-          </th>
-          <th>
-            Bid
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        
-      </tbody>
-    </table>
+      
+    </ul>
   </div>
 </div>
 `;

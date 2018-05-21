@@ -15,8 +15,8 @@ class CardHeader extends Component {
   }
 
   render() {
-    const {props: {title, subhead, update}} = this;
-    const classname = classNames('CardHeader', {'update': update });
+    const {props: {title, subhead, update, remove, view, additionalClasses}} = this;
+    const classname = classNames('CardHeader', additionalClasses, {'update': update });
     return (
       <header className={classname}>
         <div className='CardHeader-Title'>
@@ -27,7 +27,8 @@ class CardHeader extends Component {
             </p>
           )}
         </div>
-        <Dropdown>
+        {remove && view && (
+          <Dropdown>
           <p onClick={this.view}>
             {strings.view}
           </p>
@@ -35,6 +36,7 @@ class CardHeader extends Component {
             {strings.delete}
           </p>
         </Dropdown>
+        )}
       </header>
     );
   }

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // Bounty imports
 import FileList from '../FileList';
-import AssertionTable from '../AssertionTable';
+import AssertionList from '../AssertionList';
 
 class BountyInfo extends Component {
   constructor(props) {
@@ -26,13 +26,10 @@ class BountyInfo extends Component {
     return (
       <div className='Bounty-Info'>
         <div className='Bounty-Info-Container'>
-          <FileList className='Bounty-Info-Files'
-            files={files}
-            onClick={this.onFileClickHandler}
-            active={active}
-            readonly />
-          <AssertionTable className='Bounty-Info-Assertions'
-            assertions={assertions} />
+          {/* <BountySummary bounty={bounty} /> */}
+          <div/>
+          <AssertionList className='Bounty-Info-Assertions'
+            bounty={bounty} />
         </div>
       </div>
     );

@@ -1,0 +1,7 @@
+.AssertionList {
+  box-sizing: border-box;
+  color: black;
+  overflow: auto;
+  padding: 20px;
+  width: 100%;
+}
