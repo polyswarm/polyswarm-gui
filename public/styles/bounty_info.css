@@ -5,13 +5,21 @@
 }
 
 .Bounty-Info-Container {
-  display: grid;
+  display: block;
   box-sizing: border-box;
-  grid-template-columns: 300px 1fr;
-  overflow-y: hidden;
   height: 100%;
 }
 
-.Bounty-Info-Assertions {
-  grid-column: 2;
+@media only screen and (min-width: 800px) {
+  .Bounty-Info-Container {
+    display: grid;
+    box-sizing: border-box;
+    grid-template-columns: 300px 1fr;
+    overflow-y: hidden;
+    height: 100%;
+  }
+
+  .Bounty-Info-Assertions {
+    grid-column: 2;
+  }
 }

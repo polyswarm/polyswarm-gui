@@ -4,12 +4,12 @@
   overflow: auto;
   padding: 20px;
   width: 100%;
-  overflow-y: scroll;
 }
 
 @media only screen and (min-width: 800px) {
   .AssertionList {
     padding: 20px 15%;
+    overflow-y: scroll;
   }
 }
 
