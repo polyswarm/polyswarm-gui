@@ -18,6 +18,8 @@
 .CardHeader-Title {
   display: flex;
   flex-direction: column;
+  min-width: 50%;
+  word-wrap: break-word;
 }
 
 .update {

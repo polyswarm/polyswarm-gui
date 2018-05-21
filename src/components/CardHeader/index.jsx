@@ -29,13 +29,13 @@ class CardHeader extends Component {
         </div>
         {remove && view && (
           <Dropdown>
-          <p onClick={this.view}>
-            {strings.view}
-          </p>
-          <p onClick={this.remove}>
-            {strings.delete}
-          </p>
-        </Dropdown>
+            <p onClick={this.view}>
+              {strings.view}
+            </p>
+            <p onClick={this.remove}>
+              {strings.delete}
+            </p>
+          </Dropdown>
         )}
       </header>
     );

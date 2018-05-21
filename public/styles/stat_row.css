@@ -15,5 +15,6 @@
 
 .StatContent {
   margin: 4px 0;
+  min-width: 50%;
   word-wrap: break-word;
 }

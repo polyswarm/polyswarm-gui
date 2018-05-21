@@ -9,7 +9,7 @@
     width: 100%;
 }
 
-@media only screen and (min-width: 900px) {
+@media only screen and (min-width: 800px) {
     .BountyList {
         padding: 10px 15%;
     }
