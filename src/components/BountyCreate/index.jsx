@@ -59,36 +59,36 @@ class BountyCreate extends Component {
           onWalletChange={this.onWalletChangeHandler}
           addRequest={addRequest}
           removeRequest={removeRequest}/>
-          <div className='BountyCreate-Content'>
-            <div className='BountyCreate-Header'>
-              <h2>{!next ? strings.first : strings.last}</h2>
-              <div className='BountyCreate-Header-Buttons'>
-                <Button flat
-                    cancel
-                    disabled={!next}
-                    onClick={this.onBackClick}>
-                    {strings.back}
-                  </Button>
-                <Button flat
-                    disabled={next || !files || files.length == 0}
-                    onClick={this.onNextClick}>
-                    {strings.next}
-                  </Button>
-              </div>
+        <div className='BountyCreate-Content'>
+          <div className='BountyCreate-Header'>
+            <h2>{!next ? strings.first : strings.last}</h2>
+            <div className='BountyCreate-Header-Buttons'>
+              <Button flat
+                cancel
+                disabled={!next}
+                onClick={this.onBackClick}>
+                {strings.back}
+              </Button>
+              <Button flat
+                disabled={next || !files || files.length == 0}
+                onClick={this.onNextClick}>
+                {strings.next}
+              </Button>
             </div>
-            {next && (
-              <React.Fragment>
-                <form className='Bounty-Values'>
-                  <AnimatedInput type='number'
-                    onChange={this.onRewardChanged}
-                    error={reward_error}
-                    placeholder={strings.reward}
-                    input_id='reward'/>
-                  <AnimatedInput type='number'
-                    onChange={this.onDurationChanged}
-                    error={duration_error}
-                    placeholder={strings.duration}
-                    input_id='duration'/>
+          </div>
+          {next && (
+            <React.Fragment>
+              <form className='Bounty-Values'>
+                <AnimatedInput type='number'
+                  onChange={this.onRewardChanged}
+                  error={reward_error}
+                  placeholder={strings.reward}
+                  input_id='reward'/>
+                <AnimatedInput type='number'
+                  onChange={this.onDurationChanged}
+                  error={duration_error}
+                  placeholder={strings.duration}
+                  input_id='duration'/>
               </form>
               <div className='Bounty-Create-Upload'>
                 <Button
@@ -97,20 +97,20 @@ class BountyCreate extends Component {
                   {`Create ${files.length} file bounty`}
                 </Button>
               </div>
-              </React.Fragment>
-            )}
-            {!next && (
-              <div className='Bounty-Files'>
-                <div className='Bounty-Button'>
-                </div>
-                <DropTarget onFilesSelected={this.onMultipleFilesSelected} />
-                <FileList
-                  files={files}
-                  clear={this.onClearAll}
-                  removeFile={this.onFileRemoved}/>
+            </React.Fragment>
+          )}
+          {!next && (
+            <div className='Bounty-Files'>
+              <div className='Bounty-Button'>
               </div>
-            )}
-          </div>
+              <DropTarget onFilesSelected={this.onMultipleFilesSelected} />
+              <FileList
+                files={files}
+                clear={this.onClearAll}
+                removeFile={this.onFileRemoved}/>
+            </div>
+          )}
+        </div>
       </div>
     );
   }
@@ -193,7 +193,7 @@ class BountyCreate extends Component {
       this.setState({ files: [], error: null });
       return http.uploadFiles(files)
         .then(artifact =>
-          http.uploadBounty(rewardWei.toString(), artifact, duration)
+          http.uploadBounty(rewardWei.toString(), artifact, Number(duration))
         )
         .then(result => {
           if (addBounty) {
@@ -243,8 +243,8 @@ class BountyCreate extends Component {
   validateFields() {
     const {state: {duration, reward}} = this;
 
-    if (duration < 1) {
-      this.setState({duration_error: 'Duration below 1.'})
+    if (duration && duration < 1) {
+      this.setState({duration_error: 'Duration below 1.'});
     } else if (duration && !Number.isInteger(Number(duration))) {
       this.setState({duration_error: 'Duration must be integer.'});
     } else {
