@@ -2,6 +2,16 @@
   box-sizing: border-box;
   color: black;
   overflow: auto;
-  padding: 20px;
+  padding: 20px 15%;
+  width: 100%;
+}
+
+.Assertion-Placeholder {
+  color: #a5a5a5;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+  text-align: center;
   width: 100%;
 }

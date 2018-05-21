@@ -22,3 +22,13 @@ it('renders the correct number of children', () => {
   expect(wrapper.find('.Card')).toHaveLength(3);
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
+
+it('renders emptystate placeholder if not assertions', () => {
+  const assertions = [];
+  const artifacts = [{name: 'first'}];
+  const bounty = {assertions: assertions, artifacts: artifacts, amount: 5, };
+  const wrapper = render(<AssertionList bounty={bounty}/>);
+
+  expect(wrapper.find('.Assertion-Placeholder')).toHaveLength(1);
+  expect(renderToJson(wrapper)).toMatchSnapshot();
+});

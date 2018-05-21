@@ -1,8 +1,5 @@
 const strings = {
-  author: 'Author',
-  verdict: 'Verdict',
-  metadata: 'Metadata',
-  bid: 'Bid',
+  empty: 'No experts have posted any assertions. Waiting for results.',
 };
 
 export default strings;

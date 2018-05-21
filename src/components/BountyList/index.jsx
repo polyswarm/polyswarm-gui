@@ -52,7 +52,7 @@ class BountyList extends Component {
                   subhead={subheader}
                   remove={() => this.onBountyRemoved(index)}
                   view={() => this.onBountySelected(index)}
-                  />
+                />
                 <CardContent>
                   <ul>
                     <StatRow title={strings.author}
@@ -69,9 +69,9 @@ class BountyList extends Component {
         </ul>
         {(!bounties || bounties.length === 0) && (
           <div className='BountyList-Placeholder'>
-             <h3>
-               {strings.empty}
-             </h3>
+            <h3>
+              {strings.empty}
+            </h3>
           </div>
         )}
       </div>

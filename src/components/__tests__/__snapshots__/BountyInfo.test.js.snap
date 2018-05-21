@@ -7,14 +7,25 @@ exports[`renders without crashing 1`] = `
   <div
     class="Bounty-Info-Container"
   >
-    <div>
-      
-    </div>
-    <ul
-      class="AssertionList"
+    <div
+      class="BountySummary"
     >
       
-    </ul>
+    </div>
+    <div
+      class="AssertionList"
+    >
+      <ul>
+        
+      </ul>
+      <div
+        class="Assertion-Placeholder"
+      >
+        <h3>
+          No experts have posted any assertions. Waiting for results.
+        </h3>
+      </div>
+    </div>
   </div>
 </div>
 `;

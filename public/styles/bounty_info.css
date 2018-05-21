@@ -7,12 +7,8 @@
 .Bounty-Info-Container {
   display: grid;
   box-sizing: border-box;
-  grid-template-columns: 300px 1fr;
+  grid-template-columns: 3fr 7fr;
   height: 100%;
-}
-
-.Bounty-Info-Container > .File-List {
-  grid-column: 1;
 }
 
 .Bounty-Info-Assertions {
