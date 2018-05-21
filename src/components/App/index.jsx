@@ -74,14 +74,14 @@ class App extends Component {
     const {host: url} = config;
     const { state: { active, bounties, create, first, isUnlocked, walletList,
       errorMessage, requestsInProgress } } = this;
-      let header;
-      if (!create && active >= 0 && bounties.length > active) {
-        header = bounties[active].guid;
-      } else if (!create) {
-        header = strings.list;
-      } else {
-        header = strings.create;
-      }
+    let header;
+    if (!create && active >= 0 && bounties.length > active) {
+      header = bounties[active].guid;
+    } else if (!create) {
+      header = strings.list;
+    } else {
+      header = strings.create;
+    }
     return (
       <div className='App'>
         <CSSTransition
@@ -97,6 +97,7 @@ class App extends Component {
         {!first && (
           <React.Fragment>
             <Header title={header}
+              requests={requestsInProgress}
               active={active}
               create={create}
               onBack={this.onBackPressed}

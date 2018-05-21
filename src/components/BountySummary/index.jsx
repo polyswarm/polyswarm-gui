@@ -32,10 +32,12 @@ class BountySummary extends Component {
           title={strings.directory}
           content={bounty.uri}/>
         {artifacts.map((artifact, index) => {
-          const verdict = assertions
-            .map((assertion) => assertion.verdicts[index])
-            .reduce((accumulator, verdict) => accumulator || verdict);
-            
+          let verdict = false;
+          if (assertions.length > 0) {
+            verdict = assertions
+              .map((assertion) => assertion.verdicts[index])
+              .reduce((accumulator, verdict) => accumulator || verdict);
+          }
           let content = verdict ? strings.malicious : strings.safe; 
           if (!bounty.resolved && !bounty.expired) {
             content = strings.pending;

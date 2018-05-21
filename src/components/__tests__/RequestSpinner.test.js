@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallow, render, mount} from 'enzyme';
+import {shallow, mount} from 'enzyme';
 import {shallowToJson, mountToJson} from 'enzyme-to-json';
 import RequestSpinner from '../RequestSpinner';
 

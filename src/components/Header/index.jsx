@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 // Bounty imports
 import Button from '../Button';
-import PropTypes from 'prop-types';
+import RequestSpinner from '../RequestSpinner';
 // Component imports
 import strings from './strings';
 
@@ -13,7 +14,7 @@ class Header extends Component {
   }
 
   render() {
-    const { props: { title, create, active } } = this;
+    const { props: { title, create, active, requests } } = this;
     let image_path = '../public/img/polyswarm-white.svg';
     if (create || active >= 0) {
       image_path = '../public/img/back-arrow.svg';
@@ -26,6 +27,7 @@ class Header extends Component {
             src={image_path}
             alt={strings.logo}/>
           <h3>{title}</h3>
+          <RequestSpinner requests={requests}/>
         </div>
         {active < 0 && !create && (
           <Button className='Header-Button' onClick={this.onClickHandler}>
@@ -56,5 +58,6 @@ Header.propTypes = {
   onClick: PropTypes.func,
   onBack: PropTypes.func,
   create: PropTypes.bool,
+  requests: PropTypes.array,
 };
 export default Header;

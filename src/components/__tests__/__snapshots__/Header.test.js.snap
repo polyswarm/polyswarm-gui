@@ -16,6 +16,11 @@ exports[`renders without crashing 1`] = `
     <h3>
       
     </h3>
+    <span
+      class="RequestSpinner"
+    >
+      
+    </span>
   </div>
 </header>
 `;
@@ -36,6 +41,11 @@ exports[`shows title props 1`] = `
     <h3>
       Title
     </h3>
+    <span
+      class="RequestSpinner"
+    >
+      
+    </span>
   </div>
 </header>
 `;
