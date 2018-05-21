@@ -10,7 +10,90 @@ exports[`renders without crashing 1`] = `
     <div
       class="BountySummary"
     >
-      
+      <li
+        class="StatRow-Vertical"
+      >
+        <p
+          class="StatTitle"
+        >
+          Posted By:
+        </p>
+        <p
+          class="StatContent"
+        >
+          
+        </p>
+      </li>
+      <li
+        class="StatRow-Vertical"
+      >
+        <p
+          class="StatTitle"
+        >
+          Resolved:
+        </p>
+        <p
+          class="StatContent"
+        >
+          No
+        </p>
+      </li>
+      <li
+        class="StatRow-Vertical"
+      >
+        <p
+          class="StatTitle"
+        >
+          Expired:
+        </p>
+        <p
+          class="StatContent"
+        >
+          No
+        </p>
+      </li>
+      <li
+        class="StatRow-Vertical"
+      >
+        <p
+          class="StatTitle"
+        >
+          Reward:
+        </p>
+        <p
+          class="StatContent"
+        >
+          undefined Nectar (NCT)
+        </p>
+      </li>
+      <li
+        class="StatRow-Vertical"
+      >
+        <p
+          class="StatTitle"
+        >
+          Assertions:
+        </p>
+        <p
+          class="StatContent"
+        >
+          0
+        </p>
+      </li>
+      <li
+        class="StatRow-Vertical"
+      >
+        <p
+          class="StatTitle"
+        >
+          IPFS Uri
+        </p>
+        <p
+          class="StatContent"
+        >
+          
+        </p>
+      </li>
     </div>
     <div
       class="AssertionList"
