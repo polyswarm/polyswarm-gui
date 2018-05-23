@@ -1,0 +1,12 @@
+const strings = {
+  poster: 'Author:',
+  expert: 'Expert:',
+  balance: 'Remaining Balance:',
+  nectar: ' Nectar (NCT)',
+  yes: 'Yes',
+  no : 'No',
+  messages: 'Messages:',
+  malicious:'Malicious',
+  safe: 'Safe',
+};
+export default strings;
