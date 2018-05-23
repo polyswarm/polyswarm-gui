@@ -15,10 +15,9 @@
   background-color: #f5f5f5;
   box-shadow: 0 0 10px black;
   box-sizing: border-box;
-  color: black;
+  color: #555555;
   display: flex;
   flex-direction: column;
-  height: 350px;
   justify-content: flex-start;
   left: 50%;
   margin: auto;
@@ -30,9 +29,7 @@
 }
 
 .ModalContent > form {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  display: block;
   padding: 10px 20px 0 20px;
 }
 
@@ -53,7 +50,6 @@
 
 .Modal-Button-Bar {
   bottom: 0;
-  position: absolute;
   width: 100%;
 }
 
@@ -74,19 +70,6 @@
   padding: 0 20px;
 }
 
-.Balances {
-  background-color: white;
-  border: 1px solid #a9a9a9;
-  margin-bottom: 10px;
-  padding-left: 10px;
-}
-
-.Balance {
-  color: black;
-  margin: 0;
-  padding: 0;
-}
-
 select {
   background-color: white;
   font-size: 16px;
@@ -95,17 +78,6 @@ select {
 }
 
 select:focus {
-  outline-color: #8500ff;
-}
-
-input[type=password] {
-  box-sizing: border-box;
-  font-size: 16px;
-  margin-bottom: 10px;
-  padding: 4px 12px;
-}
-
-input[type=password]:focus {
   outline-color: #8500ff;
 }
 

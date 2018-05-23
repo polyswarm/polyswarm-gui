@@ -1,7 +1,7 @@
 .AnimatedInput {
   display: flex;
   flex-direction: column;
-  width: 700px;
+  width: 100%;
 }
 
 .AnimatedInput-Label {
@@ -46,9 +46,15 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0; 
 }
 
+.AnimatedInput-Readonly,
+.AnimatedInput-Readonly:focus {
+  border-bottom: none;
+  margin-bottom: 3px;
+}
+
 .AnimatedInput-Error {
   border-bottom: #ff1a00 2px solid;
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 .AnimatedInput-Error:focus {

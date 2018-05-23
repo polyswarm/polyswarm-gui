@@ -11,7 +11,9 @@ const strings = {
   background: 'Your bounty will post in the background. When it has been posted to the chain, it will appear on the sidebar. If there are any errors, we will let you know.',
   requestBalance: 'Retrieving Balances',
   requestCreateWallet: 'Creating Wallet',
-  requestUnlockWallet: 'Unlocking Wallet'
+  requestUnlockWallet: 'Unlocking Wallet',
+  nectar: 'Nectar (NCT)',
+  eth: 'Ether (ETH)',
 };
 
 export default strings;

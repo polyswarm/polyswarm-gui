@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js';
 import Uuid from 'uuid/v4';
 import {CSSTransition} from 'react-transition-group';
 // Bounty imports
+import AnimatedInput from '../AnimatedInput';
 import Button from '../Button';
 // Component imports
 import HttpAccount from './http';
@@ -16,7 +17,7 @@ class ModalPassword extends Component {
     this.state = {
       open: false,
       unlocking: false,
-      error: false,
+      password_error: null,
       password: '',
       address: 0,
       eth: 0,
@@ -73,7 +74,7 @@ class ModalPassword extends Component {
   render() {
     const { props: { walletList } } = this;
     const {
-      state: { open, unlocking, error, password, address, nct, eth }
+      state: { open, unlocking, password_error, password, address, nct, eth }
     } = this;
     return (
       <div className='ModalPassword'>
@@ -112,22 +113,22 @@ class ModalPassword extends Component {
                               );
                             })}
                           </select>
-                          <label>Balances</label>
-                          <div className='Balances'>
-                            <p className='Balance'>NCT: {nct}</p>
-                            <p className='Balance'>ETH: {eth}</p>
-                          </div>
+                          <AnimatedInput input_id='nectar'
+                            readonly={nct}
+                            placeholder={strings.nectar}
+                            type='number'/>
+                          <AnimatedInput input_id='eth'
+                            readonly={eth}
+                            placeholder={strings.eth}
+                            type='number'/>
                         </React.Fragment>
                       )}
-                      <label htmlFor='password'>{strings.password}</label>
-                      <input
-                        id='password'
-                        type='password'
-                        value={password}
-                        onKeyPress={this.onKeyPress}
+                      <AnimatedInput input_id='password'
                         onChange={this.onChangePassword}
-                      />
-                      <div className='ModalError'>{error && strings.error}</div>
+                        error={password_error}
+                        placeholder={strings.password}
+                        onKeyPress={this.onKeyPress}
+                        type='password'/>
                     </form>
                     <p className='ModalMessage'>{strings.background}</p>
                     <span className='Modal-Button-Bar'>
@@ -165,8 +166,8 @@ class ModalPassword extends Component {
     this.setState({ store: event.target.checked });
   }
 
-  onChangePassword(event) {
-    this.setState({ password: event.target.value });
+  onChangePassword(password) {
+    this.setState({ password: password });
   }
 
   onChangeAddress(event) {
@@ -202,15 +203,18 @@ class ModalPassword extends Component {
 
   unlockWallet(address, password) {
     const { props: { url } } = this;
-    this.setState({ unlocking: true, error: false });
+    this.setState({ unlocking: true, password_error: null });
     const http = new HttpAccount(url);
     const uuid = Uuid();
     this.addAccountRequest(strings.requestUnlockWallet, uuid);
     return http.unlockWallet(address, password).then(success => {
-      this.setState({ unlocking: false, error: !success });
+      this.setState({ unlocking: false});
       if (success) {
+        this.setState({password_error: null});
         this.onWalletChangeHandler(true);
         this.close();
+      } else {
+        this.setState({password_error: strings.error});
       }
       this.removeAccountRequest(strings.requestUnlockWallet, uuid);
     });
@@ -218,15 +222,17 @@ class ModalPassword extends Component {
 
   createWallet(password) {
     const { props: { url } } = this;
-    this.setState({ unlocking: true, error: false });
+    this.setState({ unlocking: true, password_error: null });
     const http = new HttpAccount(url);
     const uuid = Uuid();
     this.addAccountRequest(strings.requestCreateWallet, uuid);
     return http.createWallet(password).then(success => {
-      this.setState({ unlocking: false, error: !success });
       if (success) {
+        this.setState({password_error: null});
         this.onWalletChangeHandler(false);
         this.close();
+      } else {
+        this.setState({password_error: strings.error});
       }
       this.removeAccountRequest(strings.requestCreateWallet, uuid);
     });
