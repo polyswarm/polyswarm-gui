@@ -3,11 +3,9 @@ const strings = {
   error: 'Something went wrong.',
   locked: 'Account was locked.',
   requestCreateBounty: 'Creating Bounty',
-  reward: 'Reward (NCT)',
+  reward: 'Maximum Reward (NCT)',
   duration: 'Duration (Blocks)',
-  next: 'Next',
-  back: 'Previous',
-  first: '1. Select Files',
-  last: '2. Set Reward & Duration',
+  expert: 'Expert\'s Ethereum Address',
+  openOffer: 'Open Offer Channel',
 };
 export default strings;

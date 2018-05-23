@@ -9,7 +9,8 @@ import strings from './strings';
 class Header extends Component {
   constructor(props) {
     super(props);
-    this.onClickHandler = this.onClickHandler.bind(this);
+    this.onBountyClickHandler = this.onBountyClickHandler.bind(this);
+    this.onOfferClickHandler = this.onOfferClickHandler.bind(this);
     this.onBack = this.onBack.bind(this);
   }
 
@@ -30,8 +31,15 @@ class Header extends Component {
           <RequestSpinner requests={requests}/>
         </div>
         {active < 0 && !create && (
-          <Button className='Header-Button' onClick={this.onClickHandler}>
+          <Button className='Header-Button'
+            onClick={this.onBountyClickHandler}>
             {strings.newBounty}
+          </Button>
+        )}
+        {active < 0 && !create && (
+          <Button className='Header-Button'
+            onClick={this.onOfferClickHandler}>
+            {strings.newOffer}
           </Button>
         )}
       </header>
@@ -45,10 +53,17 @@ class Header extends Component {
     } 
   }
 
-  onClickHandler() {
+  onBountyClickHandler() {
     const { props: { onClick } } = this;
     if(onClick) {
       onClick();
+    }
+  }
+
+  onOfferClickHandler() {
+    const { props: { onOfferClick } } = this;
+    if(onOfferClick) {
+      onOfferClick();
     }
   }
 }

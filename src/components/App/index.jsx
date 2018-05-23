@@ -6,10 +6,11 @@ import {CSSTransition} from 'react-transition-group';
 import BountyCreate from '../BountyCreate';
 import BountyInfo from '../BountyInfo';
 import BountyList from '../BountyList';
-import Card from '../Card';
 import Header from '../Header';
-import Welcome from '../Welcome';
+import OfferCreate from '../OfferCreate';
+import OfferInfo from '../OfferInfo';
 import Snackbar from '../Snackbar';
+import Welcome from '../Welcome';
 // Component imports
 import HttpApp from './http';
 import config from '../../config';
@@ -25,17 +26,20 @@ class App extends Component {
       walletList: [],
       active: -1,
       bounties: bounties,
-      create: false,
+      createBounty: false,
+      createOffer: false,
       first: first,
       errorMessage: null,
       requestsInProgress: []
     };
 
     this.onAddBounty = this.onAddBounty.bind(this);
+    this.onAddOffer = this.onAddOffer.bind(this);
     this.onBackPressed = this.onBackPressed.bind(this);
     this.onRemoveBounty = this.onRemoveBounty.bind(this);
     this.onSelectBounty = this.onSelectBounty.bind(this);
     this.onCreateBounty = this.onCreateBounty.bind(this);
+    this.onCreateOffer = this.onCreateOffer.bind(this);
     this.onCloseWelcome = this.onCloseWelcome.bind(this);
     this.onErrorDismissed = this.onErrorDismissed.bind(this);
     this.onPostError = this.onPostError.bind(this);
@@ -72,15 +76,17 @@ class App extends Component {
 
   render() {
     const {host: url} = config;
-    const { state: { active, bounties, create, first, isUnlocked, walletList,
+    const { state: { active, bounties, createBounty, createOffer, first, isUnlocked, walletList,
       errorMessage, requestsInProgress } } = this;
     let header;
-    if (!create && active >= 0 && bounties.length > active) {
+    if (!createBounty && !createOffer && active >= 0 && bounties.length > active) {
       header = bounties[active].guid;
-    } else if (!create) {
+    } else if (!createBounty && !createOffer) {
       header = strings.list;
+    } else if (createBounty) {
+      header = strings.createBounty;
     } else {
-      header = strings.create;
+      header = strings.createOffer;
     }
     return (
       <div className='App'>
@@ -99,11 +105,12 @@ class App extends Component {
             <Header title={header}
               requests={requestsInProgress}
               active={active}
-              create={create}
+              create={createBounty || createOffer}
               onBack={this.onBackPressed}
-              onClick={this.onCreateBounty}/>
+              onClick={this.onCreateBounty}
+              onOfferClick={this.onCreateOffer}/>
             <div className='App-Content'>
-              { create && (
+              { createBounty && (
                 <BountyCreate url={url}
                   isUnlocked={isUnlocked}
                   walletList={walletList}
@@ -114,13 +121,27 @@ class App extends Component {
                   removeRequest={this.removeRequest}
                   onBountyPosted={this.onBackPressed}/>
               )}
-              { !create && active < 0 && (
+              { createOffer && (
+                <OfferCreate url={url}
+                  isUnlocked={isUnlocked}
+                  walletList={walletList}
+                  onWalletChange={this.onWalletChangeHandler}
+                  onError={this.onPostError}
+                  addOffer={this.onAddOffer}
+                  addRequest={this.addRequest}
+                  removeRequest={this.removeRequest}
+                  onBountyPosted={this.onBackPressed}/>
+              )}
+              { !createBounty && !createOffer && active < 0 && (
                 <BountyList bounties={bounties}
                   onBountySelected={this.onSelectBounty}
                   onBountyRemoved={this.onRemoveBounty}/>
               )}
-              { !create && active >=0 && (
+              { !createBounty && active >=0 && bounties[active].type === 'bounty' && (
                 <BountyInfo bounty={bounties[active]}/>
+              )}
+              { !createOffer && active >=0 && bounties[active].type === 'offer' && (
+                <OfferInfo offer={bounties[active]}/>
               )}
             </div>
             {errorMessage && errorMessage.length > 0 && (
@@ -152,12 +173,20 @@ class App extends Component {
       });
   }
 
+  onAddOffer(result) {
+
+  }
+
   onBackPressed() {
-    this.setState({active: -1, create: false});
+    this.setState({active: -1, createBounty: false, createOffer: false});
   }
 
   onCreateBounty() {
-    this.setState({create: true, active: -1});
+    this.setState({createBounty: true, active: -1});
+  }
+
+  onCreateOffer() {
+    this.setState({createOffer: true, active: -1});
   }
 
   onCloseWelcome() {

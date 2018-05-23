@@ -1,5 +1,6 @@
 const strings = {
-  newBounty: '+ Bounty',
+  newBounty: 'Add Bounty',
+  newOffer: 'Add Offer',
 };
 
 export default strings;

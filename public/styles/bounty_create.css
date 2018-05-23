@@ -24,7 +24,7 @@
 }
 
 .Bounty-Values > .AnimatedInput {
-  margin: 0 auto;
+  width: 100%;
 }
 
 .Bounty-Create-Upload {
