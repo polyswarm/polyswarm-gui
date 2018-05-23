@@ -13,7 +13,7 @@ class RequestSpinner extends Component {
       <span className='RequestSpinner'>
         {requests && requests.length > 0 && (
           <img className='RequestSpinner-Icon'
-            src='../public/img/nct-coin.svg'
+            src='../public/img/nct-coin.png'
             alt={strings.token}/>
         )}
       </span>

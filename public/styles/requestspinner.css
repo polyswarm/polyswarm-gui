@@ -3,10 +3,13 @@
   to { transform: rotate(360deg); }
 }
 
+.RequestSpinner {
+  height: 100%;
+  padding-top: 10px;
+}
+
 .RequestSpinner-Icon {
   animation: Nectar-Token-Spin infinite 2s linear;
-  stroke:rgb(46, 255, 108);
-  max-height: 48px;
-  margin-top: 4px;
-  margin-left: 10px;
+  max-height: 36px;
+  margin: auto 10px;
 }
