@@ -187,11 +187,14 @@ class BountyCreate extends Component {
 
     const http = this.http;
     if (files && files.length > 0) {
-      this.onBountyPosted();
       const uuid = Uuid();
       this.addCreateBountyRequest(uuid);
       this.setState({ files: [], error: null });
-      return http.uploadFiles(files)
+      return new Promise((resolve) => {
+        this.onBountyPosted();
+        resolve();
+      })
+        .then(() => http.uploadFiles(files))
         .then(artifact =>
           http.uploadBounty(rewardWei.toString(), artifact, Number(duration))
         )
