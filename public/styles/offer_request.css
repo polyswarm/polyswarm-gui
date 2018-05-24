@@ -1,0 +1,25 @@
+.Offer-Info {
+  height: 100%;
+  position: relative;
+  width: 100%;
+}
+
+.Offer-Info-Container {
+  display: block;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+@media only screen and (min-width: 800px) {
+  .Offer-Info-Container {
+    display: grid;
+    box-sizing: border-box;
+    grid-template-columns: 300px 1fr;
+    overflow-y: hidden;
+    height: 100%;
+  }
+
+  .Offer-Info-Messages {
+    grid-column: 2;
+  }
+}
