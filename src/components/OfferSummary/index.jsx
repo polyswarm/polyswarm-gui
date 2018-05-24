@@ -18,17 +18,26 @@ class OfferSummary extends Component {
   render() {
     const {props: {offer}} = this;
     const messages = offer.messages || [];
+    const hashDict = {};
     const artifacts = messages
       .filter((message) => message.type==='request')
       .map((message) => message.files)
       .reduce((all, files) => all.concat(files), [])
       .sort((a, b) => {
-        return a.name.compare(b.name);
+        return a.name > b.name;
+      })
+      .filter((file) => {
+        if (typeof hashDict[file.hash] === 'undefined') {
+          hashDict[file.hash] = file.name;
+          return true;
+        } else {
+          return false;
+        }
       });
     
     messages.filter((message) => message.type==='assertion')
       .forEach((message) => {
-        message.files.for_each((file, index) => {
+        message.files.forEach((file, index) => {
           const verdict = message.verdicts[index];
           const i = artifacts.find((value) => value.hash === file.hash);
           if (i) {

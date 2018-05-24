@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 // Bounty imports
 import Card from '../Card';
 import CardContent from '../CardContent';
 import CardHeader from '../CardHeader';
+import StatRow from '../StatRow';
 // Component imports
 import strings from './strings';
 
@@ -15,20 +17,18 @@ class OfferMessageList extends Component {
     return (
       <div className='OfferMessageList'>
         <ul>
-          {
-            messages.map((message) => {
-              let card = null;
-              if (message.type === 'request') {
-                card = renderRequest(message);
-              } else if (message.type === 'assertion') {
-                card = renderAssertion(message);
-              } else {
-                // payment
-                card = renderPayment(message);
-              }
-              return ({card});
-            })
-          }
+          {messages.map((message) => {
+            let card = null;
+            if (message.type === 'request') {
+              card = this.renderRequest(message);
+            } else if (message.type === 'assertion') {
+              card = this.renderAssertion(message);
+            } else {
+              // payment
+              card = this.renderPayment(message);
+            }
+            return (card);
+          })}
         </ul>
         {( messages.length === 0) && (
           <div className='OfferMessageList-Placeholder'>
@@ -43,15 +43,17 @@ class OfferMessageList extends Component {
 
   renderRequest(message) {
     const files = message.files;
-    const filesList = files.reduce((accumulator, file) => `, ${file.name}`);
+    const filesList = files.map((file) => file.name).reduce((accumulator, name) => `, ${name}`);
     return(
       <Card key={message.guid}>
         <CardHeader
           title={strings.request}
         />
         <CardContent>
-          <StatRow title={strings.files}
-            content={filesList}/>
+          <ul>
+            <StatRow title={strings.files}
+              content={filesList}/>
+          </ul>
         </CardContent>
       </Card>
     );
@@ -69,17 +71,21 @@ class OfferMessageList extends Component {
       <Card key={message.guid}>
         <CardHeader
           className={verdictClass}
-          title={strings.request}
+          title={strings.assertion}
         />
         <CardContent>
-          <StatRow title={strings.metadata}
-            content={message.metadata}/>
-          {files && files.map((file) => {
-            return (
-              <StatRow title={file.name}
-                content={file.verdict ? strings.malicious : strings.safe}/>
-            );
-          })}
+          <ul>
+            <StatRow title={strings.metadata}
+              content={message.metadata}/>
+            {files && files.map((file, index) => {
+              return (
+                <StatRow 
+                  key={file.name}
+                  title={file.name}
+                  content={verdicts[index] ? strings.malicious : strings.safe}/>
+              );
+            })}
+          </ul>
         </CardContent>
       </Card>
     );
@@ -89,7 +95,7 @@ class OfferMessageList extends Component {
     return(
       <Card key={message.guid}>
         <CardHeader
-          title={strings.request}
+          title={strings.payment}
           subhead={`${message.amount}${strings.nectar}`}
         />
       </Card>

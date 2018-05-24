@@ -5,5 +5,7 @@ const strings = {
   assertion: 'Assertion',
   malicious: 'Malicious',
   safe: 'Safe',
+  files: 'Files:',
+  nectar: ' Nectar (NCT)'
 };
 export default strings;
