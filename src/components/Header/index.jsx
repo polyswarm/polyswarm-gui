@@ -20,6 +20,13 @@ class Header extends Component {
     if (back) {
       image_path = '../public/img/back-arrow.svg';
     }
+
+    const main = `${strings.mainnet}${nct}${strings.nct}${eth}${strings.eth}`;
+    const side = `${strings.sidenet}${nct}${strings.nct}`;
+    const together = address + main + side;
+
+    const ratio = address && eth && nct > 0 ? 120 / together.length : -1;
+
     return (
       <header className='Header'>
         <div className='Header-Row'>
@@ -58,15 +65,19 @@ class Header extends Component {
           )}
         </div>
         <div className='Header-Address'>
-          <p className='Header-Divided'>
-            {address}
-          </p>
-          <p className='Header-Divided'>
-            {`${strings.mainnet}${nct}${strings.nct}${eth}${strings.eth}`}
-          </p>
-          <p>
-            {`${strings.sidenet}${nct}${strings.nct}`}
-          </p>
+          {ratio > 0 && (
+            <React.Fragment>
+              <p className='Header-Divided' style={{'fontSize' : `${ratio}vw`}}>
+                {address}
+              </p>
+              <p className='Header-Divided' style={{'fontSize' : `${ratio}vw`}}>
+                {main}
+              </p>
+              <p style={{'fontSize' : `${ratio}vw`}}>
+                {side}
+              </p>
+            </React.Fragment>
+          )}
         </div>
       </header>
     );

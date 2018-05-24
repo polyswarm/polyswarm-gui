@@ -58,8 +58,7 @@
 .Header-Address > p {
   color: #555555;
   font-size: 18px;
-  font-size: 1vw;
-  font-weight: bold;
+  font-weight: 300;
   line-height: 18px;
   margin: auto 5px;
 }
