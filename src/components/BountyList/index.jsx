@@ -54,7 +54,7 @@ class BountyList extends Component {
               }
               let files = '';
               if (bounty.artifacts && bounty.artifacts.length > 0) {
-                files = bounty.artifacts.map((artifact) => artifact.name).reduce((csv, name) => csv + ', ' + name)
+                files = bounty.artifacts.map((artifact) => artifact.name).reduce((csv, name) => csv + ', ' + name);
               }
               let assertions = 0;
               if (bounty && bounty.assertions) {
@@ -113,5 +113,7 @@ BountyList.proptypes = {
   bounties: PropTypes.array,
   onBountySelected: PropTypes.func,
   onBountyRemoved: PropTypes.func,
-}
+};
+// const {props: {bounties, requestsInProgress, walletList, address,
+//   onCreateBounty, onCreateOffer}} = this;
 export default BountyList;
