@@ -88,6 +88,12 @@ class App extends Component {
     } else {
       header = strings.createOffer;
     }
+
+    const headerActions = [
+      {title: strings.newBounty, onClick: this.onCreateBounty},
+      {title: strings.newOffer, onClick: this.onCreateOffer},
+      {title: strings.relay, onClick: () => {}},
+    ];
     return (
       <div className='App'>
         <CSSTransition
@@ -104,11 +110,9 @@ class App extends Component {
           <React.Fragment>
             <Header title={header}
               requests={requestsInProgress}
-              active={active}
-              create={createBounty || createOffer}
+              back={active >= 0 || createBounty || createOffer}
               onBack={this.onBackPressed}
-              onClick={this.onCreateBounty}
-              onOfferClick={this.onCreateOffer}/>
+              actions={headerActions}/>
             <div className='App-Content'>
               { createBounty && (
                 <BountyCreate url={url}

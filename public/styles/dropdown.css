@@ -18,7 +18,7 @@
   position: absolute;
   overflow: hidden;
   right: 43px;
-  width: 130px;
+  min-width: 130px;
   z-index: 1;
 }
 
@@ -39,4 +39,8 @@
 .Dropdown-Choices > p:active {
   background-color: #9125f7;
   color: white;
+}
+
+.Dropdown-Icon-Light {
+  fill: white;
 }

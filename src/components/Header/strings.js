@@ -1,6 +1,5 @@
 const strings = {
-  newBounty: 'Add Bounty',
-  newOffer: 'Add Offer',
+  logo: 'PolySwarm logo'
 };
 
 export default strings;

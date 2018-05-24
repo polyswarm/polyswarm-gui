@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 // Bounty imports
 import Button from '../Button';
 import RequestSpinner from '../RequestSpinner';
+import Dropdown from '../Dropdown';
 // Component imports
 import strings from './strings';
-
 class Header extends Component {
   constructor(props) {
     super(props);
@@ -15,9 +15,9 @@ class Header extends Component {
   }
 
   render() {
-    const { props: { title, create, active, requests } } = this;
+    const { props: { title, back, requests, actions } } = this;
     let image_path = '../public/img/polyswarm-white.svg';
-    if (create || active >= 0) {
+    if (back) {
       image_path = '../public/img/back-arrow.svg';
     }
     return (
@@ -30,17 +30,30 @@ class Header extends Component {
           <h3>{title}</h3>
           <RequestSpinner requests={requests}/>
         </div>
-        {active < 0 && !create && (
-          <Button className='Header-Button'
-            onClick={this.onBountyClickHandler}>
-            {strings.newBounty}
-          </Button>
-        )}
-        {active < 0 && !create && (
-          <Button className='Header-Button'
-            onClick={this.onOfferClickHandler}>
-            {strings.newOffer}
-          </Button>
+        {!back && (
+          <div className='Header-Actions'>
+            {actions.slice(0, 2).map((action) => {
+              return(
+                <Button key={action.title}
+                  onClick={action.onClick}
+                  header>
+                  {action.title}
+                </Button>
+              );
+            })}
+            {actions.slice(2).length > 0 && (
+              <Dropdown light>
+                {actions.slice(2).map((action) => {
+                  return(
+                    <p key={action.title}
+                      onClick={action.onClick}>
+                      {action.title}
+                    </p>
+                  );
+                })}
+              </Dropdown>
+            )}
+          </div>
         )}
       </header>
     );

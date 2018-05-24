@@ -10,11 +10,13 @@ class Button extends Component {
   }
 
   render () {
-    const { props: { disabled, children, cancel, flat } } = this;
+    const { props: { disabled, children, cancel, flat, header } } = this;
     const computedClass = classNames('Button', {
-      'cancel': !flat && cancel,
-      'flat': flat && !cancel,
-      'flat-cancel': flat && cancel
+      'header': header,
+      'header-cancel': header && cancel,
+      'cancel': !flat && cancel && !header,
+      'flat': flat && !cancel && !header,
+      'flat-cancel': flat && cancel && !header,
     });
     return (
       <button
@@ -37,6 +39,8 @@ class Button extends Component {
 Button.proptypes = {
   onClick: PropTypes.func.isRequired,
   cancel: PropTypes.bool,
+  flat: PropTypes.bool,
+  header: PropTypes.bool,
 };
 
 export default Button;

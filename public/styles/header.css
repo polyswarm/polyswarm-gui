@@ -18,9 +18,9 @@
   height: 100%;
 }
 
-.Header > button {
-  max-width: 120px;
-  padding: 0;
+.Header-Actions {
+  display: flex;
+  flex-direction: row;
 }
 
 .Header-Logo {
