@@ -23,10 +23,8 @@ class App extends Component {
     const {bounties, first} = this.preloadLocalStorage();
     this.http = new HttpApp(config.host, config.websocket_host);
     this.state = {
-      address: null,
+      address: 0,
       walletList: [],
-      nct: '0',
-      eth: '0',
       active: -1,
       bounties: bounties,
       createBounty: false,
@@ -81,7 +79,7 @@ class App extends Component {
   render() {
     const {host: url} = config;
     const { state: { active, bounties, createBounty, createOffer, first, isUnlocked, walletList,
-      errorMessage, requestsInProgress, address, nct, eth } } = this;
+      errorMessage, requestsInProgress, address } } = this;
     let header;
     if (!createBounty && !createOffer && active >= 0 && bounties.length > active) {
       header = bounties[active].guid;
@@ -92,6 +90,8 @@ class App extends Component {
     } else {
       header = strings.createOffer;
     }
+
+    const wallet = walletList[address] || {address: null, eth: null, nct: null};
 
     const headerActions = [
       {title: strings.newBounty, onClick: this.onCreateBounty},
@@ -117,9 +117,9 @@ class App extends Component {
               back={active >= 0 || createBounty || createOffer}
               onBack={this.onBackPressed}
               actions={headerActions}
-              address={address}
-              nct={nct}
-              eth={eth}/>
+              address={wallet.address}
+              nct={wallet.nct}
+              eth={wallet.eth}/>
             <div className='App-Content'>
               { createBounty && (
                 <BountyCreate url={url}
@@ -130,7 +130,8 @@ class App extends Component {
                   addBounty={this.onAddBounty}
                   addRequest={this.addRequest}
                   removeRequest={this.removeRequest}
-                  onBountyPosted={this.onBackPressed}/>
+                  onBountyPosted={this.onBackPressed}
+                  address={address}/>
               )}
               { createOffer && (
                 <OfferCreate url={url}
@@ -141,7 +142,8 @@ class App extends Component {
                   addOffer={this.onAddOffer}
                   addRequest={this.addRequest}
                   removeRequest={this.removeRequest}
-                  onBountyPosted={this.onBackPressed}/>
+                  onBountyPosted={this.onBackPressed}
+                  address={address}/>
               )}
               { !createBounty && !createOffer && active < 0 && (
                 <BountyList bounties={bounties}
@@ -152,7 +154,8 @@ class App extends Component {
                 <BountyInfo bounty={bounties[active]}/>
               )}
               { !createOffer && active >=0 && bounties[active].type === 'offer' && (
-                <OfferInfo offer={bounties[active]}/>
+                <OfferInfo offer={bounties[active]}
+                  walletList={walletList}/>
               )}
             </div>
             {errorMessage && errorMessage.length > 0 && (
@@ -332,34 +335,45 @@ class App extends Component {
   getWallets() {
     const http = this.http;
     return http.getWallets()
-      .then(accounts => new Promise(resolve => {
-        this.setState({walletList: accounts}, () => {
-          resolve();
-        });
+      .then(addresses => addresses.map(address => {
+        return({address: address});
       }))
+      .then(wallets => {
+        const promises = wallets.map((wallet) => {
+          const e = http.getEth(wallet.address).then(balance =>
+            new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000))
+          )
+            .then((b) => `${b.toNumber()}`);
+
+          const n = http.getNct(wallet.address).then(balance =>
+            new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000))
+          )
+            .then((b) => `${b.toNumber()}`);
+
+          const promises = [e, n];
+          return Promise.all(promises).then(values => {
+            return({
+              address: wallet.address,
+              eth: values[0],
+              nct: values[1]
+            });
+          });
+        });
+        return Promise.all(promises);
+      })
+      .then((wallets) => new Promise(resolve =>
+        this.setState({walletList: wallets}, resolve)
+      ))
       .then(() => http.getUnlockedWallet())
       .then(address => {
         const {state: {walletList}} = this;
-        let addr = address;
-        if (!address && walletList.length > 0) {
-          addr = walletList[0];
-        } else if (!address) {
-          return new Promise(resolve, reject => reject());
+        if (!address) {
+          this.setState({ address: 0 });
+        } else {
+          const index = walletList.findIndex((account => account.address === address));
+          this.setState({ address: index });
         }
-        this.setState({ address: addr });
-        const e = http.getEth(addr).then(balance =>
-          new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000))
-        )
-          .then((b) => this.setState({ eth: `${b.toNumber()}` }));
-
-        const n = http.getNct(addr).then(balance =>
-          new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000))
-        )
-          .then((b) => this.setState({ nct: `${b.toNumber()}` }));
-
-        const promises = [e, n];
-        return Promise.all(promises);
-      })
+      });
   }
 
   storeBounties(bounties) {

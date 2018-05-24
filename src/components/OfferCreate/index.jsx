@@ -38,13 +38,14 @@ class OfferCreate extends Component {
 
   render() {
     const { state: { reward, reward_error, duration, duration_error, expert, expert_error } } = this;
-    const { props: { url, walletList, addRequest, removeRequest } } = this;
+    const { props: { url, walletList, addRequest, removeRequest, address } } = this;
     return (
       <div className='OfferCreate'>
         <ModalPassword
           ref={modal => (this.modal = modal)}
           url={url}
           walletList={walletList}
+          address={address}
           onWalletChange={this.onWalletChangeHandler}
           addRequest={addRequest}
           removeRequest={removeRequest}/>
@@ -202,6 +203,7 @@ class OfferCreate extends Component {
 
 OfferCreate.propTypes = {
   walletList: PropTypes.array,
+  address: PropTypes.number,
   onError: PropTypes.func,
   onWalletChange: PropTypes.func,
   addOffer: PropTypes.func,

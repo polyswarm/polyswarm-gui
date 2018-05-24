@@ -15,15 +15,19 @@ class OfferInfo extends Component {
   }
 
   render() {
-    const { props: { offer, nct, eth, addRequest, removeRequest, url } } = this;
+    const { props: { offer, addRequest, removeRequest, url, walletList } } = this;
+
+    const index = walletList.findIndex((wallet) => wallet.address === offer.author);
+
+    const wallet = walletList[index];
 
     return (
       <div className='Offer-Info'>
         <ModalPay ref={(pay)=> this.pay = pay}
           author={offer.author}
           expert={offer.expert}
-          nct={nct}
-          eth={eth}
+          nct={wallet.nct}
+          eth={wallet.eth}
           addRequest={addRequest}
           removeRequest={removeRequest}
           url={url}
@@ -50,7 +54,6 @@ class OfferInfo extends Component {
 
 OfferInfo.propTypes = {
   offer: PropTypes.object.isRequired,
-  nct: PropTypes.number,
-  eth: PropTypes.number,
+  walletList: PropTypes.array,
 };
 export default OfferInfo;

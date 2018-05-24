@@ -1,7 +1,6 @@
 // Vendor imports
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import BigNumber from 'bignumber.js';
 import Uuid from 'uuid/v4';
 import {CSSTransition} from 'react-transition-group';
 // Bounty imports
@@ -20,8 +19,6 @@ class ModalPassword extends Component {
       password_error: null,
       password: '',
       addressIndex: 0,
-      eth: 0,
-      nct: 0
     };
 
     this.onWalletChangeHandler = this.onWalletChangeHandler.bind(this);
@@ -40,16 +37,16 @@ class ModalPassword extends Component {
   }
 
   componentDidMount() {
-    const { props: { walletList, address } } = this;
-    const index = walletList.findIndex((addr) => addr === address);
-    this.setState({addressIndex: index});
+    const { props: { address } } = this;
+    this.setState({addressIndex: address});
   }
 
   render() {
-    const { props: { walletList, nct, eth } } = this;
+    const { props: { walletList } } = this;
     const {
       state: { open, unlocking, password_error, addressIndex }
     } = this;
+    const wallet = walletList[addressIndex];
     return (
       <div className='ModalPassword'>
         <CSSTransition
@@ -77,22 +74,23 @@ class ModalPassword extends Component {
                           <label htmlFor='address'>{strings.address}</label>
                           <select
                             id='address'
-                            value={walletList[addressIndex]}
+                            value={wallet.address}
                             onChange={this.onChangeAddress}>
-                            {walletList.map(wallet => {
+                            {walletList.map(walletOption => {
                               return (
-                                <option key={wallet} value={wallet}>
-                                  {wallet}
+                                <option key={walletOption.address}
+                                  value={walletOption.address}>
+                                  {walletOption.address}
                                 </option>
                               );
                             })}
                           </select>
                           <AnimatedInput input_id='nectar'
-                            readonly={nct}
+                            readonly={wallet.nct}
                             placeholder={strings.nectar}
                             type='number'/>
                           <AnimatedInput input_id='eth'
-                            readonly={eth}
+                            readonly={wallet.eth}
                             placeholder={strings.eth}
                             type='number'/>
                         </React.Fragment>
@@ -147,8 +145,8 @@ class ModalPassword extends Component {
   onChangeAddress(event) {
     const { props: { walletList } } = this;
     const value = event.target.value;
-    const index = walletList.findIndex(v => v === value);
-    this.setState({ address: index });
+    const index = walletList.findIndex(v => v.address === value);
+    this.setState({ addressIndex: index });
   }
 
   onCloseClick() {
@@ -166,10 +164,10 @@ class ModalPassword extends Component {
   }
 
   onUnlockClick() {
-    const { state: { address, password } } = this;
+    const { state: { addressIndex, password } } = this;
     const { props: { walletList } } = this;
     if (walletList && walletList.length > 0) {
-      this.unlockWallet(walletList[address], password);
+      this.unlockWallet(walletList[addressIndex].address, password);
     } else {
       this.createWallet(password);
     }
@@ -243,6 +241,7 @@ ModalPassword.proptypes = {
   walletList: PropTypes.array,
   onWalletChange: PropTypes.func,
   addRequest: PropTypes.func,
-  removeRequest: PropTypes.func
+  removeRequest: PropTypes.func,
+  address: PropTypes.number,
 };
 export default ModalPassword;

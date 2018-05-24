@@ -49,13 +49,14 @@ class BountyCreate extends Component {
 
   render() {
     const { state: { files, reward, reward_error, duration, duration_error, next } } = this;
-    const { props: { url, walletList, addRequest, removeRequest } } = this;
+    const { props: { url, walletList, addRequest, removeRequest, address } } = this;
     return (
       <div className='Bounty-Create'>
         <ModalPassword
           ref={modal => (this.modal = modal)}
           url={url}
           walletList={walletList}
+          address={address}
           onWalletChange={this.onWalletChangeHandler}
           addRequest={addRequest}
           removeRequest={removeRequest}/>
@@ -266,6 +267,7 @@ class BountyCreate extends Component {
 BountyCreate.propTypes = {
   isUnlocked: PropTypes.bool,
   walletList: PropTypes.array,
+  address: PropTypes.number,
   onWalletChange: PropTypes.func,
   onError: PropTypes.func,
   addBounty: PropTypes.func,
