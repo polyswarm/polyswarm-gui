@@ -21,6 +21,7 @@
 .Bounty-Values {
   box-sizing: border-box;
   display: block;
+  padding: 20px;
 }
 
 .Bounty-Values > .AnimatedInput {
