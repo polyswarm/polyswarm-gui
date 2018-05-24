@@ -309,8 +309,9 @@ class App extends Component {
       requestsInProgress,
       onError: this.onPostError,
       addRequest: this.addRequest,
-      removeRequest: this.removeRequest,
+      onBackPressed: this.onBackPressed,
       onCreateOffer: this.onCreateOffer,
+      removeRequest: this.removeRequest,
       onCreateBounty: this.onCreateBounty,
     });
   }

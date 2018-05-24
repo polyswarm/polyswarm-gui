@@ -4,10 +4,11 @@ import PropTypes from 'prop-types';
 import Uuid from 'uuid/v4';
 import BigNumber from 'bignumber.js';
 // Bounty imports
+import Button from '../Button';
 import AnimatedInput from '../AnimatedInput';
 import DropTarget from '../DropTarget';
 import FileList from '../FileList';
-import Button from '../Button';
+import Header from '../Header';
 import ModalPassword from '../ModalPassword';
 // Component imports
 import strings from './strings';
@@ -49,9 +50,20 @@ class BountyCreate extends Component {
 
   render() {
     const { state: { files, reward, reward_error, duration, duration_error, next } } = this;
-    const { props: { url, walletList, addRequest, removeRequest, address } } = this;
+    const { props: { url, walletList, addRequest, removeRequest, address, 
+      onBackPressed, requestsInProgress } } = this;
+
+    const wallet = walletList[address] || {address: null, eth: null, nct: null};
+
     return (
-      <div className='Bounty-Create'>
+      <div className='BountyCreate'>
+        <Header title={strings.title}
+          requests={requestsInProgress}
+          back={true}
+          onBack={onBackPressed}
+          address={wallet.address}
+          nct={wallet.nct}
+          eth={wallet.eth}/>
         <ModalPassword
           ref={modal => (this.modal = modal)}
           url={url}
@@ -61,56 +73,58 @@ class BountyCreate extends Component {
           addRequest={addRequest}
           removeRequest={removeRequest}/>
         <div className='BountyCreate-Content'>
-          <div className='BountyCreate-Header'>
-            <h2>{!next ? strings.first : strings.last}</h2>
-            <div className='BountyCreate-Header-Buttons'>
-              <Button flat
-                cancel
-                disabled={!next}
-                onClick={this.onBackClick}>
-                {strings.back}
-              </Button>
-              <Button flat
-                disabled={next || !files || files.length == 0}
-                onClick={this.onNextClick}>
-                {strings.next}
-              </Button>
-            </div>
-          </div>
-          {next && (
-            <React.Fragment>
-              <form className='Bounty-Values'>
-                <AnimatedInput type='number'
-                  onChange={this.onRewardChanged}
-                  error={reward_error}
-                  placeholder={strings.reward}
-                  input_id='reward'/>
-                <AnimatedInput type='number'
-                  onChange={this.onDurationChanged}
-                  error={duration_error}
-                  placeholder={strings.duration}
-                  input_id='duration'/>
-              </form>
-              <div className='Bounty-Create-Upload'>
-                <Button
-                  disabled={!reward || !duration || reward_error || duration_error || !files || files.length == 0}
-                  onClick={this.onClickHandler}>
-                  {`Create ${files.length} file bounty`}
+          <div className='BountyCreate-Centered'>
+            <div className='BountyCreate-Header'>
+              <h2>{!next ? strings.first : strings.last}</h2>
+              <div className='BountyCreate-Header-Buttons'>
+                <Button flat
+                  cancel
+                  disabled={!next}
+                  onClick={this.onBackClick}>
+                  {strings.back}
+                </Button>
+                <Button flat
+                  disabled={next || !files || files.length == 0}
+                  onClick={this.onNextClick}>
+                  {strings.next}
                 </Button>
               </div>
-            </React.Fragment>
-          )}
-          {!next && (
-            <div className='Bounty-Files'>
-              <div className='Bounty-Button'>
-              </div>
-              <DropTarget onFilesSelected={this.onMultipleFilesSelected} />
-              <FileList
-                files={files}
-                clear={this.onClearAll}
-                removeFile={this.onFileRemoved}/>
             </div>
-          )}
+            {next && (
+              <React.Fragment>
+                <form className='Bounty-Values'>
+                  <AnimatedInput type='number'
+                    onChange={this.onRewardChanged}
+                    error={reward_error}
+                    placeholder={strings.reward}
+                    input_id='reward'/>
+                  <AnimatedInput type='number'
+                    onChange={this.onDurationChanged}
+                    error={duration_error}
+                    placeholder={strings.duration}
+                    input_id='duration'/>
+                </form>
+                <div className='Bounty-Create-Upload'>
+                  <Button
+                    disabled={!reward || !duration || reward_error || duration_error || !files || files.length == 0}
+                    onClick={this.onClickHandler}>
+                    {`Create ${files.length} file bounty`}
+                  </Button>
+                </div>
+              </React.Fragment>
+            )}
+            {!next && (
+              <div className='Bounty-Files'>
+                <div className='Bounty-Button'>
+                </div>
+                <DropTarget onFilesSelected={this.onMultipleFilesSelected} />
+                <FileList
+                  files={files}
+                  clear={this.onClearAll}
+                  removeFile={this.onFileRemoved}/>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -265,7 +279,6 @@ class BountyCreate extends Component {
 }
 
 BountyCreate.propTypes = {
-  isUnlocked: PropTypes.bool,
   walletList: PropTypes.array,
   address: PropTypes.number,
   onWalletChange: PropTypes.func,
@@ -275,4 +288,6 @@ BountyCreate.propTypes = {
   removeRequest: PropTypes.func,
   url: PropTypes.string
 };
+// url, walletList, addRequest, removeRequest, address, 
+//       onBackClick, requestsInProgress 
 export default BountyCreate;

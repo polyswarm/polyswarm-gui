@@ -1,19 +1,29 @@
-.Bounty-Create {
+.BountyCreate {
   color: #8500ff;
-  display: block;
+  display: grid;
+  grid-template-rows: 86px 1fr;
   height: 100%;
-  overflow-y: scroll;
   width: 100%;
+}
+
+.BountyCreate > .Header {
+  grid-row: 1;
 }
 
 .BountyCreate-Content {
   display: block;
+  grid-row: 2;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.BountyCreate-Centered {
   margin: 0 auto;
   width: 100%;
 }
 
 @media only screen and (min-width: 800px) {
-  .BountyCreate-Content {
+  .BountyCreate-Centered {
       width: 70%;
   }
 }
