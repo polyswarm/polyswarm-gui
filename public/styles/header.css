@@ -47,17 +47,18 @@
 
 .Header-Address {
   background-color: #e2caff;
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
   height: 43px;
   justify-content: center;
-  padding-left: 25px;
   margin: 0 -20px;
 }
 
 .Header-Address > p {
   color: #555555;
   font-size: 18px;
+  font-size: 1vw;
   font-weight: bold;
   line-height: 18px;
   margin: auto 5px;
