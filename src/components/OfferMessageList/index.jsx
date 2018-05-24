@@ -42,8 +42,8 @@ class OfferMessageList extends Component {
   }
 
   renderRequest(message) {
-    const files = message.files;
-    const filesList = files.map((file) => file.name).reduce((accumulator, name) => `, ${name}`);
+    const artifacts = message.artifacts;
+    const artifactList = artifacts.map((artifact) => artifact.name).reduce((accumulator, name) => `, ${name}`);
     return(
       <Card key={message.guid}>
         <CardHeader
@@ -52,7 +52,7 @@ class OfferMessageList extends Component {
         <CardContent>
           <ul>
             <StatRow title={strings.files}
-              content={filesList}/>
+              content={artifactList}/>
           </ul>
         </CardContent>
       </Card>
@@ -60,7 +60,7 @@ class OfferMessageList extends Component {
   }
 
   renderAssertion(message) {
-    const files = message.files || [];
+    const artifacts = message.artifacts || [];
     const verdicts = message.verdicts || [];
     const worstVerdict = verdicts.reduce((accumulator, verdict) => accumulator || verdict);
     const verdictClass = classNames({
@@ -77,11 +77,11 @@ class OfferMessageList extends Component {
           <ul>
             <StatRow title={strings.metadata}
               content={message.metadata}/>
-            {files && files.map((file, index) => {
+            {artifacts && artifacts.map((artifact, index) => {
               return (
                 <StatRow 
-                  key={file.name}
-                  title={file.name}
+                  key={artifact.name}
+                  title={artifact.name}
                   content={verdicts[index] ? strings.malicious : strings.safe}/>
               );
             })}

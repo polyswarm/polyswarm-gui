@@ -21,14 +21,14 @@ class OfferSummary extends Component {
     const hashDict = {};
     const artifacts = messages
       .filter((message) => message.type==='request')
-      .map((message) => message.files)
-      .reduce((all, files) => all.concat(files), [])
+      .map((message) => message.artifacts)
+      .reduce((all, artifacts) => all.concat(artifacts), [])
       .sort((a, b) => {
         return a.name > b.name;
       })
-      .filter((file) => {
-        if (typeof hashDict[file.hash] === 'undefined') {
-          hashDict[file.hash] = file.name;
+      .filter((artifact) => {
+        if (typeof hashDict[artifact.hash] === 'undefined') {
+          hashDict[artifact.hash] = artifact.name;
           return true;
         } else {
           return false;
@@ -37,9 +37,9 @@ class OfferSummary extends Component {
     
     messages.filter((message) => message.type==='assertion')
       .forEach((message) => {
-        message.files.forEach((file, index) => {
+        message.artifacts.forEach((artifact, index) => {
           const verdict = message.verdicts[index];
-          const i = artifacts.find((value) => value.hash === file.hash);
+          const i = artifacts.find((value) => value.hash === artifact.hash);
           if (i) {
             artifacts[index].verdict = verdict;
           }
@@ -74,7 +74,7 @@ class OfferSummary extends Component {
           let content = artifact.verdict ? strings.malicious : strings.safe;
           return(
             <StatRow
-              key={artifact.name}
+              key={artifact.hash+artifact.name}
               vertical
               title={artifact.name}
               content={content}/>

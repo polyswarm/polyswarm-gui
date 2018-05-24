@@ -205,7 +205,7 @@ class App extends Component {
     const bounties = JSON.parse(JSON.stringify(this.state.bounties.slice()));
     if (index !== null && index >= 0 && index < bounties.length) {
       bounties[index].updated = false;
-      this.setState({active: index, create: false, bounties: bounties});
+      this.setState({active: index, bounties: bounties});
     }
   }
 
