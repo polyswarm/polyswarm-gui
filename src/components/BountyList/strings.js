@@ -6,8 +6,12 @@ const strings = {
   active: ' (ACTIVE)',
   expired: ' (EXPIRED)',
   nct: ' Nectar (NCT)',
-  author: "Author: ",
-  assertions: "Assertions: ",
-  files: "Files: ",
+  author: 'Author: ',
+  assertions: 'Assertions: ',
+  files: 'Files: ',
+  title: 'Bounties & Offers',
+  newBounty: '+ Bounty',
+  newOffer: '+ Offer',
+  relay: 'Fund sidechain',
 };
 export default strings;

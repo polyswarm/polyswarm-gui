@@ -7,7 +7,6 @@ import BigNumber from 'bignumber.js';
 import BountyCreate from '../BountyCreate';
 import BountyInfo from '../BountyInfo';
 import BountyList from '../BountyList';
-import Header from '../Header';
 import OfferCreate from '../OfferCreate';
 import OfferInfo from '../OfferInfo';
 import Snackbar from '../Snackbar';
@@ -77,27 +76,9 @@ class App extends Component {
   }
 
   render() {
-    const {host: url} = config;
-    const { state: { active, bounties, createBounty, createOffer, first, isUnlocked, walletList,
-      errorMessage, requestsInProgress, address } } = this;
-    let header;
-    if (!createBounty && !createOffer && active >= 0 && bounties.length > active) {
-      header = bounties[active].guid;
-    } else if (!createBounty && !createOffer) {
-      header = strings.list;
-    } else if (createBounty) {
-      header = strings.createBounty;
-    } else {
-      header = strings.createOffer;
-    }
 
-    const wallet = walletList[address] || {address: null, eth: null, nct: null};
+    const { state: { active, bounties, createBounty, createOffer, first, errorMessage } } = this;
 
-    const headerActions = [
-      {title: strings.newBounty, onClick: this.onCreateBounty},
-      {title: strings.newOffer, onClick: this.onCreateOffer},
-      {title: strings.relay, onClick: () => {}},
-    ];
     return (
       <div className='App'>
         <CSSTransition
@@ -112,52 +93,36 @@ class App extends Component {
         </CSSTransition>
         {!first && (
           <React.Fragment>
-            <Header title={header}
-              requests={requestsInProgress}
-              back={active >= 0 || createBounty || createOffer}
-              onBack={this.onBackPressed}
-              actions={headerActions}
-              address={wallet.address}
-              nct={wallet.nct}
-              eth={wallet.eth}/>
-            <div className='App-Content'>
-              { createBounty && (
-                <BountyCreate url={url}
-                  isUnlocked={isUnlocked}
-                  walletList={walletList}
-                  onWalletChange={this.onWalletChangeHandler}
-                  onError={this.onPostError}
-                  addBounty={this.onAddBounty}
-                  addRequest={this.addRequest}
-                  removeRequest={this.removeRequest}
-                  onBountyPosted={this.onBackPressed}
-                  address={address}/>
-              )}
-              { createOffer && (
-                <OfferCreate url={url}
-                  isUnlocked={isUnlocked}
-                  walletList={walletList}
-                  onWalletChange={this.onWalletChangeHandler}
-                  onError={this.onPostError}
-                  addOffer={this.onAddOffer}
-                  addRequest={this.addRequest}
-                  removeRequest={this.removeRequest}
-                  onBountyPosted={this.onBackPressed}
-                  address={address}/>
-              )}
-              { !createBounty && !createOffer && active < 0 && (
-                <BountyList bounties={bounties}
-                  onBountySelected={this.onSelectBounty}
-                  onBountyRemoved={this.onRemoveBounty}/>
-              )}
-              { !createBounty && active >=0 && bounties[active].type === 'bounty' && (
-                <BountyInfo bounty={bounties[active]}/>
-              )}
-              { !createOffer && active >=0 && bounties[active].type === 'offer' && (
-                <OfferInfo offer={bounties[active]}
-                  walletList={walletList}/>
-              )}
-            </div>
+            { createBounty && (
+              <BountyCreate
+                {...this.getPropsForChild()}
+                onWalletChange={this.onWalletChangeHandler}
+                addBounty={this.onAddBounty}
+                onBountyPosted={this.onBackPressed}/>
+            )}
+            { createOffer && (
+              <OfferCreate
+                {...this.getPropsForChild()}
+                onWalletChange={this.onWalletChangeHandler}
+                addOffer={this.onAddOffer}
+                onBountyPosted={this.onBackPressed}/>
+            )}
+            { !createBounty && !createOffer && active < 0 && (
+              <BountyList
+                {...this.getPropsForChild()}
+                onBountySelected={this.onSelectBounty}
+                onBountyRemoved={this.onRemoveBounty}/>
+            )}
+            { !createBounty && active >=0 && bounties[active].type === 'bounty' && (
+              <BountyInfo
+                {...this.getPropsForChild()}
+                bounty={bounties[active]}/>
+            )}
+            { !createOffer && active >=0 && bounties[active].type === 'offer' && (
+              <OfferInfo
+                {...this.getPropsForChild()}
+                offer={bounties[active]}/>
+            )}
             {errorMessage && errorMessage.length > 0 && (
               <Snackbar message={errorMessage}
                 onDismiss={this.onErrorDismissed}/>
@@ -329,6 +294,24 @@ class App extends Component {
       });
       this.setState({bounties: bounties});
       this.removeRequest(strings.requestAllData, uuid);
+    });
+  }
+
+  getPropsForChild() {
+    const {host: url} = config;
+    const { state: { active, bounties, walletList, requestsInProgress, address } } = this;
+    return({
+      url,
+      active,
+      address,
+      bounties,
+      walletList,
+      requestsInProgress,
+      onError: this.onPostError,
+      addRequest: this.addRequest,
+      removeRequest: this.removeRequest,
+      onCreateOffer: this.onCreateOffer,
+      onCreateBounty: this.onCreateBounty,
     });
   }
 

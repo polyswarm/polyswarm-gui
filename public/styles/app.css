@@ -14,9 +14,7 @@ body {
 
 .App {
   color: white;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 86px 1fr;
+  display: block;
   height: 100%;
   left: 0;
   position: absolute;
@@ -25,16 +23,7 @@ body {
 }
 
 .App-Content {
-  grid-row: 2;
   overflow: auto;
-}
-
-.Header {
-  grid-row: 1;
-}
-
-.Switch {
-  height: 100%;
 }
 
 ul {
