@@ -8,3 +8,12 @@
   padding: 20px;
   width: 100%;
 }
+
+.OfferActions {
+  border-bottom: 1px #e5e5e5 solid;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 15px 0;
+  margin: 5px 0;
+}

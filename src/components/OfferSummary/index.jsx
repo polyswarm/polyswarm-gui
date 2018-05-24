@@ -2,18 +2,26 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 // Bounty imports
+import Button from '../Button';
 import StatRow from '../StatRow';
 // Component imports
 import strings from './strings';
 
 class OfferSummary extends Component {
+  constructor(props) {
+    super(props);
+
+    this.onPayClick = this.onPayClick.bind(this);
+    this.onRequestClick = this.onRequestClick.bind(this);
+  }
+
   render() {
     const {props: {offer}} = this;
     const messages = offer.messages || [];
     const artifacts = messages
       .filter((message) => message.type==='request')
       .map((message) => message.files)
-      .reduce((all, files) => all.concat(files))
+      .reduce((all, files) => all.concat(files), [])
       .sort((a, b) => {
         return a.name.compare(b.name);
       });
@@ -30,18 +38,26 @@ class OfferSummary extends Component {
       });
     return (
       <div className='OfferSummary'>
+        <div className='OfferActions'>
+          <Button onClick={this.onPayClick}>
+            {strings.pay}
+          </Button>
+          <Button onClick={this.onRequestClick}>
+            {strings.request}
+          </Button>
+        </div>
         <StatRow vertical
           title={strings.poster}
-          content={bounty.author}/>
+          content={offer.author}/>
         <StatRow vertical
           title={strings.expert}
           content={offer.expert}/>
         <StatRow vertical
           title={strings.balance}
-          content={`${bounty.remaining}${strings.nectar}`}/>
+          content={`${offer.remaining || 0}${strings.nectar}`}/>
         <StatRow vertical
           title={strings.closed}
-          content={bounty.expired ? strings.yes : strings.no}/>
+          content={offer.expired ? strings.yes : strings.no}/>
         <StatRow vertical
           title={strings.messages}
           content={messages.length}/>
@@ -58,8 +74,24 @@ class OfferSummary extends Component {
       </div>
     );
   }
+
+  onPayClick() {
+    const {props: {onPayClick}} = this;
+    if (onPayClick) {
+      onPayClick();
+    }
+  }
+
+  onRequestClick() {
+    const {props: {onRequestClick}} = this;
+    if (onRequestClick) {
+      onRequestClick();
+    }
+  }
 }
 OfferSummary.proptypes = {
   offer: PropTypes.object.isRequired,
+  onPayClick: PropTypes.func,
+  onRequestClick: PropTypes.func,
 };
 export default OfferSummary;

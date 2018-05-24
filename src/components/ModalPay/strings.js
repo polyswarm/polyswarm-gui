@@ -7,5 +7,7 @@ const strings = {
   cancel: 'Cancel',
   too_low: 'Cannot pay less than what has already been paid: ',
   incorrect: 'Incorrect password.',
+  nectar: 'Nectar (NCT)',
+  eth: 'Ether (ETH)',
 };
 export default strings;

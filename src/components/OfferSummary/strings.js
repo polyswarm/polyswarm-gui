@@ -8,5 +8,7 @@ const strings = {
   messages: 'Messages:',
   malicious:'Malicious',
   safe: 'Safe',
+  pay: 'Pay',
+  request: 'Analyze',
 };
 export default strings;
