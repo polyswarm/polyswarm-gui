@@ -70,7 +70,7 @@ class OfferMessageList extends Component {
     return(
       <Card key={message.guid}>
         <CardHeader
-          className={verdictClass}
+          additionalClasses={verdictClass}
           title={strings.assertion}
         />
         <CardContent>
