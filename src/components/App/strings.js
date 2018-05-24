@@ -8,8 +8,8 @@ const strings = {
   requestWallets: 'Updating Wallets',
   requestGetBounty: 'Getting Bounty',
   requestGetOffer: 'Getting Offer',
-  newBounty: 'Add Bounty',
-  newOffer: 'Add Offer',
+  newBounty: '+ Bounty',
+  newOffer: '+ Offer',
   relay: 'Fund sidechain',
 };
 

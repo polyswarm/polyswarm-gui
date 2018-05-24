@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import Uuid from 'uuid/v4';
 import {CSSTransition} from 'react-transition-group';
+import BigNumber from 'bignumber.js';
 // Bounty imports
 import BountyCreate from '../BountyCreate';
 import BountyInfo from '../BountyInfo';
@@ -22,8 +23,10 @@ class App extends Component {
     const {bounties, first} = this.preloadLocalStorage();
     this.http = new HttpApp(config.host, config.websocket_host);
     this.state = {
-      isUnlocked: false,
+      address: null,
       walletList: [],
+      nct: '0',
+      eth: '0',
       active: -1,
       bounties: bounties,
       createBounty: false,
@@ -62,6 +65,7 @@ class App extends Component {
 
   componentDidMount() {
     this.getData();
+    this.getWallets();
     this.timer = setInterval(() => {
       this.getWallets();
     }, 5000);
@@ -77,7 +81,7 @@ class App extends Component {
   render() {
     const {host: url} = config;
     const { state: { active, bounties, createBounty, createOffer, first, isUnlocked, walletList,
-      errorMessage, requestsInProgress } } = this;
+      errorMessage, requestsInProgress, address, nct, eth } } = this;
     let header;
     if (!createBounty && !createOffer && active >= 0 && bounties.length > active) {
       header = bounties[active].guid;
@@ -112,7 +116,10 @@ class App extends Component {
               requests={requestsInProgress}
               back={active >= 0 || createBounty || createOffer}
               onBack={this.onBackPressed}
-              actions={headerActions}/>
+              actions={headerActions}
+              address={address}
+              nct={nct}
+              eth={eth}/>
             <div className='App-Content'>
               { createBounty && (
                 <BountyCreate url={url}
@@ -324,15 +331,35 @@ class App extends Component {
 
   getWallets() {
     const http = this.http;
-    const w = http.getWallets()
-      .then(accounts => {
-        this.setState({walletList: accounts});
-      });
+    return http.getWallets()
+      .then(accounts => new Promise(resolve => {
+        this.setState({walletList: accounts}, () => {
+          resolve();
+        });
+      }))
+      .then(() => http.getUnlockedWallet())
+      .then(address => {
+        const {state: {walletList}} = this;
+        let addr = address;
+        if (!address && walletList.length > 0) {
+          addr = walletList[0];
+        } else if (!address) {
+          return new Promise(resolve, reject => reject());
+        }
+        this.setState({ address: addr });
+        const e = http.getEth(addr).then(balance =>
+          new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000))
+        )
+          .then((b) => this.setState({ eth: `${b.toNumber()}` }));
 
-    const u = http.getUnlockedWallet()
-      .then((success) => this.setState({isUnlocked: success}));
-    const promises = [w, u];
-    return Promise.all(promises);
+        const n = http.getNct(addr).then(balance =>
+          new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000))
+        )
+          .then((b) => this.setState({ nct: `${b.toNumber()}` }));
+
+        const promises = [e, n];
+        return Promise.all(promises);
+      })
   }
 
   storeBounties(bounties) {

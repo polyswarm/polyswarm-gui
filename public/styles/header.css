@@ -6,8 +6,6 @@
   border-bottom: 1px solid #dfdfdf;
   box-sizing: border-box;
   color: white;
-  display: flex;
-  justify-content: space-between;
   padding: 0 20px 0 8px;
   white-space: nowrap;
 }
@@ -18,9 +16,17 @@
   height: 100%;
 }
 
+.Header-Title > h3 {
+  margin: auto 0;
+}
+
 .Header-Actions {
   display: flex;
   flex-direction: row;
+}
+
+.Header-Actions > button {
+  margin: auto 0;
 }
 
 .Header-Logo {
@@ -29,5 +35,35 @@
   height: inherit;
   margin: auto 0;
   padding: 0 10px;
-  height: 45%;
+  height: 24px;
+}
+
+.Header-Row {
+  display: flex;
+  flex-direction: row;
+  height: 43px;
+  justify-content: space-between;
+}
+
+.Header-Address {
+  background-color: #e2caff;
+  display: flex;
+  flex-direction: row;
+  height: 43px;
+  justify-content: center;
+  padding-left: 25px;
+  margin: 0 -20px;
+}
+
+.Header-Address > p {
+  color: #555555;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 18px;
+  margin: auto 5px;
+}
+
+.Header-Divided {
+  border-right: 2px #555555 solid;
+  padding-right: 10px;
 }

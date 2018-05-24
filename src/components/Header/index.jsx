@@ -15,46 +15,59 @@ class Header extends Component {
   }
 
   render() {
-    const { props: { title, back, requests, actions } } = this;
+    const { props: { title, back, requests, actions, address, nct, eth } } = this;
     let image_path = '../public/img/polyswarm-white.svg';
     if (back) {
       image_path = '../public/img/back-arrow.svg';
     }
     return (
       <header className='Header'>
-        <div className='Header-Title'>
-          <img onClick={this.onBack} 
-            className='Header-Logo'
-            src={image_path}
-            alt={strings.logo}/>
-          <h3>{title}</h3>
-          <RequestSpinner requests={requests}/>
-        </div>
-        {!back && (
-          <div className='Header-Actions'>
-            {actions.slice(0, 2).map((action) => {
-              return(
-                <Button key={action.title}
-                  onClick={action.onClick}
-                  header>
-                  {action.title}
-                </Button>
-              );
-            })}
-            {actions.slice(2).length > 0 && (
-              <Dropdown light>
-                {actions.slice(2).map((action) => {
-                  return(
-                    <p key={action.title}
-                      onClick={action.onClick}>
-                      {action.title}
-                    </p>
-                  );
-                })}
-              </Dropdown>
-            )}
+        <div className='Header-Row'>
+          <div className='Header-Title'>
+            <img onClick={this.onBack}
+              className='Header-Logo'
+              src={image_path}
+              alt={strings.logo}/>
+            <h3>{title}</h3>
+            <RequestSpinner requests={requests}/>
           </div>
-        )}
+          {!back && (
+            <div className='Header-Actions'>
+              {actions.slice(0, 2).map((action) => {
+                return(
+                  <Button key={action.title}
+                    onClick={action.onClick}
+                    header>
+                    {action.title}
+                  </Button>
+                );
+              })}
+              {actions.slice(2).length > 0 && (
+                <Dropdown light>
+                  {actions.slice(2).map((action) => {
+                    return(
+                      <p key={action.title}
+                        onClick={action.onClick}>
+                        {action.title}
+                      </p>
+                    );
+                  })}
+                </Dropdown>
+              )}
+            </div>
+          )}
+        </div>
+        <div className='Header-Address'>
+          <p className='Header-Divided'>
+            {address}
+          </p>
+          <p className='Header-Divided'>
+            {`${strings.mainnet}${nct}${strings.nct}${eth}${strings.eth}`}
+          </p>
+          <p>
+            {`${strings.sidenet}${nct}${strings.nct}`}
+          </p>
+        </div>
       </header>
     );
   }
@@ -83,9 +96,13 @@ class Header extends Component {
 
 Header.propTypes = {
   title: PropTypes.string,
-  onClick: PropTypes.func,
+  back: PropTypes.bool,
+  actions: PropTypes.array,
+  address: PropTypes.string,
+  nct: PropTypes.string,
+  eth: PropTypes.string,
   onBack: PropTypes.func,
-  create: PropTypes.bool,
   requests: PropTypes.array,
+
 };
 export default Header;

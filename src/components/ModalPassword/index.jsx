@@ -19,7 +19,7 @@ class ModalPassword extends Component {
       unlocking: false,
       password_error: null,
       password: '',
-      address: 0,
+      addressIndex: 0,
       eth: 0,
       nct: 0
     };
@@ -35,46 +35,20 @@ class ModalPassword extends Component {
     this.createWallet = this.createWallet.bind(this);
     this.open = this.open.bind(this);
     this.close = this.close.bind(this);
-    this.updateBalance = this.updateBalance.bind(this);
     this.addAccountRequest = this.addAccountRequest.bind(this);
     this.removeAccountRequest = this.removeAccountRequest.bind(this);
   }
 
-  componentWillMount() {
-    this.timer = setInterval(() => {
-      const { props: { walletList } } = this;
-      const { state: { address } } = this;
-      if (walletList && walletList.length > 0) {
-        this.updateBalance(walletList[address]);
-      }
-    }, 5000);
-  }
-
-  componentWillUnmount() {
-    if (this.timer) {
-      clearInterval(this.timer);
-      this.timer = null;
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { props: { walletList } } = this;
-    const { state: { address } } = this;
-    const { address: prevAddr } = prevState;
-    const { walletList: prevWallets } = prevProps;
-
-    if (walletList
-      && walletList.length > 0 
-      && (prevAddr !== address 
-      || JSON.stringify(walletList) !== JSON.stringify(prevWallets))) {
-      this.updateBalance(walletList[address]);
-    }
+  componentDidMount() {
+    const { props: { walletList, address } } = this;
+    const index = walletList.findIndex((addr) => addr === address);
+    this.setState({addressIndex: index});
   }
 
   render() {
-    const { props: { walletList } } = this;
+    const { props: { walletList, nct, eth } } = this;
     const {
-      state: { open, unlocking, password_error, password, address, nct, eth }
+      state: { open, unlocking, password_error, addressIndex }
     } = this;
     return (
       <div className='ModalPassword'>
@@ -103,7 +77,7 @@ class ModalPassword extends Component {
                           <label htmlFor='address'>{strings.address}</label>
                           <select
                             id='address'
-                            value={walletList[address]}
+                            value={walletList[addressIndex]}
                             onChange={this.onChangeAddress}>
                             {walletList.map(wallet => {
                               return (
@@ -261,24 +235,6 @@ class ModalPassword extends Component {
     if (removeRequest) {
       removeRequest(title, id);
     }
-  }
-
-  updateBalance(address) {
-    const { props: { url } } = this;
-    const http = new HttpAccount(url);
-    
-    const e = http.getEth(address).then(balance => {
-      return new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000));
-    }).then((b) => {
-      this.setState({ eth: b.toNumber() });
-    });
-    const n = http.getNct(address).then(balance => {
-      return new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000));
-    }).then((b) => {
-      this.setState({ nct: b.toNumber() });
-    });
-    const promises = [e, n];
-    return Promise.all(promises);
   }
 }
 
