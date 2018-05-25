@@ -179,10 +179,13 @@ class BountyList extends Component {
   }
 }
 BountyList.proptypes = {
+  address: PropTypes.number,
   bounties: PropTypes.array,
   onBountySelected: PropTypes.func,
   onBountyRemoved: PropTypes.func,
+  onCreateBounty: PropTypes.func,
+  onCreateOffer: PropTypes.func,
+  requestsInProgress: PropTypes.array,
+  walletList: PropTypes.array,
 };
-// const {props: {bounties, requestsInProgress, walletList, address,
-//   onCreateBounty, onCreateOffer}} = this;
 export default BountyList;

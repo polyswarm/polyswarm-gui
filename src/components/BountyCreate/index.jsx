@@ -283,11 +283,11 @@ BountyCreate.propTypes = {
   address: PropTypes.number,
   onWalletChange: PropTypes.func,
   onError: PropTypes.func,
+  onBackPressed: PropTypes.func,
   addBounty: PropTypes.func,
   addRequest: PropTypes.func,
   removeRequest: PropTypes.func,
+  requestsInProgress: PropTypes.array,
   url: PropTypes.string
 };
-// url, walletList, addRequest, removeRequest, address, 
-//       onBackClick, requestsInProgress 
 export default BountyCreate;

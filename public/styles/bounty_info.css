@@ -1,25 +1,34 @@
 .Bounty-Info {
+  display: grid;
+  grid-template-rows: 86px 1fr;
   height: 100%;
   position: relative;
   width: 100%;
 }
 
+.Bounty-Info > .Header {
+  grid-row: 1;
+}
+
 .Bounty-Info-Container {
   display: block;
+  grid-row: 2;
   box-sizing: border-box;
-  height: 100%;
+  height: auto;
+  overflow: scroll;
 }
 
 @media only screen and (min-width: 800px) {
   .Bounty-Info-Container {
-    display: grid;
     box-sizing: border-box;
-    grid-template-columns: 300px 1fr;
-    overflow-y: hidden;
-    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    height: auto;
   }
 
   .Bounty-Info-Assertions {
-    grid-column: 2;
+    height: auto;
+    overflow-y: scroll;
   }
 }

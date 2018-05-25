@@ -1,4 +1,5 @@
 .BountySummary {
+  box-sizing: border-box;
   border-right: #e5e5e5 2px solid;
   color: black;
   display: flex;
@@ -6,5 +7,5 @@
   justify-content: flex-start;
   overflow-y: auto;
   padding: 20px;
-  width: 100%;
+  min-width: 300px;
 }
