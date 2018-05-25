@@ -62,6 +62,7 @@ class OfferRequest extends Component {
             addRequest={addRequest}
             removeRequest={removeRequest}/>
           <div className='OfferRequest-Files'>
+            <h2>{strings.instructions}</h2>
             <div className='OfferRequest-Button'>
               <Button
                 disabled={ !files || files.length == 0 }
