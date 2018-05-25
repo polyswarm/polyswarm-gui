@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 import validator from 'validator';
 import web3Utils from 'web3-utils';
+import multihashes from 'multihashes';
 
 class HttpApp {
   constructor(url, ws) {
@@ -80,7 +81,16 @@ class HttpApp {
   }
 
   getArtifactsForBounty(bounty) {
-    return fetch(this.url+'/artifacts/'+bounty.uri)
+    return new Promise((resolve, reject)=> {
+      const hash = multihashes.fromB58String(bounty.uri);
+      try {
+        multihashes.validate(hash);
+        resolve(bounty.uri);
+      } catch (error) {
+        reject(error);
+      }
+    })
+      .then((uri) => fetch(this.url+'/artifacts/'+uri))
       .then(response => {
         if (response.ok) {
           return response;

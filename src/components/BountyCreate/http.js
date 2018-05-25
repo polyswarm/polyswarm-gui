@@ -1,3 +1,5 @@
+import multihashes from 'multihashes';
+
 class Http {
   constructor(url) {
     this.url = url;
@@ -54,20 +56,29 @@ class Http {
       });
   }
 
-  uploadBounty(amount, artifact, duration) {
+  uploadBounty(amount, artifactUri, duration) {
     const url = this.url + '/bounties';
-    return new Promise((resolve, reject) => {
-      if (amount && duration && artifact && artifact.length > 0) {
-        const bounty = JSON.stringify({
-          amount: amount,
-          duration: duration,
-          uri: artifact
-        });
-        resolve(bounty);
-      } else {
-        reject('Invalid bounty.');
+    return new Promise((resolve, reject)=> {
+      const hash = multihashes.fromB58String(artifactUri);
+      try {
+        multihashes.validate(hash);
+        resolve(artifactUri);
+      } catch (error) {
+        reject(error);
       }
     })
+      .then((uri) => new Promise((resolve, reject) => {
+        if (amount && duration ) {
+          const bounty = JSON.stringify({
+            amount: amount,
+            duration: duration,
+            uri: uri
+          });
+          resolve(bounty);
+        } else {
+          reject('Invalid bounty.');
+        }
+      }))
       .then(bounty =>
         fetch(url, {
           headers: {
