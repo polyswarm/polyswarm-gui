@@ -1,4 +1,6 @@
 import BigNumber from 'bignumber.js';
+import validator from 'validator';
+
 class HttpApp {
   constructor(url, ws) {
     this.url = url;
@@ -34,7 +36,14 @@ class HttpApp {
   }
 
   getBounty(bounty) {
-    return fetch(this.url+'/bounties/'+bounty.guid)
+    return new Promise((resolve, reject) => {
+      if (validator.isUUID(bounty.guid, 4)) {
+        resolve(bounty.guid);
+      } else {
+        reject('Invalid GUID');
+      }
+    })
+      .then((guid) => fetch(this.url+'/bounties/'+guid))
       .then(response => {
         if (response.ok) {
           return response;
@@ -58,9 +67,15 @@ class HttpApp {
   }
 
   getOffer(offer) {
-    return new Promise((resolve) => {
-      resolve(offer);
-    });
+    return new Promise((resolve, reject) => {
+      if (validator.isUUID(offer.guid, 4)) {
+        resolve(offer.guid);
+      } else {
+        reject('Invalid GUID');
+      }
+    })
+      .then(() => new Promise((resolve) => resolve(offer)))
+      .catch(() => null);
   }
 
   getArtifactsForBounty(bounty) {
@@ -92,7 +107,14 @@ class HttpApp {
   }
 
   getAssertionsForBounty(bounty) {
-    return fetch(this.url+'/bounties/'+bounty.guid+'/assertions')
+    return new Promise((resolve, reject) => {
+      if (validator.isUUID(bounty.guid, 4)) {
+        resolve(bounty.guid);
+      } else {
+        reject('Invalid GUID');
+      }
+    })
+      .then(guid => fetch(this.url+'/bounties/'+guid+'/assertions'))
       .then(response => {
         if (response.ok) {
           return response;
