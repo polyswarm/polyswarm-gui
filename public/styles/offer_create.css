@@ -4,7 +4,6 @@
   display: block;
   height: 100%;
   overflow-y: scroll;
-  padding: 20px;
   width: 100%;
 }
 
@@ -12,6 +11,7 @@
   box-sizing: border-box;
   display: block;
   margin: 0 auto;
+  padding: 20px;
   width: 100%;
 }
 

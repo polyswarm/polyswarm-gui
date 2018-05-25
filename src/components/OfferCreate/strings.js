@@ -7,5 +7,6 @@ const strings = {
   duration: 'Duration (Blocks)',
   expert: 'Expert\'s Ethereum Address',
   openOffer: 'Open Offer Channel',
+  title: 'Enter Expert, max reward and duration.'
 };
 export default strings;

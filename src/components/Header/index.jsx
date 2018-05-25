@@ -15,7 +15,7 @@ class Header extends Component {
   }
 
   render() {
-    const { props: { title, back, requests, actions, address, nct, eth } } = this;
+    const { props: { title, back, requests, actions: a, address, nct, eth } } = this;
     let image_path = '../public/img/polyswarm-white.svg';
     if (back) {
       image_path = '../public/img/back-arrow.svg';
@@ -26,6 +26,7 @@ class Header extends Component {
     const together = address + main + side;
 
     const ratio = address && eth && nct > 0 ? 120 / together.length : -1;
+    const actions = a || [];
 
     return (
       <header className='Header'>

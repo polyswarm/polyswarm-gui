@@ -6,6 +6,7 @@ import BigNumber from 'bignumber.js';
 // Offer imports
 import AnimatedInput from '../AnimatedInput';
 import Button from '../Button';
+import Header from '../Header';
 import ModalPassword from '../ModalPassword';
 // Component imports
 import strings from './strings';
@@ -38,9 +39,20 @@ class OfferCreate extends Component {
 
   render() {
     const { state: { reward, reward_error, duration, duration_error, expert, expert_error } } = this;
-    const { props: { url, walletList, addRequest, removeRequest, address } } = this;
+    const { props: { url, walletList, addRequest, removeRequest, address,
+      requestsInProgress, onBackPressed } } = this;
+
+    const wallet = walletList[address] || {address: null, eth: null, nct: null};
+
     return (
       <div className='OfferCreate'>
+        <Header title={strings.title}
+          requests={requestsInProgress}
+          back={true}
+          onBack={onBackPressed}
+          address={wallet.address}
+          nct={wallet.nct}
+          eth={wallet.eth}/>
         <ModalPassword
           ref={modal => (this.modal = modal)}
           url={url}
@@ -50,6 +62,7 @@ class OfferCreate extends Component {
           addRequest={addRequest}
           removeRequest={removeRequest}/>
         <div className='OfferCreate-Content'>
+          <h2>{strings.title}</h2>
           <form className='Offer-Values'>
             <AnimatedInput type='text'
               onChange={this.onExpertChanged}
