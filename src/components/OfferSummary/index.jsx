@@ -8,13 +8,6 @@ import StatRow from '../StatRow';
 import strings from './strings';
 
 class OfferSummary extends Component {
-  constructor(props) {
-    super(props);
-
-    this.onPayClick = this.onPayClick.bind(this);
-    this.onRequestClick = this.onRequestClick.bind(this);
-  }
-
   render() {
     const {props: {offer}} = this;
     const messages = offer.messages || [];
@@ -48,12 +41,6 @@ class OfferSummary extends Component {
     return (
       <div className='OfferSummary'>
         <div className='OfferActions'>
-          <Button onClick={this.onPayClick}>
-            {strings.pay}
-          </Button>
-          <Button onClick={this.onRequestClick}>
-            {strings.request}
-          </Button>
         </div>
         <StatRow vertical
           title={strings.poster}
@@ -83,24 +70,8 @@ class OfferSummary extends Component {
       </div>
     );
   }
-
-  onPayClick() {
-    const {props: {onPayClick}} = this;
-    if (onPayClick) {
-      onPayClick();
-    }
-  }
-
-  onRequestClick() {
-    const {props: {onRequestClick}} = this;
-    if (onRequestClick) {
-      onRequestClick();
-    }
-  }
 }
 OfferSummary.proptypes = {
   offer: PropTypes.object.isRequired,
-  onPayClick: PropTypes.func,
-  onRequestClick: PropTypes.func,
 };
 export default OfferSummary;

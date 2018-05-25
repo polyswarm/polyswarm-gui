@@ -38,31 +38,29 @@ class Header extends Component {
             <h3>{title}</h3>
             <RequestSpinner requests={requests}/>
           </div>
-          {!back && (
-            <div className='Header-Actions'>
-              {actions.slice(0, 2).map((action) => {
-                return(
-                  <Button key={action.title}
-                    onClick={action.onClick}
-                    header>
-                    {action.title}
-                  </Button>
-                );
-              })}
-              {actions.slice(2).length > 0 && (
-                <Dropdown light>
-                  {actions.slice(2).map((action) => {
-                    return(
-                      <p key={action.title}
-                        onClick={action.onClick}>
-                        {action.title}
-                      </p>
-                    );
-                  })}
-                </Dropdown>
-              )}
-            </div>
-          )}
+          <div className='Header-Actions'>
+            {actions.slice(0, 2).map((action) => {
+              return(
+                <Button key={action.title}
+                  onClick={action.onClick}
+                  header>
+                  {action.title}
+                </Button>
+              );
+            })}
+            {actions.slice(2).length > 0 && (
+              <Dropdown light>
+                {actions.slice(2).map((action) => {
+                  return(
+                    <p key={action.title}
+                      onClick={action.onClick}>
+                      {action.title}
+                    </p>
+                  );
+                })}
+              </Dropdown>
+            )}
+          </div>
         </div>
         <div className='Header-Address'>
           {ratio > 0 && (

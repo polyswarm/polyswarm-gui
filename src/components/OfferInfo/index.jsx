@@ -22,6 +22,10 @@ class OfferInfo extends Component {
     const index = walletList.findIndex((wallet) => wallet.address === offer.author);
 
     const wallet = walletList[index];
+    const headerActions = [
+      {title: 'Pay', onClick: this.onPayClick},
+      {title: 'Request', onClick: this.onRequestClick},
+    ];
 
     return (
       <div className='Offer-Info'>
@@ -31,7 +35,8 @@ class OfferInfo extends Component {
           onBack={onBackPressed}
           address={wallet.address}
           nct={wallet.nct}
-          eth={wallet.eth}/>
+          eth={wallet.eth}
+          actions={headerActions}/>
         <ModalPay ref={(pay)=> this.pay = pay}
           author={offer.author}
           expert={offer.expert}
@@ -42,9 +47,7 @@ class OfferInfo extends Component {
           url={url}
         />
         <div className='Offer-Info-Container'>
-          <OfferSummary offer={offer}
-            onPayClick={this.onPayClick}
-            onRequestClick={this.onRequestClick}/>
+          <OfferSummary offer={offer}/>
           <OfferMessageList className='Offer-Info-Messages'
             offer={offer} />
         </div>
