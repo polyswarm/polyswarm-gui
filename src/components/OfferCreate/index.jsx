@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Uuid from 'uuid/v4';
 import BigNumber from 'bignumber.js';
+import web3Utils from 'web3-utils';
 // Offer imports
 import AnimatedInput from '../AnimatedInput';
 import Button from '../Button';
@@ -64,8 +65,8 @@ class OfferCreate extends Component {
           addRequest={addRequest}
           removeRequest={removeRequest}/>
         <div className='OfferCreate-Content'>
-          <h2>{strings.title}</h2>
           <div className='Offer-Values'>
+            <h2>{strings.title}</h2>
             <AnimatedInput type='text'
               onChange={this.onExpertChanged}
               error={expert_error}
@@ -194,7 +195,7 @@ class OfferCreate extends Component {
   }
 
   validateFields() {
-    const {state: {duration, reward}} = this;
+    const {state: {duration, reward, expert}} = this;
 
     if (duration && duration < 1) {
       this.setState({duration_error: 'Duration below 1.'});
@@ -212,6 +213,11 @@ class OfferCreate extends Component {
     }
 
     //TODO validate expert
+    if (expert && !web3Utils.isAddress(expert)) {
+      this.setState({expert_error: 'Expert address must be a valid Ethereum address.'});
+    } else {
+      this.setState({expert_error: null});
+    }
   }
 }
 

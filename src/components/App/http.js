@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 import validator from 'validator';
+import web3Utils from 'web3-utils';
 
 class HttpApp {
   constructor(url, ws) {
@@ -159,9 +160,16 @@ class HttpApp {
       });
   }
 
-  getEth(address) {
+  getEth(wallet) {
     const url = this.url;
-    return fetch(url+'/accounts/'+address+'/balance/eth')
+    return new Promise((resolve, reject) => {
+      if (web3Utils.isAddress(wallet)) {
+        resolve(wallet);
+      } else {
+        reject(`${wallet} is not an Ethereum address`);
+      }
+    })
+      .then(address => fetch(url+'/accounts/'+address+'/balance/eth'))
       .then(response => {
         if (response.ok) {
           return response;
@@ -173,9 +181,16 @@ class HttpApp {
       .catch(() => 0);
   }
 
-  getNct(address) {
+  getNct(wallet) {
     const url = this.url;
-    return fetch(url+'/accounts/'+address+'/balance/nct')
+    return new Promise((resolve, reject) => {
+      if (web3Utils.isAddress(wallet)) {
+        resolve(wallet);
+      } else {
+        reject(`${wallet} is not an Ethereum address`);
+      }
+    })
+      .then(address => fetch(url+'/accounts/'+address+'/balance/nct'))
       .then(response => {
         if (response.ok) {
           return response;
