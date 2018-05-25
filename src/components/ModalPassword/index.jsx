@@ -128,9 +128,9 @@ class ModalPassword extends Component {
   }
 
   onWalletChangeHandler(didUnlock = false) {
-    const { props: { onWalletChange }, state: { store } } = this;
+    const { props: { onWalletChange }} = this;
     if (onWalletChange) {
-      onWalletChange(didUnlock, store);
+      onWalletChange(didUnlock);
     }
   }
 

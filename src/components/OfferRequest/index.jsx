@@ -10,6 +10,7 @@ import ModalPassword from '../ModalPassword';
 import Header from '../Header';
 // Component imports
 import strings from './strings';
+import HttpRequest from './http';
 
 class OfferRequest extends Component {
   constructor(props) {
@@ -32,7 +33,7 @@ class OfferRequest extends Component {
 
   componentDidMount() {
     const { props: { url } } = this;
-    // this.http = new Http(url);
+    this.http = new HttpRequest(url);
   }
 
   render() {
@@ -118,8 +119,12 @@ class OfferRequest extends Component {
   }
   
   onWalletChangeHandler(didUnlock) {
+    const { props: { onWalletChange } } = this;
+    if (onWalletChange) {
+      onWalletChange();
+    }
     if (didUnlock) {
-      this.createBounty();
+      this.sendMessage();
     }
   }
 
@@ -157,7 +162,7 @@ class OfferRequest extends Component {
         resolve();
       })
         .then(() => http.uploadFiles(files))
-        .then(artifact => http.sendMessage(artifact))
+        .then(artifact => http.sendRequest(artifact))
         .then(result => this.addMessage(result))
         .catch(error => {
           let errorMessage;
@@ -183,6 +188,7 @@ OfferRequest.propTypes = {
   addMessage: PropTypes.func,
   addRequest: PropTypes.func,
   onError: PropTypes.func,
+  onWalletChange: PropTypes.func,
   removeRequest: PropTypes.func,
   url: PropTypes.string,
   offer: PropTypes.object,

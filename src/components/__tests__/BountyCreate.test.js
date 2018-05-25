@@ -1092,7 +1092,7 @@ it('calls setState with reward_error message when reward changed to less than 0.
 
   const instance = wrapper.instance();
 
-  expect(instance.state.reward_error).toEqual('Reward below 0.0625 minumum.');
+  expect(instance.state.reward_error).toEqual('Reward below 0.0625 minimum.');
 });
 
 it('calls setState with reward_error null when reward changed to more than 0.0625', () => {

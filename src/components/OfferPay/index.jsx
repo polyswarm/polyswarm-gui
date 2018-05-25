@@ -10,9 +10,9 @@ import Header from '../Header';
 import ModalPassword from '../ModalPassword';
 // Component imports
 import strings from './strings';
-import HttpOfferCreate from './http';
+import HttpOfferPay from './http';
 
-class OfferCreate extends Component {
+class OfferPay extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,31 +24,32 @@ class OfferCreate extends Component {
       expert_error: null,
     };
 
+    this.payExpert = this.payExpert.bind(this);
+    this.addMessage = this.addMessage.bind(this);
     this.onClickHandler = this.onClickHandler.bind(this);
-    this.onDurationChanged = this.onDurationChanged.bind(this);
-    this.onExpertChanged = this.onExpertChanged.bind(this);
     this.onRewardChanged = this.onRewardChanged.bind(this);
-    this.addCreateOfferRequest = this.addCreateOfferRequest.bind(this);
-    this.removeCreateOfferRequest = this.removeCreateOfferRequest.bind(this);
+    this.addPayRequest = this.addPayRequest.bind(this);
+    this.removePayRequest = this.removePayRequest.bind(this);
     this.validateFields = this.validateFields.bind(this);
     this.onWalletChangeHandler = this.onWalletChangeHandler.bind(this);
   }
 
   componentDidMount() {
     const { props: { url } } = this;
-    this.http = new HttpOfferCreate(url);
+    this.http = new HttpOfferPay(url);
   }
 
   render() {
-    const { state: { reward, reward_error, duration, duration_error, expert, expert_error } } = this;
-    const { props: { url, walletList, addRequest, removeRequest, address,
+    const { state: { reward, reward_error } } = this;
+    const { props: { offer, url, walletList, addRequest, removeRequest,
       requestsInProgress, onBackPressed } } = this;
 
-    const wallet = walletList[address] || {address: null, eth: null, nct: null};
-
+    const address = walletList.findIndex((wallet) => wallet.address === offer.author);
+    const wallet = walletList[address];
+    const title = strings.title + offer.expert;
     return (
-      <div className='OfferCreate'>
-        <Header title={strings.title}
+      <div className='OfferPay'>
+        <Header title={title}
           requests={requestsInProgress}
           back={true}
           onBack={onBackPressed}
@@ -63,58 +64,36 @@ class OfferCreate extends Component {
           onWalletChange={this.onWalletChangeHandler}
           addRequest={addRequest}
           removeRequest={removeRequest}/>
-        <div className='OfferCreate-Content'>
-          <h2>{strings.title}</h2>
-          <div className='Offer-Values'>
-            <AnimatedInput type='text'
-              onChange={this.onExpertChanged}
-              error={expert_error}
-              placeholder={strings.expert}
-              input_id='expert'/>
+        <div className='OfferPay-Content'>
+          <div className='OfferPay-Center'>
+            <h2>{strings.instructions}</h2>
             <AnimatedInput type='number'
               onChange={this.onRewardChanged}
               error={reward_error}
               placeholder={strings.reward}
               input_id='reward'/>
-            <AnimatedInput type='number'
-              onChange={this.onDurationChanged}
-              error={duration_error}
-              placeholder={strings.duration}
-              input_id='duration'/>
-          </div>
-          <div className='Offer-Create-Upload'>
-            <Button
-              disabled={!reward || !duration || reward_error || duration_error || !expert || expert_error}
-              onClick={this.onClickHandler}>
-              {strings.openOffer}
-            </Button>
+            <div className='OfferPay-Upload'>
+              <Button
+                disabled={!reward || reward_error}
+                onClick={this.onClickHandler}>
+                {strings.pay}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
     );
   }
 
-  onOfferPosted() {
-    const {props: {onOfferPosted}} = this;
-    if (onOfferPosted) {
-      onOfferPosted();
+  addMessage(message) {
+    const {props: {addMessage}} = this;
+    if (addMessage) {
+      addMessage(message);
     }
   }
   
   onClickHandler() {
     this.modal.open();
-  }
-  
-  onDurationChanged(duration) {
-    this.setState({duration: duration}, () => {
-      this.validateFields();
-    });
-  }
-
-  onExpertChanged(expert) {
-    this.setState({expert: expert}, () => {
-      this.validateFields();
-    });
   }
   
   onRewardChanged(reward) {
@@ -129,30 +108,25 @@ class OfferCreate extends Component {
       onWalletChange();
     }
     if (didUnlock) {
-      this.createOffer();
+      this.payExpert();
     }
   }
 
-  createOffer() {
-    const { state: {expert, expert_error, reward, reward_error, duration,
-      duration_error}, props: { addOffer } } = this;
+  payExpert() {
+    const { state: {reward, reward_error}, props: { offer, onBackPressed } } = this;
 
     const rewardWei = new BigNumber(reward).times(new BigNumber('1000000000000000000'));
 
     const http = this.http;
-    if (expert && reward && duration && !duration_error && !reward_error && !expert_error) {
+    if (reward &&!reward_error) {
       const uuid = Uuid();
-      this.addCreateOfferRequest(uuid);
+      this.addPayRequest(uuid);
       return new Promise(resolve => {
-        this.onOfferPosted();
+        onBackPressed();
         resolve();
       })
-        .then(() => http.createOffer(expert, rewardWei.toString(), Number(duration)))
-        .then(result => {
-          if (addOffer) {
-            addOffer(result);
-          }
-        })
+        .then(() => http.pay(offer.guid, rewardWei.toString()))
+        .then(result => this.addMessage(result))
         .catch(error => {
           let errorMessage;
           if (!error || !error.message || error.message.length === 0) {
@@ -172,50 +146,43 @@ class OfferCreate extends Component {
           }
         })
         .then(() => {
-          this.removeCreateOfferRequest(uuid);
+          this.removePayRequest(uuid);
         });
     } else {
       return null;
     }
   }
 
-  addCreateOfferRequest(id) {
+  addPayRequest(id) {
     const { addRequest } = this.props;
     if (addRequest) {
-      addRequest(strings.requestCreateOffer, id);
+      addRequest(strings.requestPay, id);
     }
   }
 
-  removeCreateOfferRequest(id) {
+  removePayRequest(id) {
     const { removeRequest } = this.props;
     if (removeRequest) {
-      removeRequest(strings.requestCreateOffer, id);
+      removeRequest(strings.requestPay, id);
     }
   }
 
   validateFields() {
-    const {state: {duration, reward}} = this;
-
-    if (duration && duration < 1) {
-      this.setState({duration_error: 'Duration below 1.'});
-    } else if (duration && !Number.isInteger(Number(duration))) {
-      this.setState({duration_error: 'Duration must be integer.'});
-    } else {
-      this.setState({duration_error: null});
-    }
-
+    const {state: {reward}} = this;
+    const {props: {last}} = this;
     const min = new BigNumber('0.0625');
+    const lastPay = new BigNumber(last);
     if (reward && new BigNumber(reward).comparedTo(min) < 0 ) {
       this.setState({reward_error: 'Reward below 0.0625 minimum.'});
+    } else if (reward && new BigNumber(reward).comparedTo(lastPay) <= 0 ) {
+      this.setState({reward_error: `Reward must be higher than last payment of ${lastPay.toString()}.`});
     } else {
       this.setState({reward_error: null});
     }
-
-    //TODO validate expert
   }
 }
 
-OfferCreate.propTypes = {
+OfferPay.propTypes = {
   walletList: PropTypes.array,
   address: PropTypes.number,
   onError: PropTypes.func,
@@ -223,6 +190,7 @@ OfferCreate.propTypes = {
   addOffer: PropTypes.func,
   addRequest: PropTypes.func,
   removeRequest: PropTypes.func,
-  url: PropTypes.string
+  url: PropTypes.string,
+  last: PropTypes.string,
 };
-export default OfferCreate;
+export default OfferPay;

@@ -1,18 +1,18 @@
-class HttpOffer {
+class HttpOfferManage {
   constructor(url) {
     this.url = url;
   }
 
-  unlockWallet() {
+  pay(amount) {
     return new Promise((resolve) => {
       resolve(true);
     });
   }
 
-  pay() {
+  request(files)  {
     return new Promise((resolve) => {
-      resolve();
+      resolve(true);
     });
   }
 }
-export default HttpOffer;
+export default HttpOfferManage;

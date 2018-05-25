@@ -121,6 +121,7 @@ class App extends Component {
             { !createOffer && active >=0 && bounties[active].type === 'offer' && (
               <OfferInfo
                 {...this.getPropsForChild()}
+                onWalletChange={this.onWalletChangeHandler}
                 offer={bounties[active]}/>
             )}
             {errorMessage && errorMessage.length > 0 && (
@@ -153,7 +154,22 @@ class App extends Component {
   }
 
   onAddOffer(result) {
+    const http = this.http;
 
+    this.addRequest(strings.requestGetOffer, result.guid);
+    return http.getOffer(result)
+      .then(offer => {
+        if (offer != null) {
+          offer.updated = true;
+          const bounties = this.state.bounties.slice();
+          bounties.push(offer);
+          this.setState({bounties: bounties});
+        }
+      })
+      .catch(() => {})
+      .then(() => {
+        this.removeRequest(strings.requestGetOffer, result.guid);
+      });
   }
 
   onBackPressed() {
@@ -209,8 +225,7 @@ class App extends Component {
     }
   }
 
-  onWalletChangeHandler(store) {
-    this.setState({isUnlocked: store});
+  onWalletChangeHandler() {
     this.getWallets();
   }
 

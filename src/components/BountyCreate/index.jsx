@@ -179,10 +179,10 @@ class BountyCreate extends Component {
     });
   }
   
-  onWalletChangeHandler(didUnlock, store) {
+  onWalletChangeHandler(didUnlock) {
     const { props: { onWalletChange } } = this;
     if (onWalletChange) {
-      onWalletChange(store);
+      onWalletChange();
     }
     if (didUnlock) {
       this.createBounty();
@@ -271,7 +271,7 @@ class BountyCreate extends Component {
 
     const min = new BigNumber('0.0625');
     if (reward && new BigNumber(reward).comparedTo(min) < 0 ) {
-      this.setState({reward_error: 'Reward below 0.0625 minumum.'});
+      this.setState({reward_error: 'Reward below 0.0625 minimum.'});
     } else {
       this.setState({reward_error: null});
     }

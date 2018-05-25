@@ -77,6 +77,12 @@ class HttpApp {
       .catch(() => null);
   }
 
+  getOffer(offer) {
+    return new Promise((resolve) => {
+      resolve(true);
+    });
+  }
+
   getArtifactsForBounty(bounty) {
     return fetch(this.url+'/artifacts/'+bounty.uri)
       .then(response => {
