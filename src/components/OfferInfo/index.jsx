@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // Bounty imports
+import Header from '../Header';
 import ModalPay from '../ModalPay';
 import OfferMessageList from '../OfferMessageList';
 import OfferSummary from '../OfferSummary';
@@ -15,7 +16,8 @@ class OfferInfo extends Component {
   }
 
   render() {
-    const { props: { offer, addRequest, removeRequest, url, walletList } } = this;
+    const { props: { offer, addRequest, removeRequest, url, walletList, 
+      onBackPressed, requestsInProgress } } = this;
 
     const index = walletList.findIndex((wallet) => wallet.address === offer.author);
 
@@ -23,6 +25,13 @@ class OfferInfo extends Component {
 
     return (
       <div className='Offer-Info'>
+        <Header title={offer.guid}
+          requests={requestsInProgress}
+          back={true}
+          onBack={onBackPressed}
+          address={wallet.address}
+          nct={wallet.nct}
+          eth={wallet.eth}/>
         <ModalPay ref={(pay)=> this.pay = pay}
           author={offer.author}
           expert={offer.expert}
@@ -55,5 +64,10 @@ class OfferInfo extends Component {
 OfferInfo.propTypes = {
   offer: PropTypes.object.isRequired,
   walletList: PropTypes.array,
+  addRequest: PropTypes.func,
+  removeRequest: PropTypes.func,
+  url: PropTypes.string,
+  onBackPressed: PropTypes.func,
+  requestsInProgress: PropTypes.array,
 };
 export default OfferInfo;

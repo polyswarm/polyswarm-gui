@@ -15,7 +15,7 @@
   grid-row: 2;
   box-sizing: border-box;
   height: auto;
-  overflow: scroll;
+  overflow-y: scroll;
 }
 
 @media only screen and (min-width: 800px) {
