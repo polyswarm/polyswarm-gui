@@ -286,7 +286,13 @@ class App extends Component {
     http.listenForAssertions(this.updateOnAssertion);
     const bounties = this.state.bounties.slice();
     const promises = bounties.map((bounty) => {
-      return http.getBounty(bounty)
+      let promise;
+      if (bounty.type === 'offer') {
+        promise = http.getOffer(bounty);
+      } else {
+        promise = http.getBounty(bounty);
+      }
+      return promise
         .then(b => {
           if (b == null) {
             return bounty;

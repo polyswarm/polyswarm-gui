@@ -42,8 +42,10 @@ class HttpApp {
           throw Error('Cannot get bounties.');
         }
       })
+      
       .then(response => response.json())
       .then(json => json.result)
+      .then(bounty => this.getBountyIsActive(bounty))
       .then(bounty => {
         const amount = new BigNumber(bounty.amount).dividedBy(new BigNumber('1000000000000000000')).toNumber();
         bounty.amount = amount;
@@ -52,34 +54,12 @@ class HttpApp {
       })
       .then(bounty => this.getAssertionsForBounty(bounty))
       .then(bountyAssertions => this.getArtifactsForBounty(bountyAssertions))
-      .then(bounty => {
-        const assertions = bounty.assertions;
-        let files = bounty.artifacts;
-        assertions.forEach((assertion) => {
-          assertion.verdicts.forEach((verdict, index) => {
-            const file = files[index];
-            if (!verdict) {
-              file.good++;
-            }
-            file.total++;
-            file.assertions.push({
-              author: assertion.author,
-              bid: assertion.bid,
-              verdict: verdict,
-              metadata: assertion.metadata
-            });
-            files[index] = file;
-          });
-        });
-        bounty.artifacts = files;
-        return bounty;
-      })
       .catch(() => null);
   }
 
   getOffer(offer) {
     return new Promise((resolve) => {
-      resolve(true);
+      resolve(offer);
     });
   }
 
@@ -135,6 +115,24 @@ class HttpApp {
       })
       .then(filtered => {
         bounty.assertions = filtered;
+        return bounty;
+      });
+  }
+
+  getBountyIsActive(bounty) {
+    return fetch(this.url + '/bounties/active')
+      .then(response => {
+        if (response.ok) {
+          return response;
+        } else {
+          throw new Error('Unable to access active bounties');
+        }
+      })
+      .then(response => response.json())
+      .then(json => json.result)
+      .then(bounties => bounties.findIndex(b => b.guid === bounty.guid) >= 0 )
+      .then(found => {
+        bounty.expired = !found;
         return bounty;
       });
   }
