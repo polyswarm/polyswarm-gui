@@ -15,7 +15,7 @@
   grid-row: 2;
   box-sizing: border-box;
   height: auto;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 @media only screen and (min-width: 800px) {
@@ -29,6 +29,5 @@
 
   .Bounty-Info-Assertions {
     height: auto;
-    overflow-y: scroll;
   }
 }

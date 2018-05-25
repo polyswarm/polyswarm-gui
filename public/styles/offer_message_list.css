@@ -9,7 +9,6 @@
 @media only screen and (min-width: 800px) {
   .OfferMessageList {
     padding: 20px 15%;
-    overflow-y: scroll;
   }
 }
 

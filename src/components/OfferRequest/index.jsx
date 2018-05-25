@@ -7,9 +7,9 @@ import DropTarget from '../DropTarget';
 import FileList from '../FileList';
 import Button from '../Button';
 import ModalPassword from '../ModalPassword';
+import Header from '../Header';
 // Component imports
 import strings from './strings';
-import Http from './http';
 
 class OfferRequest extends Component {
   constructor(props) {
@@ -32,36 +32,48 @@ class OfferRequest extends Component {
 
   componentDidMount() {
     const { props: { url } } = this;
-    this.http = new Http(url);
+    // this.http = new Http(url);
   }
 
   render() {
     const { state: { files } } = this;
-    const { props: { url, offer, addRequest, removeRequest } } = this;
-    const walletList = [offer.author];
+    const { props: { url, offer, addRequest, removeRequest, requestsInProgress, 
+      walletList, onBackPressed } } = this;
+    
+    const index = walletList.findIndex((wallet) => wallet.address === offer.author);
+    const wallet = walletList[index];
+
     return (
-      <div className='Bounty-Create'>
-        <ModalPassword
-          ref={modal => (this.modal = modal)}
-          url={url}
-          walletList={walletList}
-          onWalletChange={this.onWalletChangeHandler}
-          addRequest={addRequest}
-          removeRequest={removeRequest}/>
+      <div className='OfferRequest'>
+        <Header title={offer.guid}
+          requests={requestsInProgress}
+          back={true}
+          onBack={onBackPressed}
+          address={wallet.address}
+          nct={wallet.nct}
+          eth={wallet.eth}/>
         <div className='OfferRequest-Content'>
-          <div className='Bounty-Files'>
-            <DropTarget onFilesSelected={this.onMultipleFilesSelected} />
-            <FileList
-              files={files}
-              clear={this.onClearAll}
-              removeFile={this.onFileRemoved}/>
-            <div className='Bounty-Create-Upload'>
+          <ModalPassword
+            ref={modal => (this.modal = modal)}
+            url={url}
+            address={index}
+            walletList={walletList}
+            onWalletChange={this.onWalletChangeHandler}
+            addRequest={addRequest}
+            removeRequest={removeRequest}/>
+          <div className='OfferRequest-Files'>
+            <div className='OfferRequest-Button'>
               <Button
                 disabled={ !files || files.length == 0 }
                 onClick={this.onClickHandler}>
                 {`Send ${files.length} files.`}
               </Button>
             </div>
+            <DropTarget onFilesSelected={this.onMultipleFilesSelected} />
+            <FileList
+              files={files}
+              clear={this.onClearAll}
+              removeFile={this.onFileRemoved}/>
           </div>
         </div>
       </div>
@@ -171,6 +183,10 @@ OfferRequest.propTypes = {
   addRequest: PropTypes.func,
   onError: PropTypes.func,
   removeRequest: PropTypes.func,
-  url: PropTypes.string
+  url: PropTypes.string,
+  offer: PropTypes.object,
+  requestsInProgress: PropTypes.array,
+  walletList: PropTypes.array,
+  onBackPressed: PropTypes.func,
 };
 export default OfferRequest;

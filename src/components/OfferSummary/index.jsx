@@ -40,8 +40,6 @@ class OfferSummary extends Component {
       });
     return (
       <div className='OfferSummary'>
-        <div className='OfferActions'>
-        </div>
         <StatRow vertical
           title={strings.poster}
           content={offer.author}/>
