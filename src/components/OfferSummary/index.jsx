@@ -2,7 +2,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 // Bounty imports
-import Button from '../Button';
 import StatRow from '../StatRow';
 // Component imports
 import strings from './strings';
@@ -13,13 +12,18 @@ class OfferSummary extends Component {
     const messages = offer.messages || [];
     const hashDict = {};
     const artifacts = messages
-      .filter((message) => message.type==='request')
+      .filter((message) => message.type === 'request')
       .map((message) => message.artifacts)
       .reduce((all, artifacts) => all.concat(artifacts), [])
       .sort((a, b) => {
         return a.name > b.name;
       })
+      .map(artifact => {
+        artifact.verdict = false;
+        return artifact;
+      })
       .filter((artifact) => {
+        // dedup based on file contents.
         if (typeof hashDict[artifact.hash] === 'undefined') {
           hashDict[artifact.hash] = artifact.name;
           return true;
@@ -28,13 +32,14 @@ class OfferSummary extends Component {
         }
       });
     
-    messages.filter((message) => message.type==='assertion')
+    messages.filter((message) => message.type ==='assertion')
       .forEach((message) => {
         message.artifacts.forEach((artifact, index) => {
           const verdict = message.verdicts[index];
-          const i = artifacts.find((value) => value.hash === artifact.hash);
+          const i = artifacts.findIndex((value) => value.hash === artifact.hash);
           if (i) {
-            artifacts[index].verdict = verdict;
+            const current = artifacts[i].verdict || false;
+            artifacts[i].verdict = current || verdict;
           }
         });
       });
