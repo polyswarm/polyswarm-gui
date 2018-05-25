@@ -1,17 +1,23 @@
 .OfferCreate {
   box-sizing: border-box;
   color: #8500ff;
-  display: block;
+  display: grid;
+  grid-template-rows: 86px 1fr;
   height: 100%;
-  overflow-y: scroll;
   width: 100%;
+}
+
+.OfferCreate > .Header {
+  grid-row: 1;
 }
 
 .OfferCreate-Content {
   box-sizing: border-box;
   display: block;
+  grid-row: 2;
   margin: 0 auto;
   padding: 20px;
+  overflow-y: auto;
   width: 100%;
 }
 
