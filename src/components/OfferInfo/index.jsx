@@ -43,7 +43,7 @@ class OfferInfo extends Component {
     }
 
     return (
-      <React.Fragment>
+      <div className='OfferInfo'>
         {request && (
           <OfferRequest offer={offer}
             address={0}
@@ -89,7 +89,7 @@ class OfferInfo extends Component {
             </div>
           </div>
         )}
-      </React.Fragment>
+      </div>
     );
   }
 

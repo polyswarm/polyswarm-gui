@@ -2,76 +2,352 @@
 
 exports[`renders without crashing 1`] = `
 <div
-  class="OfferCreate"
+  class="OfferInfo"
 >
   <div
-    class="ModalPassword"
+    class="Offer-Info"
   >
-    <div>
-      
-    </div>
-  </div>
-  <div
-    class="OfferCreate-Content"
-  >
-    <form
-      class="Offer-Values"
+    <header
+      class="Header"
     >
       <div
-        class="AnimatedInput"
+        class="Header-Row"
       >
-        <div>
-          
-        </div>
-        <input
-          class="AnimatedInput-Input"
-          id="expert"
-          type="text"
-          value=""
+        <div
+          class="Header-Title"
         >
-          
-        </input>
+          <img
+            alt="PolySwarm logo"
+            class="Header-Logo"
+            src="../public/img/back-arrow.svg"
+          >
+            
+          </img>
+          <h3>
+            
+          </h3>
+          <span
+            class="RequestSpinner"
+          >
+            
+          </span>
+        </div>
+        <div
+          class="Header-Actions"
+        >
+          <button
+            class="Button header"
+          >
+            Pay
+          </button>
+          <button
+            class="Button header"
+          >
+            Request
+          </button>
+        </div>
       </div>
       <div
-        class="AnimatedInput"
+        class="Header-Address"
       >
-        <div>
-          
-        </div>
-        <input
-          class="AnimatedInput-Input"
-          id="reward"
-          type="number"
-          value=""
+        <p
+          class="Header-Divided"
+          style="font-size:3.4285714285714284vw"
         >
-          
-        </input>
-      </div>
-      <div
-        class="AnimatedInput"
-      >
-        <div>
-          
-        </div>
-        <input
-          class="AnimatedInput-Input"
-          id="duration"
-          type="number"
-          value=""
+          author
+        </p>
+        <p
+          class="Header-Divided"
+          style="font-size:3.4285714285714284vw"
         >
-          
-        </input>
+          Main: 1 NCT 1 ETH
+        </p>
+        <p
+          style="font-size:3.4285714285714284vw"
+        >
+          Side: 1 NCT 
+        </p>
       </div>
-    </form>
+    </header>
     <div
-      class="Offer-Create-Upload"
+      class="Offer-Info-Container"
     >
-      <button
-        class="Button"
-        disabled=""
+      <div
+        class="OfferSummary"
       >
-        Open Offer Channel
-      </button>
+        <li
+          class="StatRow-Vertical"
+        >
+          <p
+            class="StatTitle"
+          >
+            Author:
+          </p>
+          <p
+            class="StatContent"
+          >
+            author
+          </p>
+        </li>
+        <li
+          class="StatRow-Vertical"
+        >
+          <p
+            class="StatTitle"
+          >
+            Expert:
+          </p>
+          <p
+            class="StatContent"
+          >
+            expert
+          </p>
+        </li>
+        <li
+          class="StatRow-Vertical"
+        >
+          <p
+            class="StatTitle"
+          >
+            Remaining Balance:
+          </p>
+          <p
+            class="StatContent"
+          >
+            100 Nectar (NCT)
+          </p>
+        </li>
+        <li
+          class="StatRow-Vertical"
+        >
+          <p
+            class="StatTitle"
+          >
+            
+          </p>
+          <p
+            class="StatContent"
+          >
+            No
+          </p>
+        </li>
+        <li
+          class="StatRow-Vertical"
+        >
+          <p
+            class="StatTitle"
+          >
+            Messages:
+          </p>
+          <p
+            class="StatContent"
+          >
+            4
+          </p>
+        </li>
+        <li
+          class="StatRow-Vertical"
+        >
+          <p
+            class="StatTitle"
+          >
+            Benign
+          </p>
+          <p
+            class="StatContent"
+          >
+            Safe
+          </p>
+        </li>
+        <li
+          class="StatRow-Vertical"
+        >
+          <p
+            class="StatTitle"
+          >
+            Malicious
+          </p>
+          <p
+            class="StatContent"
+          >
+            Malicious
+          </p>
+        </li>
+      </div>
+      <div
+        class="OfferMessageList"
+      >
+        <ul>
+          <li>
+            <div
+              class="Card"
+            >
+              <header
+                class="CardHeader Assertion-Malignant"
+              >
+                <div
+                  class="CardHeader-Title"
+                >
+                  Assertion
+                </div>
+              </header>
+              <div
+                class="CardContent"
+              >
+                <ul>
+                  <li
+                    class="StatRow"
+                  >
+                    <p
+                      class="StatTitle"
+                    >
+                      
+                    </p>
+                    <p
+                      class="StatContent"
+                    >
+                      
+                    </p>
+                  </li>
+                  <li
+                    class="StatRow"
+                  >
+                    <p
+                      class="StatTitle"
+                    >
+                      Malicious
+                    </p>
+                    <p
+                      class="StatContent"
+                    >
+                      Malicious
+                    </p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div
+              class="Card"
+            >
+              <header
+                class="CardHeader Assertion-Benign"
+              >
+                <div
+                  class="CardHeader-Title"
+                >
+                  Assertion
+                </div>
+              </header>
+              <div
+                class="CardContent"
+              >
+                <ul>
+                  <li
+                    class="StatRow"
+                  >
+                    <p
+                      class="StatTitle"
+                    >
+                      
+                    </p>
+                    <p
+                      class="StatContent"
+                    >
+                      
+                    </p>
+                  </li>
+                  <li
+                    class="StatRow"
+                  >
+                    <p
+                      class="StatTitle"
+                    >
+                      Benign
+                    </p>
+                    <p
+                      class="StatContent"
+                    >
+                      Safe
+                    </p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div
+              class="Card"
+            >
+              <header
+                class="CardHeader"
+              >
+                <div
+                  class="CardHeader-Title"
+                >
+                  Request
+                </div>
+              </header>
+              <div
+                class="CardContent"
+              >
+                <ul>
+                  <li
+                    class="StatRow"
+                  >
+                    <p
+                      class="StatTitle"
+                    >
+                      Files:
+                    </p>
+                    <p
+                      class="StatContent"
+                    >
+                      Benign
+                    </p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+          <li>
+            <div
+              class="Card"
+            >
+              <header
+                class="CardHeader"
+              >
+                <div
+                  class="CardHeader-Title"
+                >
+                  Request
+                </div>
+              </header>
+              <div
+                class="CardContent"
+              >
+                <ul>
+                  <li
+                    class="StatRow"
+                  >
+                    <p
+                      class="StatTitle"
+                    >
+                      Files:
+                    </p>
+                    <p
+                      class="StatContent"
+                    >
+                      Malicious
+                    </p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
