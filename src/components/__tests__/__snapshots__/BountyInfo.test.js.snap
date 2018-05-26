@@ -4,6 +4,43 @@ exports[`renders without crashing 1`] = `
 <div
   class="Bounty-Info"
 >
+  <header
+    class="Header"
+  >
+    <div
+      class="Header-Row"
+    >
+      <div
+        class="Header-Title"
+      >
+        <img
+          alt="PolySwarm logo"
+          class="Header-Logo"
+          src="../public/img/back-arrow.svg"
+        >
+          
+        </img>
+        <h3>
+          
+        </h3>
+        <span
+          class="RequestSpinner"
+        >
+          
+        </span>
+      </div>
+      <div
+        class="Header-Actions"
+      >
+        
+      </div>
+    </div>
+    <div
+      class="Header-Address"
+    >
+      
+    </div>
+  </header>
   <div
     class="Bounty-Info-Container"
   >

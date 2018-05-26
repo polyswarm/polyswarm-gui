@@ -11,7 +11,10 @@ class BountyInfo extends Component {
   render() {
     const { props: { bounty, requestsInProgress, onBackPressed, walletList, address } } = this;
 
-    const wallet = walletList[address] || {address: null, eth: null, nct: null};
+    let wallet = {address: '', eth: '0', nct: '0'};
+    if (walletList && address >= 0 && walletList.length > address ) {
+      wallet = walletList[address];
+    }
 
     return (
       <div className='Bounty-Info'>
