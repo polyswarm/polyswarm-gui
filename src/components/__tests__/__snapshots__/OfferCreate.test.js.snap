@@ -4,6 +4,43 @@ exports[`renders without crashing 1`] = `
 <div
   class="OfferCreate"
 >
+  <header
+    class="Header"
+  >
+    <div
+      class="Header-Row"
+    >
+      <div
+        class="Header-Title"
+      >
+        <img
+          alt="PolySwarm logo"
+          class="Header-Logo"
+          src="../public/img/back-arrow.svg"
+        >
+          
+        </img>
+        <h3>
+          Create Offer
+        </h3>
+        <span
+          class="RequestSpinner"
+        >
+          
+        </span>
+      </div>
+      <div
+        class="Header-Actions"
+      >
+        
+      </div>
+    </div>
+    <div
+      class="Header-Address"
+    >
+      
+    </div>
+  </header>
   <div
     class="ModalPassword"
   >
@@ -14,9 +51,12 @@ exports[`renders without crashing 1`] = `
   <div
     class="OfferCreate-Content"
   >
-    <form
+    <div
       class="Offer-Values"
     >
+      <h2>
+        Enter Expert, max reward and duration.
+      </h2>
       <div
         class="AnimatedInput"
       >
@@ -62,7 +102,7 @@ exports[`renders without crashing 1`] = `
           
         </input>
       </div>
-    </form>
+    </div>
     <div
       class="Offer-Create-Upload"
     >

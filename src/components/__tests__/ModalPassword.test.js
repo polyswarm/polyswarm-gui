@@ -127,7 +127,7 @@ it('hides the select when wallet list is empty', () => {
 });
 
 it('shows the select when wallet list is not empty', () => {
-  const walletList = ['asdf'];
+  const walletList = [{address: 'asdf', nct: '1', eth: '1'}];
   const wrapper = mount(<ModalPassword walletList={walletList} />);
   wrapper.setState({open: true});
 
@@ -165,7 +165,11 @@ it('passes didUnlock parameter in onWalletChangeHandler to onWalletChange', () =
 });
 
 it('shows given walletList as options in dropdown', () => {
-  const walletList = ['asdf','demo','omed'];
+  const walletList = [
+    {address:'asdf', nct: '1', eth: '1'},
+    {address:'demo', nct: '1', eth: '1'},
+    {address:'omed', nct: '1', eth: '1'}
+  ];
   const wrapper = mount(<ModalPassword walletList={walletList}/>);
   wrapper.setState({open: true});
 

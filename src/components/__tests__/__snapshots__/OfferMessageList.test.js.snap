@@ -2,77 +2,49 @@
 
 exports[`renders without crashing 1`] = `
 <div
-  class="OfferCreate"
+  class="OfferMessageList"
 >
-  <div
-    class="ModalPassword"
-  >
-    <div>
-      
-    </div>
-  </div>
-  <div
-    class="OfferCreate-Content"
-  >
-    <form
-      class="Offer-Values"
-    >
+  <ul>
+    <li>
       <div
-        class="AnimatedInput"
+        class="Card"
       >
-        <div>
-          
-        </div>
-        <input
-          class="AnimatedInput-Input"
-          id="expert"
-          type="text"
-          value=""
+        <header
+          class="CardHeader"
         >
-          
-        </input>
+          <div
+            class="CardHeader-Title"
+          >
+            Payment
+            <p
+              class="CardHeader-Sub"
+            >
+              .5 Nectar (NCT)
+            </p>
+          </div>
+        </header>
       </div>
+    </li>
+    <li>
       <div
-        class="AnimatedInput"
+        class="Card"
       >
-        <div>
-          
-        </div>
-        <input
-          class="AnimatedInput-Input"
-          id="reward"
-          type="number"
-          value=""
+        <header
+          class="CardHeader"
         >
-          
-        </input>
+          <div
+            class="CardHeader-Title"
+          >
+            Payment
+            <p
+              class="CardHeader-Sub"
+            >
+              .0625 Nectar (NCT)
+            </p>
+          </div>
+        </header>
       </div>
-      <div
-        class="AnimatedInput"
-      >
-        <div>
-          
-        </div>
-        <input
-          class="AnimatedInput-Input"
-          id="duration"
-          type="number"
-          value=""
-        >
-          
-        </input>
-      </div>
-    </form>
-    <div
-      class="Offer-Create-Upload"
-    >
-      <button
-        class="Button"
-        disabled=""
-      >
-        Open Offer Channel
-      </button>
-    </div>
-  </div>
+    </li>
+  </ul>
 </div>
 `;
