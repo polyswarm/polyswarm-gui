@@ -130,26 +130,29 @@ class BountyList extends Component {
       subheader = offer.initial + strings.nct;
     }
 
-    let messages = offer.messages.length;
-    
+    let messages = 0;
     let lastPay;
-    const payouts = offer.messages
-      .filter((message) => message.type==='payment');
-    if (payouts.length > 0) {
-      lastPay = payouts[0].amount + strings.nct;
-    } else {
-      lastPay = strings.never;
-    }
+    let artifacts = [];
+    if (offer.messages) {
+      messages = offer.messages.length;
+      offer.messages
+        .filter((message) => message.type==='payment');
+      if (payouts.length > 0) {
+        lastPay = payouts[0].amount + strings.nct;
+      } else {
+        lastPay = strings.never;
+      }
 
-    const artifacts = offer.messages
-      .filter((message) => message.type==='request')
-      .map((message) => message.artifacts)
-      .reduce((all, artifacts) => all.concat(artifacts), [])
-      .sort((a, b) => {
-        return a.name > b.name;
-      })
-      .map((artifact) => artifact.name)
-      .reduce((accumulator, artifact) => accumulator +', '+ artifact);
+      artifacts = offer.messages
+        .filter((message) => message.type==='request')
+        .map((message) => message.artifacts)
+        .reduce((all, artifacts) => all.concat(artifacts), [])
+        .sort((a, b) => {
+          return a.name > b.name;
+        })
+        .map((artifact) => artifact.name)
+        .reduce((accumulator, artifact) => accumulator +', '+ artifact);
+    }
 
     return (
       <Card key={title}

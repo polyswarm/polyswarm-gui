@@ -16,26 +16,12 @@ const mockCreateWallet = jest.fn().mockImplementation(() => {
   });
 });
 
-const mockGetEth = jest.fn().mockImplementation(() => {
-  return new Promise(resolve => {
-    resolve(1200000000000000000);
-  });
-});
-
-const mockGetNct = jest.fn().mockImplementation(() => {
-  return new Promise(resolve => {
-    resolve(1200000000000000000);
-  });
-});
-
 jest.mock('../ModalPassword/http', () => {
   // Works and lets you check for constructor calls:
   return jest.fn().mockImplementation(() => {
     return {
       unlockWallet: mockUnlockWallet,
       createWallet: mockCreateWallet,
-      getEth: mockGetEth,
-      getNct: mockGetNct,
     };
   });
 });
@@ -46,8 +32,6 @@ beforeEach(() => {
     return {
       unlockWallet: mockUnlockWallet,
       createWallet: mockCreateWallet,
-      getEth: mockGetEth,
-      getNct: mockGetNct,
     };
   });
 });

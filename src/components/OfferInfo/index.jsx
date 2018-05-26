@@ -36,8 +36,11 @@ class OfferInfo extends Component {
       {title: 'Request', onClick: this.onRequestClick},
     ];
 
-    const payments = offer.messages.filter(message => message.type === 'payment').sort((a, b) => a.amount < b.amount);
-    const last = payments.length > 0 ? payments[0].amount : '0';
+    let last = '0';
+    if (offer.messages) {
+      const payments = offer.messages.filter(message => message.type === 'payment').sort((a, b) => a.amount < b.amount);
+      last = payments.length > 0 ? payments[0].amount : '0';
+    }
 
     return (
       <React.Fragment>

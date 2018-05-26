@@ -16,13 +16,13 @@ import Welcome from '../Welcome';
 import HttpApp from './http';
 import config from '../../config';
 import strings from './strings';
-import { relative } from 'path';
 
 class App extends Component {
   constructor(props) {
     super(props);
     const {bounties, first} = this.preloadLocalStorage();
     this.http = new HttpApp(config.host, config.websocket_host);
+    this.cancel = false;
     this.state = {
       address: 0,
       walletList: [],
@@ -68,11 +68,15 @@ class App extends Component {
     this.getData();
     this.getWallets();
     this.timer = setInterval(() => {
-      this.getWallets();
+      const {state: {first}} = this;
+      if (!first) {
+        this.getWallets();
+      }
     }, 5000);
   }
 
   componentWillUnmount() {
+    this.cancel = true;
     if (this.timer) {
       clearInterval(this.timer);
       this.timer = null;
@@ -366,14 +370,16 @@ class App extends Component {
       }))
       .then(wallets => {
         const promises = wallets.map((wallet) => {
-          const e = http.getEth(wallet.address).then(balance =>
-            new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000))
-          )
+          const e = http.getEth(wallet.address)
+            .then(balance =>
+              new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000))
+            )
             .then((b) => `${b.toNumber()}`);
 
-          const n = http.getNct(wallet.address).then(balance =>
-            new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000))
-          )
+          const n = http.getNct(wallet.address)
+            .then(balance =>
+              new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000))
+            )
             .then((b) => `${b.toNumber()}`);
 
           const promises = [e, n];
@@ -391,6 +397,13 @@ class App extends Component {
         this.setState({walletList: wallets}, resolve)
       ))
       .then(() => http.getUnlockedWallet())
+      .then((address) => new Promise((resolve, reject) => {
+        if (this.cancel) {
+          reject();
+        } else {
+          resolve(address);
+        }
+      }))
       .then(address => {
         const {state: {walletList}} = this;
         if (!address) {
@@ -399,7 +412,8 @@ class App extends Component {
           const index = walletList.findIndex((account => account.address === address));
           this.setState({ address: index });
         }
-      });
+      })
+      .catch(() => {});
   }
 
   storeBounties(bounties) {

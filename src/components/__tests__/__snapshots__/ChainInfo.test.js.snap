@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
+<div
+  class="ChainInfo"
+>
+  <div
+    class="ChainInfo-Title"
+  >
+    <h3>
+      
+    </h3>
+  </div>
+  <div
+    class="ChainInfo-Content"
+  >
+    <p>
+      
+    </p>
+    <ul>
+      <li
+        class="StatRow-Vertical"
+      >
+        <p
+          class="StatTitle"
+        >
+          
+        </p>
+        <p
+          class="StatContent"
+        >
+          undefined NCT
+        </p>
+      </li>
+      <li
+        class="StatRow-Vertical"
+      >
+        <p
+          class="StatTitle"
+        >
+          
+        </p>
+        <p
+          class="StatContent"
+        >
+          undefined NCT
+        </p>
+      </li>
+    </ul>
+  </div>
+</div>
+`;

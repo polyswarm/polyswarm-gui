@@ -35,6 +35,14 @@ const mockGetBounty = jest.fn().mockImplementation((bounty) => {
   });
 });
 
+const mockGetEth = jest.fn().mockImplementation(() => {
+  return new Promise(resolve => resolve('1000000000000000000'));
+});
+
+const mockGetNct = jest.fn().mockImplementation(() => {
+  return new Promise(resolve => resolve('1000000000000000000'));
+});
+
 const mockListenForAssertions = jest.fn().mockImplementation(() => {
   return new Promise((resolve) => {
     resolve();
@@ -48,6 +56,8 @@ jest.mock('../App/http', () => {
       getBounty: mockGetBounty,
       getWallets: mockGetWallets,
       getUnlockedWallet: mockUnlockWallet,
+      getEth: mockGetEth,
+      getNct: mockGetNct,
       listenForAssertions: mockListenForAssertions
     };
   });
@@ -63,6 +73,8 @@ beforeEach(() => {
       getBounty: mockGetBounty,
       getWallets: mockGetWallets,
       getUnlockedWallet: mockUnlockWallet,
+      getEth: mockGetEth,
+      getNct: mockGetNct,
       listenForAssertions: mockListenForAssertions
     };
   });
@@ -80,7 +92,7 @@ it('shows empty bounty list when no bounties found', () => {
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
 
-it('calls setState with create:true when onCreateBounty is called', () => {
+it('calls setState with createBounty:true when onCreateBounty is called', () => {
   const wrapper = shallow(<App />);
   const instance = wrapper.instance();
   const bounties = [{guid:'asdf'}];
@@ -90,17 +102,90 @@ it('calls setState with create:true when onCreateBounty is called', () => {
 
   instance.onCreateBounty();
 
-  expect(setState).toHaveBeenCalledWith({active:-1, create: true});
+  expect(setState).toHaveBeenCalledWith({active:-1, createBounty: true});
 });
 
-it('shows create bounty when create is true.', () => {
+it('shows create bounty when createBounty is true.', () => {
   const wrapper = mount(<App />);
   const bounties = [{guid:'asdf'}];
   const active = 0;
 
-  wrapper.setState({first: false, create: true, bounties: bounties, active: active});
+  wrapper.setState({first: false, createBounty: true, bounties: bounties, active: active});
 
-  expect(wrapper.find('.Bounty-Create')).toHaveLength(1);
+  expect(wrapper.find('.BountyCreate')).toHaveLength(1);
+});
+
+it('calls setState with createOffer:true when onCreateOffer is called', () => {
+  const wrapper = shallow(<App />);
+  const instance = wrapper.instance();
+  const bounties = [{guid:'asdf'}];
+  const active = 0;
+  wrapper.setState({first: false, bounties: bounties, active: active});
+  const setState = jest.spyOn(App.prototype, 'setState');
+
+  instance.onCreateOffer();
+
+  expect(setState).toHaveBeenCalledWith({active:-1, createOffer: true});
+});
+
+it('shows create offer when createOffer is true.', () => {
+  const wrapper = mount(<App />);
+  const bounties = [{guid:'asdf'}];
+  const active = 0;
+
+  wrapper.setState({first: false, createOffer: true, bounties: bounties, active: active});
+
+  expect(wrapper.find('.OfferCreate')).toHaveLength(1);
+});
+
+it('calls setState with relay:true when onOpenRelay is called', () => {
+  const wrapper = shallow(<App />);
+  const instance = wrapper.instance();
+  const bounties = [{guid:'asdf'}];
+  const active = 0;
+  wrapper.setState({first: false, bounties: bounties, active: active});
+  const setState = jest.spyOn(App.prototype, 'setState');
+
+  instance.onOpenRelay();
+
+  expect(setState).toHaveBeenCalledWith({active:-1, relay: true});
+});
+
+it('shows relay when relay is true.', () => {
+  const wrapper = mount(<App />);
+  const bounties = [{guid:'asdf'}];
+  const active = 0;
+
+  wrapper.setState({first: false,
+    relay: true,
+    bounties: bounties,
+    active: active,
+    address: 0,
+    walletList: [{address: 'asdf', nct: '0', eth: '0'}]
+  });
+
+  expect(wrapper.find('.Relay')).toHaveLength(1);
+});
+
+it('calls onOpenRelay when dropdown button is clicked.', () => {
+  const onOpenRelay = jest.spyOn(App.prototype, 'onOpenRelay');
+  const wrapper = mount(<App />);
+  const bounties = [{guid:'asdf'}];
+  const active = -1;
+  wrapper.setState({first: false,
+    relay: false,
+    createBounty: false,
+    createOffer: false,
+    bounties: bounties,
+    active: active,
+    address: 0,
+    walletList: [{address: 'asdf', nct: '0', eth: '0'}]
+  });
+
+  wrapper.find('.Header').find('.Dropdown-Icon').simulate('mouseEnter');
+  wrapper.find('.Header').find('.Dropdown').find('p').simulate('click');
+
+  expect(onOpenRelay).toHaveBeenCalledTimes(1);
 });
 
 it('calls onCreateBounty when header button is clicked.', () => {
@@ -110,29 +195,46 @@ it('calls onCreateBounty when header button is clicked.', () => {
   const active = -1;
   wrapper.setState({first: false, bounties: bounties, active: active});
 
-  wrapper.find('.Header-Button').simulate('click');
+  wrapper.find('.Header').find('.Button').slice(0,1).simulate('click');
 
   expect(onCreateBounty).toHaveBeenCalledTimes(1);
 });
 
-it('shows create when header "+ Bounty" is clicked', () => {
+it('calls onCreateOffer when header button is clicked.', () => {
+  const onCreateOffer = jest.spyOn(App.prototype, 'onCreateOffer');
   const wrapper = mount(<App />);
   const bounties = [{guid:'asdf'}];
   const active = -1;
   wrapper.setState({first: false, bounties: bounties, active: active});
 
-  wrapper.find('.Header-Button').simulate('click');
+  wrapper.find('.Button').slice(1,2).simulate('click');
 
-  expect(wrapper.find('.Bounty-Create')).toHaveLength(1);
-  expect(wrapper.find('.Bounty-Info')).toHaveLength(0);
+  expect(onCreateOffer).toHaveBeenCalledTimes(1);
 });
 
 it('shows BountyInfo when at least one bounty & active selects it', () => {
   const wrapper = mount(<App />);
-  const bounties = [{guid:'asdf'}];
+  const bounties = [{guid:'asdf', type: 'bounty'}];
   const active = 0;
   wrapper.setState({first: false, bounties: bounties, active: active});
   expect(wrapper.find('.Bounty-Info')).toHaveLength(1);
+});
+
+it('shows OfferInfo when at least one offer & active selects it', () => {
+  const wrapper = mount(<App />);
+  const bounties = [{guid:'asdf', type: 'offer', author: 'asdf'}];
+  const active = 0;
+  wrapper.setState({first: false,
+    relay: false,
+    createBounty: false,
+    createOffer: false,
+    bounties: bounties,
+    active: active,
+    address: 0,
+    walletList: [{address: 'asdf', nct: '0', eth: '0'}]
+  });
+
+  expect(wrapper.find('.Offer-Info')).toHaveLength(1);
 });
 
 it('shows BountyList when at least one bounty & active is negative', () => {
@@ -175,7 +277,7 @@ it('calls select when card menu view button is clicked', () => {
   const active = -1;
   wrapper.setState({first: false, bounties: bounties, active: active});
 
-  wrapper.find('.Dropdown-Choices').first().find('p').first().simulate('click');
+  wrapper.find('.CardHeader').find('.Dropdown-Choices').first().find('p').first().simulate('click');
 
   expect(select).toHaveBeenCalledTimes(1);
   expect(select).toHaveBeenCalledWith(0);
@@ -193,7 +295,6 @@ it('updates the state when onSelectBounty called',() => {
 
   expect(setState).toHaveBeenCalledWith({
     active: 1,
-    create: false,
     bounties: [{
       guid:'asdf',
       updated: true
@@ -216,7 +317,7 @@ it('sets updated to false on bounty when onSelectBounty clicked', () => {
   const instance = wrapper.instance();
   instance.onSelectBounty(0);
 
-  expect(setState).toHaveBeenCalledWith({active: 0, create: false, bounties: [{guid:'asdf', updated: false}, {guid:'demo', updated:true}]});
+  expect(setState).toHaveBeenCalledWith({active: 0, bounties: [{guid:'asdf', updated: false}, {guid:'demo', updated:true}]});
 });
 
 it('does not update the state when onSelectBounty called with negative',() => {
@@ -268,7 +369,7 @@ it('calls remove when a card delete is clicked', () => {
   const active = -1;
   wrapper.setState({first: false, bounties: bounties, active: active});
 
-  wrapper.find('.Dropdown-Choices').first().find('p').last().simulate('click');
+  wrapper.find('.CardHeader').find('.Dropdown-Choices').first().find('p').last().simulate('click');
 
   expect(remove).toHaveBeenCalledTimes(1);
   expect(remove).toHaveBeenCalledWith(0);
@@ -499,7 +600,7 @@ it('calls addRequest when getData is called', (done) => {
   promise.then(() =>{
     try {
       expect(addRequest).toHaveBeenCalledTimes(1);
-      expect(addRequest.mock.calls[0][0]).toEqual('Refreshing bounties');
+      expect(addRequest.mock.calls[0][0]).toEqual('Refreshing');
       done();
     } catch (error) {
       done.fail(error);
@@ -518,7 +619,7 @@ it('calls removeRequest when getData finishes', (done) => {
   promise.then(() =>{
     try {
       expect(removeRequest).toHaveBeenCalledTimes(1);
-      expect(removeRequest.mock.calls[0][0]).toEqual('Refreshing bounties');
+      expect(removeRequest.mock.calls[0][0]).toEqual('Refreshing');
       done();
     } catch (error) {
       done.fail(error);
@@ -742,6 +843,8 @@ it('doesn\'t call storeBounties when setState called with identical set of bount
       getBounty: mockEmptyBounty,
       getWallets: mockGetWallets,
       getUnlockedWallet: mockUnlockWallet,
+      getEth: mockGetEth,
+      getNct: mockGetNct,
       listenForAssertions: mockListenForAssertions
     });
   });
@@ -781,6 +884,8 @@ it('calls storeBounties when setState called with different set of bounties', (d
       getBounty: mockEmptyBounty,
       getWallets: mockGetWallets,
       getUnlockedWallet: mockUnlockWallet,
+      getEth: mockGetEth,
+      getNct: mockGetNct,
       listenForAssertions: mockListenForAssertions
     });
   });
@@ -866,46 +971,16 @@ it('reads seen from localStorage and puts it into state as first on startup', ()
   expect(instance.state.first).toBeFalsy();
 });
 
-it('calls setState with account: true when calling onAccountSet(true)', () => {
-  const setState = jest.spyOn(App.prototype, 'setState');
+it('calls getWallets when oNWalletChangeHandler called', () => {
+  const getWallets = jest.spyOn(App.prototype, 'getWallets');
   const wrapper = shallow(<App />);
   const instance = wrapper.instance();
-  setState.mockClear();
+  getWallets.mockClear();
 
-  instance.onWalletChangeHandler(true);
+  instance.onWalletChangeHandler();
 
-  expect(setState.mock.calls[0][0]).toEqual({isUnlocked: true});
+  expect(getWallets).toHaveBeenCalledTimes(1);
 });
-
-it('calls setState with account: false when calling onAccountSet(false)', () => {
-  const setState = jest.spyOn(App.prototype, 'setState');
-  const wrapper = shallow(<App />);
-  const instance = wrapper.instance();
-  setState.mockClear();
-
-  instance.onWalletChangeHandler(false);
-
-  expect(setState.mock.calls[0][0]).toEqual({isUnlocked: false});
-});
-
-// it('opens the modal when onPostError is called', (done) => {
-//   const setState = jest.spyOn(App.prototype, 'setState');
-//   const wrapper = mount(<App />);
-//   const instance = wrapper.instance();
-//   setState.mockClear();
-//
-//   instance.onPostError('error');
-//
-//   setTimeout(() => {
-//     try {
-//       expect(instance.modal.state).toEqual(null);
-//       expect(wrapper.find('.ModalBackground')).toHaveLength(1);
-//       done();
-//     } catch (error) {
-//       done.fail(error);
-//     }
-//   }, 0);
-// });
 
 it('sets the error message when onPostError is called', () => {
   const setState = jest.spyOn(App.prototype, 'setState');
@@ -933,12 +1008,16 @@ it('shows a Snackbar when there is an error', (done) => {
   });
 });
 
-it('sets state with active -1 and create false when onBackPressed called', () => {
+it('sets state with active -1 and createBounty, createOffer and relay false when onBackPressed called', () => {
   const setState = jest.spyOn(App.prototype, 'setState');
   const wrapper = mount(<App />);
   const instance = wrapper.instance();
   setState.mockClear();
   instance.onBackPressed();
 
-  expect(setState).toHaveBeenCalledWith({active: -1, create: false});
+  expect(setState).toHaveBeenCalledWith({
+    active: -1,
+    createBounty: false,
+    createOffer: false,
+    relay: false});
 });
