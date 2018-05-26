@@ -6,13 +6,6 @@ class Http {
     this.xhr = null;
   }
 
-  cancel() {
-    const { xhr } = this;
-    if (xhr) {
-      xhr.abort();
-    }
-  }
-
   uploadFiles(files) {
     return new Promise(resolve => {
       const url = this.url + '/artifacts';

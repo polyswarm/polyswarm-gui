@@ -36,7 +36,6 @@ class BountyCreate extends Component {
     this.onNextClick = this.onNextClick.bind(this);
     this.onRewardChanged = this.onRewardChanged.bind(this);
     this.createBounty = this.createBounty.bind(this);
-    this.cancel = this.cancel.bind(this);
     this.onWalletChangeHandler = this.onWalletChangeHandler.bind(this);
     this.addCreateBountyRequest = this.addCreateBountyRequest.bind(this);
     this.removeCreateBountyRequest = this.removeCreateBountyRequest.bind(this);
@@ -53,7 +52,10 @@ class BountyCreate extends Component {
     const { props: { url, walletList, addRequest, removeRequest, address, 
       onBackPressed, requestsInProgress } } = this;
 
-    const wallet = walletList[address] || {address: null, eth: null, nct: null};
+    let wallet = {address: '', eth: '0', nct: '0'};
+    if (walletList && address >= 0 && walletList.length > address ) {
+      wallet = walletList[address];
+    }
 
     return (
       <div className='BountyCreate'>
@@ -187,11 +189,6 @@ class BountyCreate extends Component {
     if (didUnlock) {
       this.createBounty();
     }
-  }
-
-  cancel() {
-    const { http } = this;
-    http.cancel();
   }
 
   createBounty() {

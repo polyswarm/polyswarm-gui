@@ -3,7 +3,6 @@ import {shallow, render, mount} from 'enzyme';
 import {renderToJson} from 'enzyme-to-json';
 import BountyCreate from '../BountyCreate';
 import Http from '../BountyCreate/http';
-import { isJSDocNonNullableType } from 'typescript';
 
 const mockUploadFiles = jest.fn().mockImplementation(() => {
   return new Promise(resolve => {
@@ -138,7 +137,7 @@ it('stores additional files in state.files', () => {
   expect(instance.state.files).toEqual([{name: 'demo'}, {name: 'omed'}, {name: 'asdf'}]);
 });
 
-it('calls uploadFiles when all parameters are met (files, addBounty, url)', () => {
+it('calls uploadFiles when all parameters are met (files, addBounty, url)', (done) => {
   const addBounty = jest.fn();
   const walletList = [];
   const wrapper = mount(
@@ -162,10 +161,16 @@ it('calls uploadFiles when all parameters are met (files, addBounty, url)', () =
   wrapper.setState(state);
 
   // act
-  instance.createBounty();
-
-  // assert
-  expect(mockUploadFiles).toHaveBeenCalledTimes(1);
+  instance.createBounty()
+    .then(() => {
+      try {
+        // assert
+        expect(mockUploadFiles).toHaveBeenCalledTimes(1);
+        done();
+      } catch (error) {
+        done.fail(error);
+      }
+    });
 });
 
 it('doesn\'t call uploadFiles when parameters are missing', () => {
@@ -422,7 +427,7 @@ it('disables button when there are no files', () => {
   };
   wrapper.setState(state);
   
-    expect(wrapper.find('.Bounty-Create-Upload').find('button').props().disabled).toBeTruthy();
+  expect(wrapper.find('.Bounty-Create-Upload').find('button').props().disabled).toBeTruthy();
 });
 
 it('disables the button when reward is not set', () => {
@@ -645,10 +650,9 @@ it('calls onWalletChange when modal closed and password checked', () => {
   wrapper.setState(state);
   const instance = wrapper.instance();
 
-  instance.onWalletChangeHandler(true, true);
+  instance.onWalletChangeHandler(true);
 
   expect(onWalletChange).toHaveBeenCalledTimes(1);
-  expect(onWalletChange).toHaveBeenCalledWith(true);
 });
 
 it('calls onWalletChange when modal closed and password not checked', () => {
@@ -667,10 +671,9 @@ it('calls onWalletChange when modal closed and password not checked', () => {
   wrapper.setState({files: files, uploading: false});
   const instance = wrapper.instance();
 
-  instance.onWalletChangeHandler(false, false);
+  instance.onWalletChangeHandler(false);
 
   expect(onWalletChange).toHaveBeenCalledTimes(1);
-  expect(onWalletChange).toHaveBeenCalledWith(false);
 });
 
 it('calls onWalletChange with false when upload bounty returns 401', (done) => {
@@ -987,7 +990,6 @@ it('sets next: false when previous is clicked', () => {
 });
 
 it('shows file list & drop target when next is false', () => {
-  const setState = jest.spyOn(BountyCreate.prototype, 'setState');
   const onWalletChange = jest.fn();
   const walletList = [];
   const wrapper = mount(
@@ -1013,7 +1015,6 @@ it('shows file list & drop target when next is false', () => {
 });
 
 it('shows the error when reward_error set', () => {
-  const setState = jest.spyOn(BountyCreate.prototype, 'setState');
   const onWalletChange = jest.fn();
   const walletList = [];
   const wrapper = mount(
@@ -1040,7 +1041,6 @@ it('shows the error when reward_error set', () => {
 });
 
 it('shows the error when duration_error set', () => {
-  const setState = jest.spyOn(BountyCreate.prototype, 'setState');
   const onWalletChange = jest.fn();
   const walletList = [];
   const wrapper = mount(
@@ -1067,7 +1067,6 @@ it('shows the error when duration_error set', () => {
 });
 
 it('calls setState with reward_error message when reward changed to less than 0.0625', () => {
-  const setState = jest.spyOn(BountyCreate.prototype, 'setState');
   const onWalletChange = jest.fn();
   const walletList = [];
   const wrapper = mount(
@@ -1096,7 +1095,6 @@ it('calls setState with reward_error message when reward changed to less than 0.
 });
 
 it('calls setState with reward_error null when reward changed to more than 0.0625', () => {
-  const setState = jest.spyOn(BountyCreate.prototype, 'setState');
   const onWalletChange = jest.fn();
   const walletList = [];
   const wrapper = mount(
@@ -1125,7 +1123,6 @@ it('calls setState with reward_error null when reward changed to more than 0.062
 });
 
 it('calls setState with duration_error message when duration error changed to less than 1', () => {
-  const setState = jest.spyOn(BountyCreate.prototype, 'setState');
   const onWalletChange = jest.fn();
   const walletList = [];
   const wrapper = mount(
@@ -1154,7 +1151,6 @@ it('calls setState with duration_error message when duration error changed to le
 });
 
 it('calls setState with duration_error message when duration set to a float', () => {
-  const setState = jest.spyOn(BountyCreate.prototype, 'setState');
   const onWalletChange = jest.fn();
   const walletList = [];
   const wrapper = mount(
@@ -1183,7 +1179,6 @@ it('calls setState with duration_error message when duration set to a float', ()
 });
 
 it('calls setState with duration_error null when duration changed to more than 0', () => {
-  const setState = jest.spyOn(BountyCreate.prototype, 'setState');
   const onWalletChange = jest.fn();
   const walletList = [];
   const wrapper = mount(
