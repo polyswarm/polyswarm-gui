@@ -19,10 +19,10 @@ class ChainInfo extends Component {
           <ul>
             <StatRow vertical
               title={homeName}
-              content={homeBalance}/>
+              content={`${homeBalance}${strings.nectar}`}/>
             <StatRow vertical
               title={sideName}
-              content={sideBalance}/>
+              content={`${sideBalance}${strings.nectar}`}/>
           </ul>
         </div>
       </div>

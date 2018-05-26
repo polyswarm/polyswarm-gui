@@ -1,5 +1,6 @@
 const strings = {
-    current: 'Current Balance: ',
-    adjusted: 'Balance after Transfer: '
+  current: 'Current Balance: ',
+  adjusted: 'Balance after Transfer: ',
+  nectar: ' NCT'
 };
 export default strings;
