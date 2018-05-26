@@ -184,7 +184,12 @@ class App extends Component {
   }
 
   onBackPressed() {
-    this.setState({active: -1, createBounty: false, createOffer: false});
+    this.setState({
+      active: -1,
+      createBounty: false,
+      createOffer: false,
+      relay: false
+    });
   }
 
   onCreateBounty() {
