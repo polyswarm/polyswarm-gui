@@ -1,0 +1,63 @@
+.Relay {
+  display: grid;
+  grid-template-rows: 86px 1fr;
+  height: 100%;
+  width: 100%;
+}
+
+.Relay > .Header {
+  grid-row: 1;
+}
+
+.Relay-Content {
+  box-sizing: border-box;
+  grid-row: 2;
+  height: auto;
+  margin: 0 auto;
+  padding: 20px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.Relay-Content > h2 {
+  text-align: center;
+}
+
+.Relay-Chain {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.Relay-Centered {
+  margin: 0 auto;
+  width: 100%;
+}
+
+@media only screen and (min-width: 800px) {
+  .Relay-Centered {
+    width: 70%;
+  }
+}
+
+.Relay-Nectar {
+  display: flex;
+  flex-direction: row;
+}
+
+.Relay-Nectar > .NectarField {
+  flex-grow: 1
+}
+
+.Relay-Nectar > .Button {
+  margin-top: auto;
+  margin-left: 8px;
+  height: 48px;
+}
+
+.Relay-Button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}

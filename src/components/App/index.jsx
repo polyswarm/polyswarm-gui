@@ -9,12 +9,14 @@ import BountyInfo from '../BountyInfo';
 import BountyList from '../BountyList';
 import OfferCreate from '../OfferCreate';
 import OfferInfo from '../OfferInfo';
+import Relay from '../Relay';
 import Snackbar from '../Snackbar';
 import Welcome from '../Welcome';
 // Component imports
 import HttpApp from './http';
 import config from '../../config';
 import strings from './strings';
+import { relative } from 'path';
 
 class App extends Component {
   constructor(props) {
@@ -28,9 +30,10 @@ class App extends Component {
       bounties: bounties,
       createBounty: false,
       createOffer: false,
+      relay: false,
       first: first,
       errorMessage: null,
-      requestsInProgress: []
+      requestsInProgress: [],
     };
 
     this.onAddBounty = this.onAddBounty.bind(this);
@@ -40,6 +43,7 @@ class App extends Component {
     this.onSelectBounty = this.onSelectBounty.bind(this);
     this.onCreateBounty = this.onCreateBounty.bind(this);
     this.onCreateOffer = this.onCreateOffer.bind(this);
+    this.onOpenRelay = this.onOpenRelay.bind(this);
     this.onCloseWelcome = this.onCloseWelcome.bind(this);
     this.onErrorDismissed = this.onErrorDismissed.bind(this);
     this.onPostError = this.onPostError.bind(this);
@@ -77,7 +81,8 @@ class App extends Component {
 
   render() {
 
-    const { state: { active, bounties, createBounty, createOffer, first, errorMessage } } = this;
+    const { state: { active, bounties, createBounty, createOffer, first, 
+      errorMessage, relay } } = this;
 
     return (
       <div className='App'>
@@ -107,7 +112,13 @@ class App extends Component {
                 addOffer={this.onAddOffer}
                 onBountyPosted={this.onBackPressed}/>
             )}
-            { !createBounty && !createOffer && active < 0 && (
+            { relay && (
+              <Relay
+                {...this.getPropsForChild()}
+                onWalletChange={this.onWalletChangeHandler}
+              />
+            )}
+            { !createBounty && !createOffer && !relay && active < 0 && (
               <BountyList
                 {...this.getPropsForChild()}
                 onBountySelected={this.onSelectBounty}
@@ -182,6 +193,10 @@ class App extends Component {
 
   onCreateOffer() {
     this.setState({createOffer: true, active: -1});
+  }
+
+  onOpenRelay() {
+    this.setState({relay: true, active: -1});
   }
 
   onCloseWelcome() {
@@ -332,6 +347,7 @@ class App extends Component {
       addRequest: this.addRequest,
       onBackPressed: this.onBackPressed,
       onCreateOffer: this.onCreateOffer,
+      onOpenRelay: this.onOpenRelay,
       removeRequest: this.removeRequest,
       onCreateBounty: this.onCreateBounty,
     });

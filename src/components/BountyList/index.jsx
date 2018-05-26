@@ -19,14 +19,14 @@ class BountyList extends Component {
 
   render() {
     const {props: {bounties, requestsInProgress, walletList, address,
-      onCreateBounty, onCreateOffer}} = this;
+      onCreateBounty, onCreateOffer, onOpenRelay }} = this;
 
     const wallet = walletList[address] || {address: null, eth: null, nct: null};
 
     const headerActions = [
       {title: strings.newBounty, onClick: onCreateBounty},
       {title: strings.newOffer, onClick: onCreateOffer},
-      {title: strings.relay, onClick: () => {}},
+      {title: strings.relay, onClick: onOpenRelay},
     ];
     return (
       <div className='BountyList'>
