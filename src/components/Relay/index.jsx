@@ -138,7 +138,6 @@ class Relay extends Component {
     const { state: {selected}, props: { onWalletChange } } = this;
     if (onWalletChange) {
       onWalletChange();
-      return null;
     }
     if (didUnlock) {
       if (selected == 1) {
@@ -147,6 +146,7 @@ class Relay extends Component {
         return this.transfer(true);
       }
     }
+    return null;
   }
 
   addRelayRequest(id) {

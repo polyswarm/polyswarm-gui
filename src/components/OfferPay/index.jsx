@@ -108,7 +108,9 @@ class OfferPay extends Component {
       onWalletChange();
     }
     if (didUnlock) {
-      this.payExpert();
+      return this.payExpert();
+    } else {
+      return null;
     }
   }
 
@@ -122,7 +124,9 @@ class OfferPay extends Component {
       const uuid = Uuid();
       this.addPayRequest(uuid);
       return new Promise(resolve => {
-        onBackPressed();
+        if (onBackPressed) {
+          onBackPressed();
+        }
         resolve();
       })
         .then(() => http.pay(offer.guid, rewardWei.toString()))
