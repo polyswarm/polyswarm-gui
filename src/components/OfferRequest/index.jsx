@@ -46,7 +46,7 @@ class OfferRequest extends Component {
 
     return (
       <div className='OfferRequest'>
-        <Header title={offer.guid}
+        <Header title={`${strings.title}${offer.expert}`}
           requests={requestsInProgress}
           back={true}
           onBack={onBackPressed}
