@@ -1,8 +1,8 @@
 const strings = {
-  createBounty: 'Create Bounty',
+  createOffer: 'Create Offer',
   error: 'Something went wrong.',
   locked: 'Account was locked.',
-  requestCreateBounty: 'Creating Bounty',
+  requestCreateOffer: 'Creating Offer',
   reward: 'Maximum Reward (NCT)',
   duration: 'Duration (Blocks)',
   expert: 'Expert\'s Ethereum Address',

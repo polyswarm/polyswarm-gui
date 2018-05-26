@@ -49,7 +49,7 @@ class OfferCreate extends Component {
 
     return (
       <div className='OfferCreate'>
-        <Header title={strings.title}
+        <Header title={strings.createOffer}
           requests={requestsInProgress}
           back={true}
           onBack={onBackPressed}

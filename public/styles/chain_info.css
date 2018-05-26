@@ -1,0 +1,25 @@
+.ChainInfo {
+  border: 4px #e2caff solid;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0 15px 0;
+  padding: 5px 20px 5px 20px;
+  width: 45%;
+}
+
+.ChainInfo-Title > h3 {
+  color: #8500ff;
+  margin: 0 0 8px 0;
+}
+
+.ChainInfo-Content > ul > li {
+  margin: 0 0 8px 0;
+}
+
+.ChainInfo-Content > ul {
+  list-style: none;
+  padding-left: 0;
+}
