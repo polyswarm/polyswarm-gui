@@ -93,8 +93,12 @@ class OfferInfo extends Component {
     );
   }
 
-  addMessage(message) {
-
+  addMessage() {
+    const {props: {onAddMessage, offer}} = this;
+    if (onAddMessage) {
+      // Tells app that this offer has a new message to retrieve.
+      onAddMessage(offer);
+    }
   }
 
   onBack() {

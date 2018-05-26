@@ -137,6 +137,8 @@ class App extends Component {
               <OfferInfo
                 {...this.getPropsForChild()}
                 onWalletChange={this.onWalletChangeHandler}
+                // This will just kickoff a refresh of this offer
+                onAddMessage={this.onAddOffer}
                 offer={bounties[active]}/>
             )}
             {errorMessage && errorMessage.length > 0 && (
