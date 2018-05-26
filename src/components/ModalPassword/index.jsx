@@ -44,9 +44,12 @@ class ModalPassword extends Component {
   render() {
     const { props: { walletList } } = this;
     const {
-      state: { open, unlocking, password_error, addressIndex }
+      state: { open, unlocking, password_error, addressIndex: address }
     } = this;
-    const wallet = walletList[addressIndex];
+    let wallet = {address: '', eth: '0', nct: '0'};
+    if (walletList && address >= 0 && walletList.length > address ) {
+      wallet = walletList[address];
+    }
     return (
       <div className='ModalPassword'>
         <CSSTransition

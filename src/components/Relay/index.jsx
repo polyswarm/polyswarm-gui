@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import BigNumber from 'bignumber.js';
+import Uuid from 'uuid/v4';
 // Project imports
 import AnimatedInput from '../AnimatedInput';
 import Button from '../Button';
@@ -25,7 +26,10 @@ class Relay extends Component {
     this.onButtonClick = this.onButtonClick.bind(this);
     this.onNectarChanged = this.onNectarChanged.bind(this);
     this.onSelectionChanged = this.onSelectionChanged.bind(this);
+    this.handleError = this.handleError.bind(this);
     this.transfer = this.transfer.bind(this);
+    this.addRelayRequest = this.addRelayRequest.bind(this);
+    this.removeRelayRequest = this.removeRelayRequest.bind(this);
   }
 
   componentDidMount() {
@@ -38,7 +42,11 @@ class Relay extends Component {
       props: {address, walletList, url, onBackPressed,
         requestsInProgress, addRequest, removeRequest } } = this;
 
-    const wallet = walletList[address];
+    let wallet = {address: '', eth: '0', nct: '0'};
+    if (walletList && address >= 0 && walletList.length > address ) {
+      wallet = walletList[address];
+    }
+
     let homeAltered ='0';
     let sideAltered ='0';
     if (wallet.nct) {
@@ -107,11 +115,17 @@ class Relay extends Component {
   
   onNectarChanged(nectar) {
     const { state: {selected}, props: {walletList, address}} = this;
-    const wallet = walletList[address];
+    let wallet = {address: '', eth: '0', nct: '0'};
+    if (walletList && address >= 0 && walletList.length > address ) {
+      wallet = walletList[address];
+    }
+
     let max = selected == 0 ? wallet.nct : wallet.nct;
     let error = null;
-    if (nectar && new BigNumber(nectar).comparedTo(new BigNumber(max)) > 0) {
+    if (nectar && nectar.length > 0 && new BigNumber(nectar).comparedTo(new BigNumber(max)) > 0) {
       error = `${strings.tooHigh}${max}`;
+    } else if (nectar && nectar.length > 0 && new BigNumber(nectar).comparedTo(new BigNumber('0')) <= 0) {
+      error = `${strings.tooLow}`;
     }
     this.setState({nectar: nectar, nectar_error: error});
   }
@@ -124,25 +138,40 @@ class Relay extends Component {
     const { state: {selected}, props: { onWalletChange } } = this;
     if (onWalletChange) {
       onWalletChange();
+      return null;
     }
     if (didUnlock) {
-      if (selected) {
-        this.transfer(false);
+      if (selected == 1) {
+        return this.transfer(false);
       } else {
-        this.transfer(true);
+        return this.transfer(true);
       }
+    }
+  }
+
+  addRelayRequest(id) {
+    const { addRequest } = this.props;
+    if (addRequest) {
+      addRequest(strings.relayRequest,id);
+    }
+  }
+
+  removeRelayRequest(id) {
+    const { removeRequest } = this.props;
+    if (removeRequest) {
+      removeRequest(strings.relayRequest, id);
     }
   }
 
   transfer(isDeposit) {
     const { state: {nectar, nectar_error} } = this;
 
-    const nectarWei = new BigNumber(reward).times(new BigNumber('1000000000000000000'));
+    const nectarWei = new BigNumber(nectar).times(new BigNumber('1000000000000000000'));
 
     const http = this.http;
     if (nectar &&!nectar_error) {
       const uuid = Uuid();
-      this.addPayRequest(uuid);
+      this.addRelayRequest(uuid);
       let promise;
       if (isDeposit) {
         promise = http.deposit(nectarWei.toString());
@@ -153,7 +182,7 @@ class Relay extends Component {
         .then(result => this.addMessage(result))
         .catch(error => this.handleError(error))
         .then(() => {
-          this.removePayRequest(uuid);
+          this.removeRelayRequest(uuid);
         });
     } else {
       return null;
@@ -184,5 +213,14 @@ class Relay extends Component {
 }
 Relay.proptypes = {
   onTransfer: PropTypes.func,
+  address: PropTypes.number,
+  walletList: PropTypes.array,
+  url: PropTypes.string,
+  onBackPressed: PropTypes.func,
+  requestsInProgress: PropTypes.array,
+  addRequest: PropTypes.func,
+  removeRequest: PropTypes.func,
+  onWalletChange: PropTypes.func,
+  onError: PropTypes.func
 };
 export default Relay;

@@ -1,0 +1,224 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
+<div
+  class="Relay"
+>
+  <header
+    class="Header"
+  >
+    <div
+      class="Header-Row"
+    >
+      <div
+        class="Header-Title"
+      >
+        <img
+          alt="PolySwarm logo"
+          class="Header-Logo"
+          src="../public/img/back-arrow.svg"
+        >
+          
+        </img>
+        <h3>
+          PolySwarm Relay
+        </h3>
+        <span
+          class="RequestSpinner"
+        >
+          
+        </span>
+      </div>
+      <div
+        class="Header-Actions"
+      >
+        
+      </div>
+    </div>
+    <div
+      class="Header-Address"
+    >
+      <p
+        class="Header-Divided"
+        style="font-size:3.6363636363636362vw"
+      >
+        asdf
+      </p>
+      <p
+        class="Header-Divided"
+        style="font-size:3.6363636363636362vw"
+      >
+        Main: 1 NCT 0 ETH
+      </p>
+      <p
+        style="font-size:3.6363636363636362vw"
+      >
+        Side: 1 NCT 
+      </p>
+    </div>
+  </header>
+  <div
+    class="ModalPassword"
+  >
+    <div>
+      
+    </div>
+  </div>
+  <div
+    class="Relay-Content"
+  >
+    <div
+      class="Relay-Centered"
+    >
+      <div
+        class="Relay-Chain"
+      >
+        <div
+          class="ChainInfo"
+        >
+          <div
+            class="ChainInfo-Title"
+          >
+            <h3>
+              Current
+            </h3>
+          </div>
+          <div
+            class="ChainInfo-Content"
+          >
+            <p>
+              
+            </p>
+            <ul>
+              <li
+                class="StatRow-Vertical"
+              >
+                <p
+                  class="StatTitle"
+                >
+                  Main Ethereum Chain
+                </p>
+                <p
+                  class="StatContent"
+                >
+                  1 NCT
+                </p>
+              </li>
+              <li
+                class="StatRow-Vertical"
+              >
+                <p
+                  class="StatTitle"
+                >
+                  PolySwarm Side Chain
+                </p>
+                <p
+                  class="StatContent"
+                >
+                  1 NCT
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div
+          class="ChainInfo"
+        >
+          <div
+            class="ChainInfo-Title"
+          >
+            <h3>
+              Preview
+            </h3>
+          </div>
+          <div
+            class="ChainInfo-Content"
+          >
+            <p>
+              
+            </p>
+            <ul>
+              <li
+                class="StatRow-Vertical"
+              >
+                <p
+                  class="StatTitle"
+                >
+                  Main Ethereum Chain
+                </p>
+                <p
+                  class="StatContent"
+                >
+                  1 NCT
+                </p>
+              </li>
+              <li
+                class="StatRow-Vertical"
+              >
+                <p
+                  class="StatTitle"
+                >
+                  PolySwarm Side Chain
+                </p>
+                <p
+                  class="StatContent"
+                >
+                  1 NCT
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div
+        class="Relay-Nectar"
+      >
+        <div
+          class="RelayDropdown"
+        >
+          <p
+            class="RelayDropdown-Selection"
+          >
+            Deposit
+          </p>
+          <div
+            class="RelayDropdown-Choices"
+          >
+            <p>
+              Deposit
+            </p>
+            <p>
+              Withdraw
+            </p>
+          </div>
+        </div>
+        <div
+          class="AnimatedInput"
+        >
+          <div>
+            
+          </div>
+          <input
+            class="AnimatedInput-Input"
+            id="nectar"
+            type="number"
+            value=""
+          >
+            
+          </input>
+        </div>
+      </div>
+      <div
+        class="Relay-Button"
+      >
+        <button
+          class="Button"
+          disabled=""
+        >
+          Transfer!
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

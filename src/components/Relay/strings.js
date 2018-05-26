@@ -4,9 +4,11 @@ const strings = {
   before: 'Current',
   after: 'Preview',
   tooHigh: 'Must enter a value below the source chain\'s balance: ',
+  tooLow: 'Must enter a value above 0',
   nectar: 'Nectar (NCT)',
   main: 'Main Ethereum Chain',
-  side: 'PolySwarm Side Chain'
+  side: 'PolySwarm Side Chain',
+  relayRequest: 'Relaying Nectar',
 };
 
 export default strings;
