@@ -18,11 +18,10 @@ class ModalPassword extends Component {
       unlocking: false,
       password_error: null,
       password: '',
-      addressIndex: 0,
+      address: 0,
     };
 
     this.onWalletChangeHandler = this.onWalletChangeHandler.bind(this);
-    this.onChangeStore = this.onChangeStore.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
     this.onChangeAddress = this.onChangeAddress.bind(this);
     this.onCloseClick = this.onCloseClick.bind(this);
@@ -38,13 +37,13 @@ class ModalPassword extends Component {
 
   componentDidMount() {
     const { props: { address } } = this;
-    this.setState({addressIndex: address});
+    this.setState({address: address});
   }
 
   render() {
     const { props: { walletList } } = this;
     const {
-      state: { open, unlocking, password_error, addressIndex: address }
+      state: { open, unlocking, password_error, address: address }
     } = this;
     let wallet = {address: '', eth: '0', nct: '0'};
     if (walletList && address >= 0 && walletList.length > address ) {
@@ -137,10 +136,6 @@ class ModalPassword extends Component {
     }
   }
 
-  onChangeStore(event) {
-    this.setState({ store: event.target.checked });
-  }
-
   onChangePassword(password) {
     this.setState({ password: password });
   }
@@ -149,7 +144,7 @@ class ModalPassword extends Component {
     const { props: { walletList } } = this;
     const value = event.target.value;
     const index = walletList.findIndex(v => v.address === value);
-    this.setState({ addressIndex: index });
+    this.setState({ address: index });
   }
 
   onCloseClick() {
@@ -167,10 +162,14 @@ class ModalPassword extends Component {
   }
 
   onUnlockClick() {
-    const { state: { addressIndex, password } } = this;
+    const { state: { address, password } } = this;
     const { props: { walletList } } = this;
+    let wallet = {address: '', eth: '0', nct: '0'};
+    if (walletList && address >= 0 && walletList.length > address ) {
+      wallet = walletList[address];
+    }
     if (walletList && walletList.length > 0) {
-      this.unlockWallet(walletList[addressIndex].address, password);
+      this.unlockWallet(wallet.address, password);
     } else {
       this.createWallet(password);
     }
@@ -183,13 +182,12 @@ class ModalPassword extends Component {
     const uuid = Uuid();
     this.addAccountRequest(strings.requestUnlockWallet, uuid);
     return http.unlockWallet(address, password).then(success => {
-      this.setState({ unlocking: false});
       if (success) {
-        this.setState({password_error: null});
+        this.setState({unlocking: false, password_error: null});
         this.onWalletChangeHandler(true);
         this.close();
       } else {
-        this.setState({password_error: strings.error});
+        this.setState({unlocking: false, password_error: strings.error});
       }
       this.removeAccountRequest(strings.requestUnlockWallet, uuid);
     });
@@ -203,11 +201,11 @@ class ModalPassword extends Component {
     this.addAccountRequest(strings.requestCreateWallet, uuid);
     return http.createWallet(password).then(success => {
       if (success) {
-        this.setState({password_error: null});
+        this.setState({unlocking: false, password_error: null});
         this.onWalletChangeHandler(false);
         this.close();
       } else {
-        this.setState({password_error: strings.error});
+        this.setState({unlocking: false, password_error: strings.error});
       }
       this.removeAccountRequest(strings.requestCreateWallet, uuid);
     });
