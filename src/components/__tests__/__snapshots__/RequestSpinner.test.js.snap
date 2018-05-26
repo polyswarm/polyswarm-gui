@@ -23,7 +23,7 @@ exports[`shows the icon when there are requests 1`] = `
     <img
       alt="Request in progress"
       className="RequestSpinner-Icon"
-      src="../public/img/nct-coin.svg"
+      src="../public/img/nct-coin.png"
     />
   </span>
 </RequestSpinner>
