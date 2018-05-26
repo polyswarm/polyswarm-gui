@@ -56,7 +56,7 @@ class OfferSummary extends Component {
           content={`${offer.remaining || 0}${strings.nectar}`}/>
         <StatRow vertical
           title={strings.closed}
-          content={offer.expired ? strings.yes : strings.no}/>
+          content={offer.closed ? strings.yes : strings.no}/>
         <StatRow vertical
           title={strings.messages}
           content={messages.length}/>

@@ -2,77 +2,105 @@
 
 exports[`renders without crashing 1`] = `
 <div
-  class="OfferCreate"
+  class="OfferSummary"
 >
-  <div
-    class="ModalPassword"
+  <li
+    class="StatRow-Vertical"
   >
-    <div>
+    <p
+      class="StatTitle"
+    >
+      Author:
+    </p>
+    <p
+      class="StatContent"
+    >
+      author
+    </p>
+  </li>
+  <li
+    class="StatRow-Vertical"
+  >
+    <p
+      class="StatTitle"
+    >
+      Expert:
+    </p>
+    <p
+      class="StatContent"
+    >
+      expert
+    </p>
+  </li>
+  <li
+    class="StatRow-Vertical"
+  >
+    <p
+      class="StatTitle"
+    >
+      Remaining Balance:
+    </p>
+    <p
+      class="StatContent"
+    >
+      100 Nectar (NCT)
+    </p>
+  </li>
+  <li
+    class="StatRow-Vertical"
+  >
+    <p
+      class="StatTitle"
+    >
       
-    </div>
-  </div>
-  <div
-    class="OfferCreate-Content"
+    </p>
+    <p
+      class="StatContent"
+    >
+      No
+    </p>
+  </li>
+  <li
+    class="StatRow-Vertical"
   >
-    <form
-      class="Offer-Values"
+    <p
+      class="StatTitle"
     >
-      <div
-        class="AnimatedInput"
-      >
-        <div>
-          
-        </div>
-        <input
-          class="AnimatedInput-Input"
-          id="expert"
-          type="text"
-          value=""
-        >
-          
-        </input>
-      </div>
-      <div
-        class="AnimatedInput"
-      >
-        <div>
-          
-        </div>
-        <input
-          class="AnimatedInput-Input"
-          id="reward"
-          type="number"
-          value=""
-        >
-          
-        </input>
-      </div>
-      <div
-        class="AnimatedInput"
-      >
-        <div>
-          
-        </div>
-        <input
-          class="AnimatedInput-Input"
-          id="duration"
-          type="number"
-          value=""
-        >
-          
-        </input>
-      </div>
-    </form>
-    <div
-      class="Offer-Create-Upload"
+      Messages:
+    </p>
+    <p
+      class="StatContent"
     >
-      <button
-        class="Button"
-        disabled=""
-      >
-        Open Offer Channel
-      </button>
-    </div>
-  </div>
+      4
+    </p>
+  </li>
+  <li
+    class="StatRow-Vertical"
+  >
+    <p
+      class="StatTitle"
+    >
+      Benign
+    </p>
+    <p
+      class="StatContent"
+    >
+      Safe
+    </p>
+  </li>
+  <li
+    class="StatRow-Vertical"
+  >
+    <p
+      class="StatTitle"
+    >
+      Malicious
+    </p>
+    <p
+      class="StatContent"
+    >
+      Malicious
+    </p>
+  </li>
 </div>
 `;
