@@ -11,8 +11,8 @@ it('renders without crashing', () => {
 it('displays the name of the networks', () => {
   const wrapper = render(<ChainInfo homeName={'home'} sideName={'side'}/>);
   
-  expect(wrapper.find('li').first().text()).toEqual('home: ');
-  expect(wrapper.find('li').last().text()).toEqual('side: ');
+  expect(wrapper.find('.StatTitle').first().text()).toEqual('home');
+  expect(wrapper.find('.StatTitle').last().text()).toEqual('side');
 });
 
 it('displays the current balances', () => {
@@ -21,12 +21,12 @@ it('displays the current balances', () => {
     sideName={'side'}
     sideBalance={2}/>);
   
-    expect(wrapper.find('li').first().text()).toEqual('home: 1');
-    expect(wrapper.find('li').last().text()).toEqual('side: 2');
+  expect(wrapper.find('.StatContent').first().text()).toEqual('1 NCT');
+  expect(wrapper.find('.StatContent').last().text()).toEqual('2 NCT');
 });
 
 it('displays the title', () => {
   const wrapper = render(<ChainInfo title={'Title'}/>);
 
-  expect(wrapper.find('h2').text()).toEqual('Title');
+  expect(wrapper.find('h3').text()).toEqual('Title');
 });
