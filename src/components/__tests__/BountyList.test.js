@@ -10,8 +10,8 @@ it('renders without crashing', () => {
 
 it('shows all bounties passed as cards', () => {
   const bounties = [
-    {guid: 'asdf'},
-    {guid: 'fdsa'}
+    {guid: 'asdf', type:'bounty'},
+    {guid: 'fdsa', type:'bounty'}
   ];
   const wrapper = mount(<BountyList bounties={bounties}/>);
 
@@ -23,8 +23,8 @@ it('shows all bounties passed as cards', () => {
 it('selects the bounty when the card is clicked', () => {
   const onBountySelected = jest.spyOn(BountyList.prototype, 'onBountySelected');
   const bounties = [
-    {guid: 'asdf'},
-    {guid: 'fdsa'}
+    {guid: 'asdf', type:'bounty'},
+    {guid: 'fdsa', type:'bounty'}
   ];
   const wrapper = mount(<BountyList bounties={bounties}/>);
   wrapper.find('.Card').first().simulate('click');
@@ -35,8 +35,8 @@ it('selects the bounty when the card is clicked', () => {
 it('calls prop onBountySelected when the card is clicked', () => {
   const onBountySelected = jest.fn();
   const bounties = [
-    {guid: 'asdf'},
-    {guid: 'fdsa'}
+    {guid: 'asdf', type:'bounty'},
+    {guid: 'fdsa', type:'bounty'}
   ];
   const wrapper = mount(<BountyList bounties={bounties} onBountySelected={onBountySelected}/>);
   wrapper.find('.Card').first().simulate('click');
@@ -47,8 +47,8 @@ it('calls prop onBountySelected when the card is clicked', () => {
 it('selects the bounty when view on the card is clicked', () => {
   const onBountySelected = jest.spyOn(BountyList.prototype, 'onBountySelected');
   const bounties = [
-    {guid: 'asdf'},
-    {guid: 'fdsa'}
+    {guid: 'asdf', type:'bounty'},
+    {guid: 'fdsa', type:'bounty'}
   ];
   const wrapper = mount(<BountyList bounties={bounties}/>);
   wrapper.find('.Dropdown-Choices').first().find('p').first().simulate('click');
@@ -59,11 +59,11 @@ it('selects the bounty when view on the card is clicked', () => {
 it('calls prop onBountySelected when view on the card is clicked', () => {
   const onBountySelected = jest.fn();
   const bounties = [
-    {guid: 'asdf'},
-    {guid: 'fdsa'}
+    {guid: 'asdf', type:'bounty'},
+    {guid: 'fdsa', type:'bounty'}
   ];
   const wrapper = mount(<BountyList bounties={bounties} onBountySelected={onBountySelected}/>);
-  wrapper.find('.Dropdown-Choices').first().find('p').first().simulate('click');
+  wrapper.find('.CardHeader').find('.Dropdown-Choices').first().find('p').first().simulate('click');
 
   expect(onBountySelected).toHaveBeenCalledWith(0);
 });
@@ -71,11 +71,11 @@ it('calls prop onBountySelected when view on the card is clicked', () => {
 it('calls method onBountyRemoved when remove on the card is clicked', () => {
   const onBountyRemoved = jest.spyOn(BountyList.prototype, 'onBountyRemoved');
   const bounties = [
-    {guid: 'asdf'},
-    {guid: 'fdsa'}
+    {guid: 'asdf', type:'bounty'},
+    {guid: 'fdsa', type:'bounty'}
   ];
   const wrapper = mount(<BountyList bounties={bounties}/>);
-  wrapper.find('.Dropdown-Choices').first().find('p').last().simulate('click');
+  wrapper.find('.CardHeader').find('.Dropdown-Choices').first().find('p').last().simulate('click');
 
   expect(onBountyRemoved).toHaveBeenCalledWith(0);
 });
@@ -83,18 +83,18 @@ it('calls method onBountyRemoved when remove on the card is clicked', () => {
 it('calls prop onBountyRemoved when remove on the card is clicked', () => {
   const onBountyRemoved = jest.fn();
   const bounties = [
-    {guid: 'asdf'},
-    {guid: 'fdsa'}
+    {guid: 'asdf', type:'bounty'},
+    {guid: 'fdsa', type:'bounty'}
   ];
   const wrapper = mount(<BountyList bounties={bounties} onBountyRemoved={onBountyRemoved}/>);
-  wrapper.find('.Dropdown-Choices').first().find('p').last().simulate('click');
+  wrapper.find('.CardHeader').find('.Dropdown-Choices').first().find('p').last().simulate('click');
 
   expect(onBountyRemoved).toHaveBeenCalledWith(0);
 });
 
 it('puts a subheader on the CardHeader when amount is valid', () => {
   const bounties = [
-    {guid: 'asdf', amount: '123'}
+    {guid: 'asdf', amount: '123', type: 'bounty'}
   ];
   const wrapper = mount(<BountyList bounties={bounties}/>);
 
@@ -104,16 +104,28 @@ it('puts a subheader on the CardHeader when amount is valid', () => {
 
 it('adds 3 statrows per bounty', () => {
   const bounties = [
-    {guid: 'asdf', amount: '123', assertions: [], author: 'author', artifacts: [{'name':'file'}]}
+    {guid: 'asdf',
+      amount: '123',
+      assertions: [],
+      author: 'author',
+      artifacts: [{'name':'file'}],
+      type: 'bounty'
+    }
   ];
   const wrapper = mount(<BountyList bounties={bounties}/>);
 
-  expect(wrapper.find('.StatRow')).toHaveLength(3);
+  expect(wrapper.find('.CardContent').find('.StatRow')).toHaveLength(3);
 });
 
 it('displays a StatRow with author on a bounty card', () => {
   const bounties = [
-    {guid: 'asdf', amount: '123', assertions: [], author: 'author', artifacts: [{'name':'file'}]}
+    {guid: 'asdf',
+      amount: '123',
+      assertions: [],
+      author: 'author',
+      artifacts: [{'name':'file'}],
+      type: 'bounty'
+    }
   ];
   const wrapper = mount(<BountyList bounties={bounties}/>);
 
@@ -122,7 +134,13 @@ it('displays a StatRow with author on a bounty card', () => {
 
 it('displays a StatRow with the number of assertions', () => {
   const bounties = [
-    {guid: 'asdf', amount: '123', assertions: [], author: 'author', artifacts: [{'name':'file'}]}
+    {guid: 'asdf',
+      amount: '123',
+      assertions: [],
+      author: 'author',
+      artifacts: [{'name':'file'}],
+      type: 'bounty'
+    }
   ];
   const wrapper = mount(<BountyList bounties={bounties}/>);
 
@@ -131,20 +149,48 @@ it('displays a StatRow with the number of assertions', () => {
 
 it('displays a StatRow with the name of the file in the bounty', () => {
   const bounties = [
-    {guid: 'asdf', amount: '123', assertions: [], author: 'author', artifacts: [{'name':'file'}]}
+    {guid: 'asdf',
+      amount: '123',
+      assertions: [],
+      author: 'author',
+      artifacts: [{'name':'file'}],
+      type: 'bounty'
+    }
   ];
   const wrapper = mount(<BountyList bounties={bounties}/>);
-
+  
   expect(wrapper.find('.StatRow').slice(2, 3).find('.StatContent').text()).toEqual('file');
 });
 
 it('displays a StatRow with a csv of files in the bounty', () => {
-  const bounties = [
-    {guid: 'asdf', amount: '123', assertions: [], author: 'author', artifacts: [{'name':'file'}, {'name':'other'}]}
-  ];
+  const bounties = [{
+    guid: 'asdf',
+    amount: '123',
+    assertions: [],
+    author: 'author',
+    artifacts: [{'name':'file'},{'name':'other'}],
+    type: 'bounty'
+  }];
   const wrapper = mount(<BountyList bounties={bounties}/>);
 
   expect(wrapper.find('.StatRow').slice(2, 3).find('.StatContent').text()).toEqual('file, other');
+});
+
+it('adds 5 statrows per offer', () => {
+  const bounties = [
+    {
+      guid: 'asdf',
+      messages: [],
+      author: 'author',
+      expert: 'expert',
+      resolved: false,
+      expired: true,
+      type: 'offer',
+    }
+  ];
+  const wrapper = mount(<BountyList bounties={bounties}/>);
+
+  expect(wrapper.find('.CardContent').find('.StatRow')).toHaveLength(5);
 });
 
 it('adds (ACTIVE) to Card headers when neither expired for resolved', () => {
@@ -155,6 +201,7 @@ it('adds (ACTIVE) to Card headers when neither expired for resolved', () => {
       author: 'author',
       resolved: false,
       expired: false,
+      type: 'bounty',
       artifacts: [{'name':'file'}, {'name':'other'}],
     }
   ];
@@ -171,6 +218,7 @@ it('adds (CLOSED) when a bounty is resolved', () => {
       author: 'author',
       resolved: true,
       expired: false,
+      type: 'bounty',
       artifacts: [{'name':'file'}, {'name':'other'}],
     }
   ];
@@ -187,6 +235,7 @@ it('adds (CLOSED) when a bounty is resolved, even if expired', () => {
       author: 'author',
       resolved: true,
       expired: true,
+      type: 'bounty',
       artifacts: [{'name':'file'}, {'name':'other'}],
     }
   ];
@@ -203,6 +252,7 @@ it('adds (EXPIRED) when a bounty has passed it\'s expiration block', () => {
       author: 'author',
       resolved: false,
       expired: true,
+      type: 'bounty',
       artifacts: [{'name':'file'}, {'name':'other'}],
     }
   ];
@@ -221,10 +271,213 @@ it('adds update to CardHeaders where bounty.updated is true', () => {
       author: 'author',
       resolved: false,
       expired: true,
+      type: 'bounty',
       artifacts: [{'name':'file'}, {'name':'other'}],
     }
   ];
   const wrapper = mount(<BountyList bounties={bounties}/>);
 
   expect(wrapper.find('.CardHeader').hasClass('update')).toBeTruthy();
+});
+
+it('calls renderBounty when a bounty is in bounty list', () => {
+  const renderBounty = jest.spyOn(BountyList.prototype, 'renderBounty');
+  const bounties = [
+    {
+      guid: 'asdf',
+      assertions: [],
+      author: 'author',
+      resolved: false,
+      expired: true,
+      type: 'bounty',
+      artifacts: [{'name':'file'}, {'name':'other'}],
+    }
+  ];
+  mount(<BountyList bounties={bounties}/>);
+
+  expect(renderBounty).toHaveBeenCalledTimes(1);
+});
+
+it('adds (ACTIVE) to Card headers when neither expired for resolved', () => {
+  const bounties = [
+    {
+      expired: true,
+      guid: 'asdf',
+      messages: [{type: 'payment', amount: '1000'}, {type: 'payment', amount: '100'}],
+      author: 'author',
+      expert: 'expert',
+      resolved: false,
+      expired: true,
+      type: 'offer',
+    }
+  ];
+  const wrapper = mount(<BountyList bounties={bounties}/>);
+
+  expect(wrapper.find('.CardHeader-Title').text()).toEqual('asdf (ACTIVE)');
+});
+
+it('adds (CLOSED) when a offer is closed', () => {
+  const bounties = [
+    {
+      closed: true,
+      guid: 'asdf',
+      messages: [{type: 'payment', amount: '1000'}, {type: 'payment', amount: '100'}],
+      author: 'author',
+      expert: 'expert',
+      resolved: false,
+      expired: true,
+      type: 'offer',
+    }
+  ];
+  const wrapper = mount(<BountyList bounties={bounties}/>);
+
+  expect(wrapper.find('.CardHeader-Title').text()).toEqual('asdf (CLOSED)');
+});
+
+it('adds update to CardHeaders where offer.updated is true', () => {
+  const bounties = [
+    {
+      updated: true,
+      guid: 'asdf',
+      messages: [{type: 'payment', amount: '1000'}, {type: 'payment', amount: '100'}],
+      author: 'author',
+      expert: 'expert',
+      resolved: false,
+      expired: true,
+      type: 'offer',
+    }
+  ];
+  const wrapper = mount(<BountyList bounties={bounties}/>);
+
+  expect(wrapper.find('.CardHeader').hasClass('update')).toBeTruthy();
+});
+
+it('adds the initial max value for the offer channel as the subheader', () => {
+  const bounties = [
+    {
+      initial: '100',
+      updated: true,
+      guid: 'asdf',
+      messages: [{type: 'payment', amount: '1000'}, {type: 'payment', amount: '100'}],
+      author: 'author',
+      expert: 'expert',
+      resolved: false,
+      expired: true,
+      type: 'offer',
+    }
+  ];
+  const wrapper = mount(<BountyList bounties={bounties}/>);
+
+  expect(wrapper.find('.CardHeader-Sub').text()).toEqual('100 Nectar (NCT)');
+});
+
+it('puts the addr and current balances in the header when walletlist and address specified', () => {
+  const walletList = [{address: 'asdf', nct: '1', eth: '1'}];
+  const wrapper = mount(<BountyList walletList={walletList} address={0}/>);
+
+  expect(wrapper.find('.Header-Address').text()).toEqual('asdfMain: 1 NCT 1 ETHSide: 1 NCT ');
+});
+
+it('displays a StatRow with author', () => {
+  const bounties = [
+    {
+      guid: 'asdf',
+      messages: [{type: 'payment', amount: '1000'}, {type: 'payment', amount: '100'}],
+      author: 'author',
+      expert: 'expert',
+      resolved: false,
+      expired: true,
+      type: 'offer',
+    }
+  ];
+  const wrapper = mount(<BountyList bounties={bounties}/>);
+
+  expect(wrapper.find('.StatRow').first().find('.StatContent').text()).toEqual('author');
+});
+
+it('displays a StatRow with expert', () => {
+  const bounties = [
+    {
+      guid: 'asdf',
+      messages: [{type: 'payment', amount: '1000'}, {type: 'payment', amount: '100'}],
+      author: 'author',
+      expert: 'expert',
+      resolved: false,
+      expired: true,
+      type: 'offer',
+    }
+  ];
+  const wrapper = mount(<BountyList bounties={bounties}/>);
+
+  expect(wrapper.find('.StatRow').slice(1, 2).find('.StatContent').text()).toEqual('expert');
+});
+
+it('displays a StatRow with the amount of the most recent payment', () => {
+  const bounties = [
+    {
+      guid: 'asdf',
+      messages: [{type: 'payment', amount: '1000'}, {type: 'payment', amount: '100'}],
+      author: 'author',
+      expert: 'expert',
+      resolved: false,
+      expired: true,
+      type: 'offer',
+    }
+  ];
+  const wrapper = mount(<BountyList bounties={bounties}/>);
+
+  expect(wrapper.find('.StatRow').slice(2, 3).find('.StatContent').text()).toEqual('1000 Nectar (NCT)');
+});
+
+it('displays a StatRow with the number of messages', () => {
+  const bounties = [
+    {
+      guid: 'asdf',
+      messages: [{type: 'request', artifacts: [{name: 'file'}, {name: 'other'}]}],
+      author: 'author',
+      expert: 'expert',
+      resolved: false,
+      expired: true,
+      type: 'offer',
+    }
+  ];
+  const wrapper = mount(<BountyList bounties={bounties}/>);
+
+  expect(wrapper.find('.StatRow').slice(3, 4).find('.StatContent').text()).toEqual('1');
+});
+
+it('displays a StatRow with a csv of files in the offer request', () => {
+  const bounties = [
+    {
+      guid: 'asdf',
+      messages: [{type: 'request', artifacts: [{name: 'file'}, {name: 'other'}]}],
+      author: 'author',
+      expert: 'expert',
+      resolved: false,
+      expired: true,
+      type: 'offer',
+    }
+  ];
+  const wrapper = mount(<BountyList bounties={bounties}/>);
+
+  expect(wrapper.find('.StatRow').slice(4, 5).find('.StatContent').text()).toEqual('file, other');
+});
+
+it('calls renderOffer when an offer is in bounty list', () => {
+  const renderOffer = jest.spyOn(BountyList.prototype, 'renderOffer');
+  const bounties = [
+    {
+      guid: 'asdf',
+      messages: [],
+      author: 'author',
+      expert: 'expert',
+      resolved: false,
+      expired: true,
+      type: 'offer',
+    }
+  ];
+  renderOffer.mockClear();
+  mount(<BountyList bounties={bounties}/>);
+
+  expect(renderOffer).toHaveBeenCalledTimes(1);
 });

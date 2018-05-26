@@ -21,7 +21,10 @@ class BountyList extends Component {
     const {props: {bounties, requestsInProgress, walletList, address,
       onCreateBounty, onCreateOffer, onOpenRelay }} = this;
 
-    const wallet = walletList[address] || {address: null, eth: null, nct: null};
+    let wallet = {address: '', eth: '0', nct: '0'};
+    if (walletList && address >= 0 && walletList.length > address ) {
+      wallet = walletList[address];
+    }
 
     const headerActions = [
       {title: strings.newBounty, onClick: onCreateBounty},
@@ -120,7 +123,7 @@ class BountyList extends Component {
   renderOffer(offer, index) {
     let title = offer.guid;
     if (offer.closed) {
-      title += strings.closed;
+      title += strings.resolved;
     } else {
       title += strings.active;
     }
@@ -135,7 +138,7 @@ class BountyList extends Component {
     let artifacts = [];
     if (offer.messages) {
       messages = offer.messages.length;
-      offer.messages
+      const payouts = offer.messages
         .filter((message) => message.type==='payment');
       if (payouts.length > 0) {
         lastPay = payouts[0].amount + strings.nct;
@@ -143,15 +146,17 @@ class BountyList extends Component {
         lastPay = strings.never;
       }
 
-      artifacts = offer.messages
+      const names = offer.messages
         .filter((message) => message.type==='request')
         .map((message) => message.artifacts)
         .reduce((all, artifacts) => all.concat(artifacts), [])
         .sort((a, b) => {
           return a.name > b.name;
         })
-        .map((artifact) => artifact.name)
-        .reduce((accumulator, artifact) => accumulator +', '+ artifact);
+        .map((artifact) => artifact.name);
+      if (names.length > 0) {
+        artifacts = names.reduce((accumulator, artifact) => accumulator +', '+ artifact);
+      }
     }
 
     return (
@@ -168,7 +173,7 @@ class BountyList extends Component {
             <StatRow title={strings.author}
               content={offer.author}/>
             <StatRow title={strings.expert}
-              content={offer.author}/>
+              content={offer.expert}/>
             <StatRow title={strings.lastPay}
               content={lastPay}/>
             <StatRow title={strings.messages}

@@ -4,15 +4,85 @@ exports[`renders without crashing 1`] = `
 <div
   class="BountyList"
 >
-  <ul>
-    
-  </ul>
-  <div
-    class="BountyList-Placeholder"
+  <header
+    class="Header"
   >
-    <h3>
-      You haven't posted any bounties. Click '+ BOUNTY' to post one.
-    </h3>
+    <div
+      class="Header-Row"
+    >
+      <div
+        class="Header-Title"
+      >
+        <img
+          alt="PolySwarm logo"
+          class="Header-Logo"
+          src="../public/img/polyswarm-white.svg"
+        >
+          
+        </img>
+        <h3>
+          Bounties & Offers
+        </h3>
+        <span
+          class="RequestSpinner"
+        >
+          
+        </span>
+      </div>
+      <div
+        class="Header-Actions"
+      >
+        <button
+          class="Button header"
+        >
+          + Bounty
+        </button>
+        <button
+          class="Button header"
+        >
+          + Offer
+        </button>
+        <div
+          class="Dropdown"
+        >
+          <img
+            alt="menu"
+            class="Dropdown-Icon"
+            height="24px"
+            src="../public/img/menu_light.svg"
+            width="7px"
+          >
+            
+          </img>
+          <div
+            class="Dropdown-Choices"
+          >
+            <p>
+              Relay
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="Header-Address"
+    >
+      
+    </div>
+  </header>
+  <div
+    class="BountyList-Content"
+  >
+    <ul>
+      
+    </ul>
+    <div
+      class="BountyList-Placeholder"
+    >
+      <h3>
+        You haven't posted any bounties. Click '+ BOUNTY' to post one.
+      </h3>
+    </div>
   </div>
 </div>
 `;
