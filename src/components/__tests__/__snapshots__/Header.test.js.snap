@@ -5,22 +5,97 @@ exports[`renders without crashing 1`] = `
   class="Header"
 >
   <div
-    class="Header-Title"
+    class="Header-Row"
   >
-    <img
-      class="Header-Logo"
-      src="../public/img/polyswarm-white.svg"
+    <div
+      class="Header-Title"
+    >
+      <img
+        alt="PolySwarm logo"
+        class="Header-Logo"
+        src="../public/img/polyswarm-white.svg"
+      >
+        
+      </img>
+      <h3>
+        
+      </h3>
+      <span
+        class="RequestSpinner"
+      >
+        
+      </span>
+    </div>
+    <div
+      class="Header-Actions"
     >
       
-    </img>
-    <h3>
-      
-    </h3>
-    <span
-      class="RequestSpinner"
+    </div>
+  </div>
+  <div
+    class="Header-Address"
+  >
+    
+  </div>
+</header>
+`;
+
+exports[`should show back button when back is set 1`] = `null`;
+
+exports[`should show polyswarm logo when back is not set 1`] = `null`;
+
+exports[`should show the address and balances 1`] = `
+<header
+  class="Header"
+>
+  <div
+    class="Header-Row"
+  >
+    <div
+      class="Header-Title"
+    >
+      <img
+        alt="PolySwarm logo"
+        class="Header-Logo"
+        src="../public/img/polyswarm-white.svg"
+      >
+        
+      </img>
+      <h3>
+        
+      </h3>
+      <span
+        class="RequestSpinner"
+      >
+        
+      </span>
+    </div>
+    <div
+      class="Header-Actions"
     >
       
-    </span>
+    </div>
+  </div>
+  <div
+    class="Header-Address"
+  >
+    <p
+      class="Header-Divided"
+      style="font-size:3.6363636363636362vw"
+    >
+      asdf
+    </p>
+    <p
+      class="Header-Divided"
+      style="font-size:3.6363636363636362vw"
+    >
+      Main: 1 NCT 2 ETH
+    </p>
+    <p
+      style="font-size:3.6363636363636362vw"
+    >
+      Side: 1 NCT 
+    </p>
   </div>
 </header>
 `;
@@ -30,22 +105,37 @@ exports[`shows title props 1`] = `
   class="Header"
 >
   <div
-    class="Header-Title"
+    class="Header-Row"
   >
-    <img
-      class="Header-Logo"
-      src="../public/img/polyswarm-white.svg"
+    <div
+      class="Header-Title"
+    >
+      <img
+        alt="PolySwarm logo"
+        class="Header-Logo"
+        src="../public/img/polyswarm-white.svg"
+      >
+        
+      </img>
+      <h3>
+        Title
+      </h3>
+      <span
+        class="RequestSpinner"
+      >
+        
+      </span>
+    </div>
+    <div
+      class="Header-Actions"
     >
       
-    </img>
-    <h3>
-      Title
-    </h3>
-    <span
-      class="RequestSpinner"
-    >
-      
-    </span>
+    </div>
+  </div>
+  <div
+    class="Header-Address"
+  >
+    
   </div>
 </header>
 `;
