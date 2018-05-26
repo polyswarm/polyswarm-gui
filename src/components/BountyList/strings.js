@@ -15,6 +15,6 @@ const strings = {
   title: 'Bounties & Offers',
   newBounty: '+ Bounty',
   newOffer: '+ Offer',
-  relay: 'Fund sidechain',
+  relay: 'Relay',
 };
 export default strings;
