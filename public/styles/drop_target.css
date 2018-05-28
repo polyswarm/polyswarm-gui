@@ -1,5 +1,5 @@
 .Drop-Target {
-  background-color: #fbf2ff;
+  background-color: #e2caff;
   background-size: 48px 58px;
   border: 2px dashed #8500ff;
   border-radius: 5px;
@@ -8,6 +8,7 @@
   cursor: pointer;
   display: flex;
   flex-direction: column;
+  height: 330px;
   justify-content: center;
   position: relative;
 }
@@ -23,6 +24,5 @@
 }
 
 .drag {
-  background-image: url('../img/hexgrid_2x.png');
   cursor: copy;
 }

@@ -1,0 +1,35 @@
+.CardHeader {
+  background-image: url('../img/gray_hexgrid_2x.png');
+  background-size: 36px 43px;
+  border-bottom: 1px #e5e5e5 solid;
+  box-sizing: border-box;
+  color: #8500ff;
+  display: flex;
+  font-size: 20px;
+  flex-direction: row;
+  justify-content: space-between;
+  line-height: 20px;
+  min-height: 48px;
+  padding: 5px 0 5px 20px;
+  transition: background-color .025s ease;
+  width: 100%;
+}
+
+.CardHeader-Title {
+  display: flex;
+  flex-direction: column;
+  min-width: 50%;
+  word-wrap: break-word;
+}
+
+.update {
+  background-color: rgba(46, 255, 109, .3);
+}
+
+.CardHeader-Sub {
+  color: #858585;
+  font-size: 16px;
+  line-height: 18px;
+  margin: 0;
+  padding: 0;
+}

@@ -1,0 +1,41 @@
+.OfferPay {
+  box-sizing: border-box;
+  color: #8500ff;
+  display: grid;
+  grid-template-rows: 86px 1fr;
+  height: 100%;
+  width: 100%;
+}
+
+.OfferPay > .Header {
+  grid-row: 1;
+}
+
+.OfferPay-Content {
+  grid-row: 2;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.OfferPay-Center {
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 20px;
+  width: 100%;
+}
+
+@media only screen and (min-width: 800px) {
+  .OfferPay-Center {
+      width: 70%;
+  }
+}
+
+.OfferPay-Center > .AnimatedInput {
+  width: 100%;
+}
+
+.OfferPay-Upload {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}

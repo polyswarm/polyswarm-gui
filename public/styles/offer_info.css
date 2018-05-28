@@ -1,0 +1,33 @@
+.Offer-Info {
+  display: grid;
+  grid-template-rows: 86px 1fr;
+  height: 100%;
+  position: relative;
+  width: 100%;
+}
+
+.Offer-Info > .Header {
+  grid-row: 1;
+}
+
+.Offer-Info-Container {
+  display: block;
+  grid-row: 2;
+  box-sizing: border-box;
+  height: auto;
+  overflow-y: auto;
+}
+
+@media only screen and (min-width: 800px) {
+  .Offer-Info-Container {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    height: auto;
+  }
+
+  .Bounty-Info-Assertions {
+    height: auto;
+  }
+}

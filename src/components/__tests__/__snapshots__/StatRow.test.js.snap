@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
+<li
+  class="StatRow"
+>
+  <p
+    class="StatTitle"
+  >
+    
+  </p>
+  <p
+    class="StatContent"
+  >
+    
+  </p>
+</li>
+`;
+
+exports[`shows the content when passed 1`] = `null`;
+
+exports[`shows the title when passed 1`] = `null`;

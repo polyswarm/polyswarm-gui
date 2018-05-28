@@ -1,4 +1,8 @@
 import BigNumber from 'bignumber.js';
+import validator from 'validator';
+import web3Utils from 'web3-utils';
+import multihashes from 'multihashes';
+
 class HttpApp {
   constructor(url, ws) {
     this.url = url;
@@ -15,8 +19,8 @@ class HttpApp {
         }
       })
       .then(response => response.json())
-      .then(json => !json.locked)
-      .catch(() => false);
+      .then(json => json.result)
+      .catch(() => null);
   }
 
   getWallets() {
@@ -34,7 +38,14 @@ class HttpApp {
   }
 
   getBounty(bounty) {
-    return fetch(this.url+'/bounties/'+bounty.guid)
+    return new Promise((resolve, reject) => {
+      if (validator.isUUID(bounty.guid, 4)) {
+        resolve(bounty.guid);
+      } else {
+        reject('Invalid GUID');
+      }
+    })
+      .then((guid) => fetch(this.url+'/bounties/'+guid))
       .then(response => {
         if (response.ok) {
           return response;
@@ -42,37 +53,44 @@ class HttpApp {
           throw Error('Cannot get bounties.');
         }
       })
+      
       .then(response => response.json())
       .then(json => json.result)
-      .then(bounty => this.getAssertionsForBounty(bounty))
-      .then(bountyAssertions => this.getArtifactsForBounty(bountyAssertions))
+      .then(bounty => this.getBountyIsActive(bounty))
       .then(bounty => {
-        const assertions = bounty.assertions;
-        let files = bounty.artifacts;
-        assertions.forEach((assertion) => {
-          assertion.verdicts.forEach((verdict, index) => {
-            const file = files[index];
-            if (!verdict) {
-              file.good++;
-            }
-            file.total++;
-            file.assertions.push({
-              author: assertion.author,
-              bid: assertion.bid,
-              verdict: verdict,
-              metadata: assertion.metadata
-            });
-            files[index] = file;
-          });
-        });
-        bounty.artifacts = files;
+        const amount = new BigNumber(bounty.amount).dividedBy(new BigNumber('1000000000000000000')).toNumber();
+        bounty.amount = amount;
+        bounty.type = 'bounty';
         return bounty;
       })
+      .then(bounty => this.getAssertionsForBounty(bounty))
+      .then(bountyAssertions => this.getArtifactsForBounty(bountyAssertions))
+      .catch(() => null);
+  }
+
+  getOffer(offer) {
+    return new Promise((resolve, reject) => {
+      if (validator.isUUID(offer.guid, 4)) {
+        resolve(offer.guid);
+      } else {
+        reject('Invalid GUID');
+      }
+    })
+      .then(() => new Promise((resolve) => resolve(offer)))
       .catch(() => null);
   }
 
   getArtifactsForBounty(bounty) {
-    return fetch(this.url+'/artifacts/'+bounty.uri)
+    return new Promise((resolve, reject)=> {
+      const hash = multihashes.fromB58String(bounty.uri);
+      try {
+        multihashes.validate(hash);
+        resolve(bounty.uri);
+      } catch (error) {
+        reject(error);
+      }
+    })
+      .then((uri) => fetch(this.url+'/artifacts/'+uri))
       .then(response => {
         if (response.ok) {
           return response;
@@ -100,7 +118,14 @@ class HttpApp {
   }
 
   getAssertionsForBounty(bounty) {
-    return fetch(this.url+'/bounties/'+bounty.guid+'/assertions')
+    return new Promise((resolve, reject) => {
+      if (validator.isUUID(bounty.guid, 4)) {
+        resolve(bounty.guid);
+      } else {
+        reject('Invalid GUID');
+      }
+    })
+      .then(guid => fetch(this.url+'/bounties/'+guid+'/assertions'))
       .then(response => {
         if (response.ok) {
           return response;
@@ -125,6 +150,66 @@ class HttpApp {
         bounty.assertions = filtered;
         return bounty;
       });
+  }
+
+  getBountyIsActive(bounty) {
+    return fetch(this.url + '/bounties/active')
+      .then(response => {
+        if (response.ok) {
+          return response;
+        } else {
+          throw new Error('Unable to access active bounties');
+        }
+      })
+      .then(response => response.json())
+      .then(json => json.result)
+      .then(bounties => bounties.findIndex(b => b.guid === bounty.guid) >= 0 )
+      .then(found => {
+        bounty.expired = !found;
+        return bounty;
+      });
+  }
+
+  getEth(wallet) {
+    const url = this.url;
+    return new Promise((resolve, reject) => {
+      if (web3Utils.isAddress(wallet)) {
+        resolve(wallet);
+      } else {
+        reject(`${wallet} is not an Ethereum address`);
+      }
+    })
+      .then(address => fetch(url+'/accounts/'+address+'/balance/eth'))
+      .then(response => {
+        if (response.ok) {
+          return response;
+        }
+        throw Error('Failed to get balance');
+      })
+      .then(response => response.json())
+      .then(json => json.result+'')
+      .catch(() => 0);
+  }
+
+  getNct(wallet) {
+    const url = this.url;
+    return new Promise((resolve, reject) => {
+      if (web3Utils.isAddress(wallet)) {
+        resolve(wallet);
+      } else {
+        reject(`${wallet} is not an Ethereum address`);
+      }
+    })
+      .then(address => fetch(url+'/accounts/'+address+'/balance/nct'))
+      .then(response => {
+        if (response.ok) {
+          return response;
+        }
+        throw Error('Failed to get balance');
+      })
+      .then(response => response.json())
+      .then(json => json.result+'')
+      .catch(() => 0);
   }
 
   listenForAssertions(assertionAddedCallback) {

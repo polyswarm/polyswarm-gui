@@ -1,0 +1,206 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders emptystate placeholder if not assertions 1`] = `
+<div
+  class="AssertionList"
+>
+  <ul>
+    
+  </ul>
+  <div
+    class="Assertion-Placeholder"
+  >
+    <h3>
+      No experts have posted any assertions. Waiting for results.
+    </h3>
+  </div>
+</div>
+`;
+
+exports[`renders the correct number of children 1`] = `
+<div
+  class="AssertionList"
+>
+  <ul>
+    <li>
+      <div
+        class="Card"
+      >
+        <header
+          class="CardHeader Assertion-Benign"
+        >
+          <div
+            class="CardHeader-Title"
+          >
+            Author: asdf
+            <p
+              class="CardHeader-Sub"
+            >
+              5 Nectar (NCT)
+            </p>
+          </div>
+        </header>
+        <div
+          class="CardContent"
+        >
+          <ul>
+            <li
+              class="StatRow"
+            >
+              <p
+                class="StatTitle"
+              >
+                Metadata
+              </p>
+              <p
+                class="StatContent"
+              >
+                Nothing
+              </p>
+            </li>
+            <li
+              class="StatRow"
+            >
+              <p
+                class="StatTitle"
+              >
+                first
+              </p>
+              <p
+                class="StatContent"
+              >
+                Safe
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </li>
+    <li>
+      <div
+        class="Card"
+      >
+        <header
+          class="CardHeader Assertion-Benign"
+        >
+          <div
+            class="CardHeader-Title"
+          >
+            Author: demo
+            <p
+              class="CardHeader-Sub"
+            >
+              5 Nectar (NCT)
+            </p>
+          </div>
+        </header>
+        <div
+          class="CardContent"
+        >
+          <ul>
+            <li
+              class="StatRow"
+            >
+              <p
+                class="StatTitle"
+              >
+                Metadata
+              </p>
+              <p
+                class="StatContent"
+              >
+                
+              </p>
+            </li>
+            <li
+              class="StatRow"
+            >
+              <p
+                class="StatTitle"
+              >
+                first
+              </p>
+              <p
+                class="StatContent"
+              >
+                Safe
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </li>
+    <li>
+      <div
+        class="Card"
+      >
+        <header
+          class="CardHeader Assertion-Malignant"
+        >
+          <div
+            class="CardHeader-Title"
+          >
+            Author: fdsa
+            <p
+              class="CardHeader-Sub"
+            >
+              1000 Nectar (NCT)
+            </p>
+          </div>
+        </header>
+        <div
+          class="CardContent"
+        >
+          <ul>
+            <li
+              class="StatRow"
+            >
+              <p
+                class="StatTitle"
+              >
+                Metadata
+              </p>
+              <p
+                class="StatContent"
+              >
+                VIRUS
+              </p>
+            </li>
+            <li
+              class="StatRow"
+            >
+              <p
+                class="StatTitle"
+              >
+                first
+              </p>
+              <p
+                class="StatContent"
+              >
+                Malicious
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
+`;
+
+exports[`renders without crashing 1`] = `
+<div
+  class="AssertionList"
+>
+  <ul>
+    
+  </ul>
+  <div
+    class="Assertion-Placeholder"
+  >
+    <h3>
+      No experts have posted any assertions. Waiting for results.
+    </h3>
+  </div>
+</div>
+`;

@@ -1,20 +1,33 @@
 .Bounty-Info {
+  display: grid;
+  grid-template-rows: 86px 1fr;
   height: 100%;
   position: relative;
   width: 100%;
 }
 
+.Bounty-Info > .Header {
+  grid-row: 1;
+}
+
 .Bounty-Info-Container {
-  display: grid;
+  display: block;
+  grid-row: 2;
   box-sizing: border-box;
-  grid-template-columns: 300px 1fr;
-  height: 100%;
+  height: auto;
+  overflow-y: auto;
 }
 
-.Bounty-Info-Container > .File-List {
-  grid-column: 1;
-}
+@media only screen and (min-width: 800px) {
+  .Bounty-Info-Container {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    height: auto;
+  }
 
-.Bounty-Info-Assertions {
-  grid-column: 2;
+  .Bounty-Info-Assertions {
+    height: auto;
+  }
 }

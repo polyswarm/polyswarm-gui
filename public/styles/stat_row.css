@@ -1,0 +1,37 @@
+.StatRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  overflow-wrap: break-word;
+}
+
+.StatRow-Vertical {
+  display: block;
+}
+
+.StatRow-Vertical > .StatTitle {
+  color: #8500ff;
+  border-bottom: 1px #e5e5e5 solid;
+  width: 100%;
+}
+
+.StatRow-Vertical > .StatContent {
+  margin: 15px 0 15px 0;
+  min-width: 50%;
+  word-wrap: break-word;
+  text-align: left;
+}
+
+.StatTitle {
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 16px;
+  margin: 4px 0;
+  width: 140px;
+}
+
+.StatContent {
+  margin: 4px 0;
+  min-width: 50%;
+  word-wrap: break-word;
+}

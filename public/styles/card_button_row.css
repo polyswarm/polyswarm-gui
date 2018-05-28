@@ -1,0 +1,12 @@
+.CardButtonRow {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 5px 20px;
+  width: 100%;
+}
+
+.Button-Wrap {
+  width: 128px;
+}

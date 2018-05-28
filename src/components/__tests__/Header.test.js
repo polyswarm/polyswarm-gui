@@ -16,22 +16,82 @@ it('shows title props', () => {
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
 
-it('should call onClick callback when clicked', () => {
-  const onClick = jest.fn();
-  const wrapper = mount(<Header title={'Title'} onClick={onClick}/>);
+it('should show polyswarm logo when back is not set', () => {
+  const wrapper = mount(<Header/>);
 
-  wrapper.find('button').simulate('click');
-
-  expect(onClick).toHaveBeenCalledTimes(1);
+  expect(wrapper.find('img').props().src).toEqual('../public/img/polyswarm-white.svg');
+  expect(renderToJson(wrapper)).toMatchSnapshot();
 });
 
-it('should not show the button if create set', () => {
-  const onClick = jest.fn();
-  const wrapper = mount(
-    <Header title={'Title'}
-      create
-      onClick={onClick}/>
-  );
+it('should show back button when back is set', () => {
+  const wrapper = mount(<Header back/>);
 
-  expect(wrapper.find('button')).toHaveLength(0);
+  expect(wrapper.find('img').props().src).toEqual('../public/img/back-arrow.svg');
+  expect(renderToJson(wrapper)).toMatchSnapshot();
+});
+
+it('should call prop onBack when back is set and arrow is clicked', () => {
+  const onBack = jest.fn();
+  const wrapper = mount(<Header back onBack={onBack}/>);
+
+  wrapper.find('img').slice(0, 1).simulate('click');
+
+  expect(onBack).toHaveBeenCalledTimes(1);
+});
+
+it('should show first two actions as buttons', () => {
+  const actions = [
+    {title: 'first', onClick:() => {}},
+    {title: 'second', onClick:() => {}},
+  ];
+  const wrapper = render(<Header actions={actions}/>);
+
+  expect(wrapper.find('.Button').first().text()).toEqual('first');
+  expect(wrapper.find('.Button').last().text()).toEqual('second');
+  expect(wrapper.find('.Dropdown')).toHaveLength(0);
+});
+
+it('should show the dropdown menu if more than two actions', () => {
+  const actions = [
+    {title: 'first', onClick:() => {}},
+    {title: 'second', onClick:() => {}},
+    {title: 'third', onClick:() => {}},
+  ];
+  const wrapper = render(<Header actions={actions}/>);
+
+  expect(wrapper.find('.Dropdown')).toHaveLength(1);
+});
+
+it('should list all items over two as elements in the dropdown', () => {
+  const actions = [
+    {title: 'first', onClick:() => {}},
+    {title: 'second', onClick:() => {}},
+    {title: 'third', onClick:() => {}},
+  ];
+  const wrapper = mount(<Header actions={actions}/>);
+
+  wrapper.find('.Dropdown').slice(0, 1).simulate('mouseEnter');
+
+  expect(wrapper.find('.Dropdown').find('p').text()).toEqual('third');
+});
+
+it('should call actions onClick function when clicked', () => {
+  const first = jest.fn();
+  const actions = [
+    {title: 'first', onClick: first},
+    {title: 'second', onClick:() => {}},
+    {title: 'third', onClick:() => {}},
+  ];
+  const wrapper = mount(<Header actions={actions}/>);
+
+  wrapper.find('.Button').slice(0, 1).simulate('click');
+
+  expect(first).toHaveBeenCalledTimes(1);
+});
+
+it('should show the address and balances', () => {
+  const wrapper = render(<Header address='asdf' nct='1' eth='2'/>);
+
+  expect(wrapper.find('.Header-Address').text()).toEqual('asdfMain: 1 NCT 2 ETHSide: 1 NCT ');
+  expect(renderToJson(wrapper)).toMatchSnapshot();
 });

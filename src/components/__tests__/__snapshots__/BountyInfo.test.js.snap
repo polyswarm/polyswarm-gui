@@ -4,52 +4,148 @@ exports[`renders without crashing 1`] = `
 <div
   class="Bounty-Info"
 >
+  <header
+    class="Header"
+  >
+    <div
+      class="Header-Row"
+    >
+      <div
+        class="Header-Title"
+      >
+        <img
+          alt="PolySwarm logo"
+          class="Header-Logo"
+          src="../public/img/back-arrow.svg"
+        >
+          
+        </img>
+        <h3>
+          
+        </h3>
+        <span
+          class="RequestSpinner"
+        >
+          
+        </span>
+      </div>
+      <div
+        class="Header-Actions"
+      >
+        
+      </div>
+    </div>
+    <div
+      class="Header-Address"
+    >
+      
+    </div>
+  </header>
   <div
     class="Bounty-Info-Container"
   >
     <div
-      class="File-List"
+      class="BountySummary"
     >
-      <header
-        class="File-List-Header"
+      <li
+        class="StatRow-Vertical"
       >
         <p
-          class="File-List-Title"
+          class="StatTitle"
         >
-          0 Files
+          Posted By:
         </p>
-      </header>
-      <ul
-        class="List"
-      >
-        <div>
+        <p
+          class="StatContent"
+        >
           
-        </div>
-      </ul>
+        </p>
+      </li>
+      <li
+        class="StatRow-Vertical"
+      >
+        <p
+          class="StatTitle"
+        >
+          Resolved:
+        </p>
+        <p
+          class="StatContent"
+        >
+          No
+        </p>
+      </li>
+      <li
+        class="StatRow-Vertical"
+      >
+        <p
+          class="StatTitle"
+        >
+          Expired:
+        </p>
+        <p
+          class="StatContent"
+        >
+          No
+        </p>
+      </li>
+      <li
+        class="StatRow-Vertical"
+      >
+        <p
+          class="StatTitle"
+        >
+          Reward:
+        </p>
+        <p
+          class="StatContent"
+        >
+          undefined Nectar (NCT)
+        </p>
+      </li>
+      <li
+        class="StatRow-Vertical"
+      >
+        <p
+          class="StatTitle"
+        >
+          Assertions:
+        </p>
+        <p
+          class="StatContent"
+        >
+          0
+        </p>
+      </li>
+      <li
+        class="StatRow-Vertical"
+      >
+        <p
+          class="StatTitle"
+        >
+          IPFS Uri
+        </p>
+        <p
+          class="StatContent"
+        >
+          
+        </p>
+      </li>
     </div>
-    <table
-      class="AssertionTable"
+    <div
+      class="AssertionList"
     >
-      <thead>
-        <tr>
-          <th>
-            Author
-          </th>
-          <th>
-            Verdict
-          </th>
-          <th>
-            Metadata
-          </th>
-          <th>
-            Bid
-          </th>
-        </tr>
-      </thead>
-      <tbody>
+      <ul>
         
-      </tbody>
-    </table>
+      </ul>
+      <div
+        class="Assertion-Placeholder"
+      >
+        <h3>
+          No experts have posted any assertions. Waiting for results.
+        </h3>
+      </div>
+    </div>
   </div>
 </div>
 `;

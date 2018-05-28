@@ -1,0 +1,99 @@
+.AnimatedInput {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.AnimatedInput-Label {
+  color: #555555;
+  line-height: 18px;
+  font-size: 18px;
+  position: relative;
+  user-select: none;
+  top: 25px;
+}
+
+.AnimatedInput-Input {
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  border-bottom: #555555 2px solid;
+  color: black;
+  box-sizing: border-box;
+  font-size: 18px;
+  height: 36px;
+  line-height: 36px;
+  margin-bottom: 32px;
+  padding-left: 8px;
+}
+
+.AnimatedInput-Input:focus {
+  border-bottom: rgb(46, 255, 109) 2px solid;
+  outline-color: rgba(0,0,0,0);
+}
+
+ .AnimatedInput-Input:focus + .AnimatedInput-Label {
+  color: rgb(46, 255, 109);
+}
+
+.AnimatedInput-ErrorLabel {
+  font-size: 10px;
+  color: #ff1a00;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+.AnimatedInput-Readonly,
+.AnimatedInput-Readonly:focus {
+  border-bottom: none;
+  margin-bottom: 3px;
+}
+
+.AnimatedInput-Error {
+  border-bottom: #ff1a00 2px solid;
+  margin-bottom: 0;
+}
+
+.AnimatedInput-Error:focus {
+  border-bottom: #ff1a00 2px solid;
+  outline-color: rgba(0,0,0,0);
+}
+
+.label-enter {
+  font-size: 18px;
+  font-weight: normal;
+  transform: translateY(0);
+}
+.label-enter-active {
+  font-size: 16px;
+  font-weight: 300;
+  transform: translateY(-25px);
+  transition: all 300ms ease-out;
+}
+
+.label-enter-done {
+  font-size: 16px;
+  font-weight: 300;
+  transform: translateY(-25px);
+}
+
+.label-exit {
+  font-size: 16px;
+  font-weight: 300;
+  transform: translateY(-25px);
+}
+.label-exit-active {
+  font-size: 18px;
+  font-weight: normal;
+  transform: translateY(0);
+  transition: all 300ms ease-out;
+}
+
+.label-exit-done {
+  font-size: 18px;
+  font-weight: normal;
+  transform: translateY(0);
+}

@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
+<div
+  class="AnimatedInput"
+>
+  <div>
+    
+  </div>
+  <input
+    class="AnimatedInput-Input"
+    type="text"
+    value=""
+  >
+    
+  </input>
+</div>
+`;

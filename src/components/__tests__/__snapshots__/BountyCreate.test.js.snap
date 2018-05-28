@@ -2,8 +2,45 @@
 
 exports[`renders without crashing 1`] = `
 <div
-  class="Bounty-Create"
+  class="BountyCreate"
 >
+  <header
+    class="Header"
+  >
+    <div
+      class="Header-Row"
+    >
+      <div
+        class="Header-Title"
+      >
+        <img
+          alt="PolySwarm logo"
+          class="Header-Logo"
+          src="../public/img/back-arrow.svg"
+        >
+          
+        </img>
+        <h3>
+          Create Bounty
+        </h3>
+        <span
+          class="RequestSpinner"
+        >
+          
+        </span>
+      </div>
+      <div
+        class="Header-Actions"
+      >
+        
+      </div>
+    </div>
+    <div
+      class="Header-Address"
+    >
+      
+    </div>
+  </header>
   <div
     class="ModalPassword"
   >
@@ -12,64 +49,94 @@ exports[`renders without crashing 1`] = `
     </div>
   </div>
   <div
-    class="Container"
+    class="BountyCreate-Content"
   >
     <div
-      class="File-List"
+      class="BountyCreate-Centered"
     >
-      <header
-        class="File-List-Header"
+      <div
+        class="BountyCreate-Header"
       >
-        <p
-          class="File-List-Title"
+        <h2>
+          1. Select Files
+        </h2>
+        <div
+          class="BountyCreate-Header-Buttons"
         >
-          0 Files
-        </p>
-        <button
-          class="Button"
-          disabled=""
-        >
-          - Clear
-        </button>
-      </header>
-      <ul
-        class="List"
+          <button
+            class="Button flat-cancel"
+            disabled=""
+          >
+            Previous
+          </button>
+          <button
+            class="Button flat"
+            disabled=""
+          >
+            Next
+          </button>
+        </div>
+      </div>
+      <div
+        class="Bounty-Files"
       >
-        <div>
+        <div
+          class="Bounty-Button"
+        >
           
         </div>
-      </ul>
-    </div>
-    <div
-      class="Drop-Target"
-    >
-      <div>
-        <p>
-          Drag and drop your files here, or 
-        </p>
-        <form>
-          <input
-            class="hidden"
-            id="file"
-            multiple=""
-            type="file"
+        <div
+          class="Drop-Target"
+        >
+          <div>
+            <p>
+              Drag and drop your files here, or 
+            </p>
+            <form>
+              <input
+                class="hidden"
+                id="file"
+                multiple=""
+                type="file"
+              >
+                
+              </input>
+              <label
+                for="file"
+              >
+                click here.
+              </label>
+            </form>
+          </div>
+        </div>
+        <div
+          class="File-List"
+        >
+          <header
+            class="File-List-Header"
           >
-            
-          </input>
-          <label
-            for="file"
+            <p
+              class="File-List-Title"
+            >
+              0 Files
+            </p>
+            <button
+              class="Button flat-cancel"
+              disabled=""
+            >
+              Clear
+            </button>
+          </header>
+          <ul
+            class="List"
           >
-            click here.
-          </label>
-        </form>
+            <div>
+              
+            </div>
+          </ul>
+        </div>
       </div>
     </div>
-    <button
-      class="Button"
-      disabled=""
-    >
-      Create Bounty
-    </button>
   </div>
 </div>
 `;

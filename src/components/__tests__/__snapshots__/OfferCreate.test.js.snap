@@ -1,0 +1,118 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
+<div
+  class="OfferCreate"
+>
+  <header
+    class="Header"
+  >
+    <div
+      class="Header-Row"
+    >
+      <div
+        class="Header-Title"
+      >
+        <img
+          alt="PolySwarm logo"
+          class="Header-Logo"
+          src="../public/img/back-arrow.svg"
+        >
+          
+        </img>
+        <h3>
+          Create Offer
+        </h3>
+        <span
+          class="RequestSpinner"
+        >
+          
+        </span>
+      </div>
+      <div
+        class="Header-Actions"
+      >
+        
+      </div>
+    </div>
+    <div
+      class="Header-Address"
+    >
+      
+    </div>
+  </header>
+  <div
+    class="ModalPassword"
+  >
+    <div>
+      
+    </div>
+  </div>
+  <div
+    class="OfferCreate-Content"
+  >
+    <div
+      class="Offer-Values"
+    >
+      <h2>
+        Enter Expert, max reward and duration.
+      </h2>
+      <div
+        class="AnimatedInput"
+      >
+        <div>
+          
+        </div>
+        <input
+          class="AnimatedInput-Input"
+          id="expert"
+          type="text"
+          value=""
+        >
+          
+        </input>
+      </div>
+      <div
+        class="AnimatedInput"
+      >
+        <div>
+          
+        </div>
+        <input
+          class="AnimatedInput-Input"
+          id="reward"
+          type="number"
+          value=""
+        >
+          
+        </input>
+      </div>
+      <div
+        class="AnimatedInput"
+      >
+        <div>
+          
+        </div>
+        <input
+          class="AnimatedInput-Input"
+          id="duration"
+          type="number"
+          value=""
+        >
+          
+        </input>
+      </div>
+    </div>
+    <div
+      class="Offer-Create-Upload"
+    >
+      <button
+        class="Button"
+        disabled=""
+      >
+        Open Offer Channel
+      </button>
+    </div>
+  </div>
+</div>
+`;

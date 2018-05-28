@@ -1,0 +1,106 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
+<div
+  class="OfferSummary"
+>
+  <li
+    class="StatRow-Vertical"
+  >
+    <p
+      class="StatTitle"
+    >
+      Author:
+    </p>
+    <p
+      class="StatContent"
+    >
+      author
+    </p>
+  </li>
+  <li
+    class="StatRow-Vertical"
+  >
+    <p
+      class="StatTitle"
+    >
+      Expert:
+    </p>
+    <p
+      class="StatContent"
+    >
+      expert
+    </p>
+  </li>
+  <li
+    class="StatRow-Vertical"
+  >
+    <p
+      class="StatTitle"
+    >
+      Remaining Balance:
+    </p>
+    <p
+      class="StatContent"
+    >
+      100 Nectar (NCT)
+    </p>
+  </li>
+  <li
+    class="StatRow-Vertical"
+  >
+    <p
+      class="StatTitle"
+    >
+      
+    </p>
+    <p
+      class="StatContent"
+    >
+      No
+    </p>
+  </li>
+  <li
+    class="StatRow-Vertical"
+  >
+    <p
+      class="StatTitle"
+    >
+      Messages:
+    </p>
+    <p
+      class="StatContent"
+    >
+      4
+    </p>
+  </li>
+  <li
+    class="StatRow-Vertical"
+  >
+    <p
+      class="StatTitle"
+    >
+      Benign
+    </p>
+    <p
+      class="StatContent"
+    >
+      Safe
+    </p>
+  </li>
+  <li
+    class="StatRow-Vertical"
+  >
+    <p
+      class="StatTitle"
+    >
+      Malicious
+    </p>
+    <p
+      class="StatContent"
+    >
+      Malicious
+    </p>
+  </li>
+</div>
+`;

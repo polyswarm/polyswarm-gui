@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
+<div
+  class="OfferMessageList"
+>
+  <ul>
+    <li>
+      <div
+        class="Card"
+      >
+        <header
+          class="CardHeader"
+        >
+          <div
+            class="CardHeader-Title"
+          >
+            Payment
+            <p
+              class="CardHeader-Sub"
+            >
+              .5 Nectar (NCT)
+            </p>
+          </div>
+        </header>
+      </div>
+    </li>
+    <li>
+      <div
+        class="Card"
+      >
+        <header
+          class="CardHeader"
+        >
+          <div
+            class="CardHeader-Title"
+          >
+            Payment
+            <p
+              class="CardHeader-Sub"
+            >
+              .0625 Nectar (NCT)
+            </p>
+          </div>
+        </header>
+      </div>
+    </li>
+  </ul>
+</div>
+`;

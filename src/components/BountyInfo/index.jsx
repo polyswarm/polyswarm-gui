@@ -2,48 +2,44 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // Bounty imports
-import FileList from '../FileList';
-import AssertionTable from '../AssertionTable';
+import AssertionList from '../AssertionList';
+import BountySummary from '../BountySummary';
+import Header from '../Header';
 
 class BountyInfo extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      active: 0,
-    };
-
-    this.onFileClickHandler = this.onFileClickHandler.bind(this);
-  }
 
   render() {
-    const { props: { bounty }, state: { active } } = this;
-    const files = bounty.artifacts || [];
-    let assertions = [];
-    if (files[active] && files[active].assertions) {
-      assertions = files[active].assertions;
+    const { props: { bounty, requestsInProgress, onBackPressed, walletList, address } } = this;
+
+    let wallet = {address: '', eth: '0', nct: '0'};
+    if (walletList && address >= 0 && walletList.length > address ) {
+      wallet = walletList[address];
     }
 
     return (
       <div className='Bounty-Info'>
+        <Header title={bounty.guid}
+          requests={requestsInProgress}
+          back={true}
+          onBack={onBackPressed}
+          address={wallet.address}
+          nct={wallet.nct}
+          eth={wallet.eth}/>
         <div className='Bounty-Info-Container'>
-          <FileList className='Bounty-Info-Files'
-            files={files}
-            onClick={this.onFileClickHandler}
-            active={active}
-            readonly />
-          <AssertionTable className='Bounty-Info-Assertions'
-            assertions={assertions} />
+          <BountySummary bounty={bounty} />
+          <AssertionList className='Bounty-Info-Assertions'
+            bounty={bounty} />
         </div>
       </div>
     );
-  }
-
-  onFileClickHandler(index) {
-    this.setState({active: index});
   }
 }
 
 BountyInfo.propTypes = {
   bounty: PropTypes.object.isRequired,
+  onBackPressed: PropTypes.func,
+  walletList: PropTypes.array,
+  requestsInProgress: PropTypes.array,
+  address: PropTypes.number,
 };
 export default BountyInfo;

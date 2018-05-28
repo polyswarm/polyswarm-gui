@@ -1,0 +1,104 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
+<div
+  class="OfferPay"
+>
+  <header
+    class="Header"
+  >
+    <div
+      class="Header-Row"
+    >
+      <div
+        class="Header-Title"
+      >
+        <img
+          alt="PolySwarm logo"
+          class="Header-Logo"
+          src="../public/img/back-arrow.svg"
+        >
+          
+        </img>
+        <h3>
+          Pay expert
+        </h3>
+        <span
+          class="RequestSpinner"
+        >
+          
+        </span>
+      </div>
+      <div
+        class="Header-Actions"
+      >
+        
+      </div>
+    </div>
+    <div
+      class="Header-Address"
+    >
+      <p
+        class="Header-Divided"
+        style="font-size:3.4285714285714284vw"
+      >
+        author
+      </p>
+      <p
+        class="Header-Divided"
+        style="font-size:3.4285714285714284vw"
+      >
+        Main: 1 NCT 1 ETH
+      </p>
+      <p
+        style="font-size:3.4285714285714284vw"
+      >
+        Side: 1 NCT 
+      </p>
+    </div>
+  </header>
+  <div
+    class="ModalPassword"
+  >
+    <div>
+      
+    </div>
+  </div>
+  <div
+    class="OfferPay-Content"
+  >
+    <div
+      class="OfferPay-Center"
+    >
+      <h2>
+        Enter amount to pay
+      </h2>
+      <div
+        class="AnimatedInput"
+      >
+        <div>
+          
+        </div>
+        <input
+          class="AnimatedInput-Input"
+          id="reward"
+          type="number"
+          value=""
+        >
+          
+        </input>
+      </div>
+      <div
+        class="OfferPay-Upload"
+      >
+        <button
+          class="Button"
+          disabled=""
+        >
+          Pay
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

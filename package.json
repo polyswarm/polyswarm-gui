@@ -1,5 +1,5 @@
 {
-  "name": "bounty-management",
+  "name": "polyswarm-gui",
   "description": "Tool to post and manage bounties on the PolySwarm Marketplace running on Ethereum.",
   "author": "Swarm Technologies",
   "version": "0.2.0",
@@ -14,9 +14,11 @@
   ],
   "dependencies": {
     "bignumber.js": "^6.0.0",
+    "classnames": "^2.2.5",
     "electron-compile": "^6.4.2",
     "electron-devtools-installer": "^2.1.0",
     "electron-squirrel-startup": "^1.0.0",
+    "multihashes": "^0.4.13",
     "mv": "^2.1.1",
     "ps-node": "^0.1.6",
     "react": "^16.2.0",
@@ -24,7 +26,9 @@
     "react-hot-loader": "^3.0.0-beta.6",
     "react-transition-group": "^2.3.1",
     "unzip": "^0.1.11",
-    "uuid": "^3.2.1"
+    "uuid": "^3.2.1",
+    "validator": "^10.2.0",
+    "web3-utils": "^1.0.0-beta.34"
   },
   "lint-staged": {
     "src/**/*.{js,jsx,json,css}": [
@@ -100,7 +104,7 @@
         "icon": "./public/favicon.ico",
         "win32metadata": {
           "CompanyName": "PolySwarm",
-          "ProductName": "Bounty Management"
+          "ProductName": "PolySwarm Gui"
         },
         "packageManager": "yarn",
         "afterCopy": [
@@ -108,17 +112,17 @@
         ]
       },
       "electronWinstallerConfig": {
-        "name": "BountyManagement"
+        "name": "PolySwarmGui"
       },
       "electronInstallerDebian": {},
       "electronInstallerRedhat": {},
       "github_repository": {
         "owner": "polyswarm",
-        "name": "bounty-management"
+        "name": "polyswarm-gui"
       },
       "windowsStoreConfig": {
         "packageName": "",
-        "name": "bountymanagement"
+        "name": "polyswarmgui"
       }
     }
   }

@@ -1,76 +1,58 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders without crashing 1`] = `
-<table>
-  <tbody>
-    <tr
-      class="AssertionRow"
+<li>
+  <div
+    class="Card"
+  >
+    <header
+      class="CardHeader Assertion-Malignant"
     >
-      <td>
-        
-      </td>
-      <td
-        class="Assertion-Malignant"
+      <div
+        class="CardHeader-Title"
       >
-        Malicious
-      </td>
-      <td>
-        Some virus
-      </td>
-      <td>
-        10
-      </td>
-    </tr>
-  </tbody>
-</table>
-`;
-
-exports[`shows Benign in the veridict column with false verdict 1`] = `
-<table>
-  <tbody>
-    <tr
-      class="AssertionRow"
+        Author: asdf
+        <p
+          class="CardHeader-Sub"
+        >
+          10 Nectar (NCT)
+        </p>
+      </div>
+    </header>
+    <div
+      class="CardContent"
     >
-      <td>
-        
-      </td>
-      <td
-        class="Assertion-Benign"
-      >
-        Safe
-      </td>
-      <td>
-        
-      </td>
-      <td>
-        10
-      </td>
-    </tr>
-  </tbody>
-</table>
-`;
-
-exports[`shows Malignant in the veridict column with true verdict 1`] = `
-<table>
-  <tbody>
-    <tr
-      class="AssertionRow"
-    >
-      <td>
-        
-      </td>
-      <td
-        class="Assertion-Malignant"
-      >
-        Malicious
-      </td>
-      <td>
-        Some virus
-      </td>
-      <td>
-        10
-      </td>
-    </tr>
-  </tbody>
-</table>
+      <ul>
+        <li
+          class="StatRow"
+        >
+          <p
+            class="StatTitle"
+          >
+            Metadata
+          </p>
+          <p
+            class="StatContent"
+          >
+            Some virus
+          </p>
+        </li>
+        <li
+          class="StatRow"
+        >
+          <p
+            class="StatTitle"
+          >
+            evil_file
+          </p>
+          <p
+            class="StatContent"
+          >
+            Malicious
+          </p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</li>
 `;

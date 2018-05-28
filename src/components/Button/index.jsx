@@ -1,6 +1,7 @@
 // Vendor imports
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 class Button extends Component {
   constructor(props) {
@@ -9,12 +10,18 @@ class Button extends Component {
   }
 
   render () {
-    const { props: { disabled, children, cancel, flat } } = this;
-    const computedClass = this.computeClass(cancel, flat);
+    const { props: { disabled, children, cancel, flat, header } } = this;
+    const computedClass = classNames('Button', {
+      'header': header,
+      'header-cancel': header && cancel,
+      'cancel': !flat && cancel && !header,
+      'flat': flat && !cancel && !header,
+      'flat-cancel': flat && cancel && !header,
+    });
     return (
       <button
         disabled={disabled}
-        className={`Button${computedClass}`}
+        className={computedClass}
         onClick={this.onClickHandler}>
         {children}
       </button>
@@ -27,23 +34,13 @@ class Button extends Component {
       onClick();
     }
   }
-
-  computeClass(cancel, flat) {
-    if (cancel && flat) {
-      return ' flat-cancel';
-    } else if (flat) {
-      return ' flat';
-    } else if (cancel) {
-      return ' cancel';
-    } else {
-      return '';
-    }
-  }
 }
 
 Button.proptypes = {
   onClick: PropTypes.func.isRequired,
   cancel: PropTypes.bool,
+  flat: PropTypes.bool,
+  header: PropTypes.bool,
 };
 
 export default Button;

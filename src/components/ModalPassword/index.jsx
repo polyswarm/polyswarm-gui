@@ -1,10 +1,10 @@
 // Vendor imports
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import BigNumber from 'bignumber.js';
 import Uuid from 'uuid/v4';
 import {CSSTransition} from 'react-transition-group';
 // Bounty imports
+import AnimatedInput from '../AnimatedInput';
 import Button from '../Button';
 // Component imports
 import HttpAccount from './http';
@@ -16,15 +16,12 @@ class ModalPassword extends Component {
     this.state = {
       open: false,
       unlocking: false,
-      error: false,
+      password_error: null,
       password: '',
       address: 0,
-      eth: 0,
-      nct: 0
     };
 
     this.onWalletChangeHandler = this.onWalletChangeHandler.bind(this);
-    this.onChangeStore = this.onChangeStore.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
     this.onChangeAddress = this.onChangeAddress.bind(this);
     this.onCloseClick = this.onCloseClick.bind(this);
@@ -34,47 +31,24 @@ class ModalPassword extends Component {
     this.createWallet = this.createWallet.bind(this);
     this.open = this.open.bind(this);
     this.close = this.close.bind(this);
-    this.updateBalance = this.updateBalance.bind(this);
     this.addAccountRequest = this.addAccountRequest.bind(this);
     this.removeAccountRequest = this.removeAccountRequest.bind(this);
   }
 
-  componentWillMount() {
-    this.timer = setInterval(() => {
-      const { props: { walletList } } = this;
-      const { state: { address } } = this;
-      if (walletList && walletList.length > 0) {
-        this.updateBalance(walletList[address]);
-      }
-    }, 5000);
-  }
-
-  componentWillUnmount() {
-    if (this.timer) {
-      clearInterval(this.timer);
-      this.timer = null;
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { props: { walletList } } = this;
-    const { state: { address } } = this;
-    const { address: prevAddr } = prevState;
-    const { walletList: prevWallets } = prevProps;
-
-    if (walletList
-      && walletList.length > 0 
-      && (prevAddr !== address 
-      || JSON.stringify(walletList) !== JSON.stringify(prevWallets))) {
-      this.updateBalance(walletList[address]);
-    }
+  componentDidMount() {
+    const { props: { address } } = this;
+    this.setState({address: address});
   }
 
   render() {
     const { props: { walletList } } = this;
     const {
-      state: { open, unlocking, error, password, address, nct, eth }
+      state: { open, unlocking, password_error, address: address }
     } = this;
+    let wallet = {address: '', eth: '0', nct: '0'};
+    if (walletList && address >= 0 && walletList.length > address ) {
+      wallet = walletList[address];
+    }
     return (
       <div className='ModalPassword'>
         <CSSTransition
@@ -102,32 +76,33 @@ class ModalPassword extends Component {
                           <label htmlFor='address'>{strings.address}</label>
                           <select
                             id='address'
-                            value={walletList[address]}
+                            value={wallet.address}
                             onChange={this.onChangeAddress}>
-                            {walletList.map(wallet => {
+                            {walletList.map(walletOption => {
                               return (
-                                <option key={wallet} value={wallet}>
-                                  {wallet}
+                                <option key={walletOption.address}
+                                  value={walletOption.address}>
+                                  {walletOption.address}
                                 </option>
                               );
                             })}
                           </select>
-                          <label>Balances</label>
-                          <div className='Balances'>
-                            <p className='Balance'>NCT: {nct}</p>
-                            <p className='Balance'>ETH: {eth}</p>
-                          </div>
+                          <AnimatedInput input_id='nectar'
+                            readonly={wallet.nct}
+                            placeholder={strings.nectar}
+                            type='number'/>
+                          <AnimatedInput input_id='eth'
+                            readonly={wallet.eth}
+                            placeholder={strings.eth}
+                            type='number'/>
                         </React.Fragment>
                       )}
-                      <label htmlFor='password'>{strings.password}</label>
-                      <input
-                        id='password'
-                        type='password'
-                        value={password}
-                        onKeyPress={this.onKeyPress}
+                      <AnimatedInput input_id='password'
                         onChange={this.onChangePassword}
-                      />
-                      <div className='ModalError'>{error && strings.error}</div>
+                        error={password_error}
+                        placeholder={strings.password}
+                        onKeyPress={this.onKeyPress}
+                        type='password'/>
                     </form>
                     <p className='ModalMessage'>{strings.background}</p>
                     <span className='Modal-Button-Bar'>
@@ -155,24 +130,20 @@ class ModalPassword extends Component {
   }
 
   onWalletChangeHandler(didUnlock = false) {
-    const { props: { onWalletChange }, state: { store } } = this;
+    const { props: { onWalletChange }} = this;
     if (onWalletChange) {
-      onWalletChange(didUnlock, store);
+      onWalletChange(didUnlock);
     }
   }
 
-  onChangeStore(event) {
-    this.setState({ store: event.target.checked });
-  }
-
-  onChangePassword(event) {
-    this.setState({ password: event.target.value });
+  onChangePassword(password) {
+    this.setState({ password: password });
   }
 
   onChangeAddress(event) {
     const { props: { walletList } } = this;
     const value = event.target.value;
-    const index = walletList.findIndex(v => v === value);
+    const index = walletList.findIndex(v => v.address === value);
     this.setState({ address: index });
   }
 
@@ -193,8 +164,12 @@ class ModalPassword extends Component {
   onUnlockClick() {
     const { state: { address, password } } = this;
     const { props: { walletList } } = this;
+    let wallet = {address: '', eth: '0', nct: '0'};
+    if (walletList && address >= 0 && walletList.length > address ) {
+      wallet = walletList[address];
+    }
     if (walletList && walletList.length > 0) {
-      this.unlockWallet(walletList[address], password);
+      this.unlockWallet(wallet.address, password);
     } else {
       this.createWallet(password);
     }
@@ -202,15 +177,17 @@ class ModalPassword extends Component {
 
   unlockWallet(address, password) {
     const { props: { url } } = this;
-    this.setState({ unlocking: true, error: false });
+    this.setState({ unlocking: true, password_error: null });
     const http = new HttpAccount(url);
     const uuid = Uuid();
     this.addAccountRequest(strings.requestUnlockWallet, uuid);
     return http.unlockWallet(address, password).then(success => {
-      this.setState({ unlocking: false, error: !success });
       if (success) {
+        this.setState({unlocking: false, password_error: null});
         this.onWalletChangeHandler(true);
         this.close();
+      } else {
+        this.setState({unlocking: false, password_error: strings.error});
       }
       this.removeAccountRequest(strings.requestUnlockWallet, uuid);
     });
@@ -218,15 +195,17 @@ class ModalPassword extends Component {
 
   createWallet(password) {
     const { props: { url } } = this;
-    this.setState({ unlocking: true, error: false });
+    this.setState({ unlocking: true, password_error: null });
     const http = new HttpAccount(url);
     const uuid = Uuid();
     this.addAccountRequest(strings.requestCreateWallet, uuid);
     return http.createWallet(password).then(success => {
-      this.setState({ unlocking: false, error: !success });
       if (success) {
+        this.setState({unlocking: false, password_error: null});
         this.onWalletChangeHandler(false);
         this.close();
+      } else {
+        this.setState({unlocking: false, password_error: strings.error});
       }
       this.removeAccountRequest(strings.requestCreateWallet, uuid);
     });
@@ -256,24 +235,6 @@ class ModalPassword extends Component {
       removeRequest(title, id);
     }
   }
-
-  updateBalance(address) {
-    const { props: { url } } = this;
-    const http = new HttpAccount(url);
-    
-    const e = http.getEth(address).then(balance => {
-      return new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000));
-    }).then((b) => {
-      this.setState({ eth: b.toNumber() });
-    });
-    const n = http.getNct(address).then(balance => {
-      return new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000));
-    }).then((b) => {
-      this.setState({ nct: b.toNumber() });
-    });
-    const promises = [e, n];
-    return Promise.all(promises);
-  }
 }
 
 ModalPassword.proptypes = {
@@ -281,6 +242,7 @@ ModalPassword.proptypes = {
   walletList: PropTypes.array,
   onWalletChange: PropTypes.func,
   addRequest: PropTypes.func,
-  removeRequest: PropTypes.func
+  removeRequest: PropTypes.func,
+  address: PropTypes.number,
 };
 export default ModalPassword;

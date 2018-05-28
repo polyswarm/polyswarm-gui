@@ -1,0 +1,139 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders without crashing 1`] = `
+<div
+  class="OfferRequest"
+>
+  <header
+    class="Header"
+  >
+    <div
+      class="Header-Row"
+    >
+      <div
+        class="Header-Title"
+      >
+        <img
+          alt="PolySwarm logo"
+          class="Header-Logo"
+          src="../public/img/back-arrow.svg"
+        >
+          
+        </img>
+        <h3>
+          Send files to expert
+        </h3>
+        <span
+          class="RequestSpinner"
+        >
+          
+        </span>
+      </div>
+      <div
+        class="Header-Actions"
+      >
+        
+      </div>
+    </div>
+    <div
+      class="Header-Address"
+    >
+      <p
+        class="Header-Divided"
+        style="font-size:3.4285714285714284vw"
+      >
+        author
+      </p>
+      <p
+        class="Header-Divided"
+        style="font-size:3.4285714285714284vw"
+      >
+        Main: 1 NCT 1 ETH
+      </p>
+      <p
+        style="font-size:3.4285714285714284vw"
+      >
+        Side: 1 NCT 
+      </p>
+    </div>
+  </header>
+  <div
+    class="OfferRequest-Content"
+  >
+    <div
+      class="ModalPassword"
+    >
+      <div>
+        
+      </div>
+    </div>
+    <div
+      class="OfferRequest-Files"
+    >
+      <h2>
+        Select files to send to expert.
+      </h2>
+      <div
+        class="OfferRequest-Button"
+      >
+        <button
+          class="Button"
+          disabled=""
+        >
+          Send 0 files.
+        </button>
+      </div>
+      <div
+        class="Drop-Target"
+      >
+        <div>
+          <p>
+            Drag and drop your files here, or 
+          </p>
+          <form>
+            <input
+              class="hidden"
+              id="file"
+              multiple=""
+              type="file"
+            >
+              
+            </input>
+            <label
+              for="file"
+            >
+              click here.
+            </label>
+          </form>
+        </div>
+      </div>
+      <div
+        class="File-List"
+      >
+        <header
+          class="File-List-Header"
+        >
+          <p
+            class="File-List-Title"
+          >
+            0 Files
+          </p>
+          <button
+            class="Button flat-cancel"
+            disabled=""
+          >
+            Clear
+          </button>
+        </header>
+        <ul
+          class="List"
+        >
+          <div>
+            
+          </div>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+`;

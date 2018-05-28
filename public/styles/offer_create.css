@@ -1,0 +1,45 @@
+.OfferCreate {
+  box-sizing: border-box;
+  color: #8500ff;
+  display: grid;
+  grid-template-rows: 86px 1fr;
+  height: 100%;
+  width: 100%;
+}
+
+.OfferCreate > .Header {
+  grid-row: 1;
+}
+
+.OfferCreate-Content {
+  box-sizing: border-box;
+  display: block;
+  grid-row: 2;
+  margin: 0 auto;
+  padding: 20px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.Offer-Values {
+  box-sizing: border-box;
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+}
+
+@media only screen and (min-width: 800px) {
+  .Offer-Values {
+      width: 70%;
+  }
+}
+
+.Offer-Values > .AnimatedInput {
+  width: 100%;
+}
+
+.Offer-Create-Upload {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
