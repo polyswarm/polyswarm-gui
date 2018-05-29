@@ -52,7 +52,7 @@ exports[`renders without crashing 1`] = `
     <p
       class="StatTitle"
     >
-      
+      Closed:
     </p>
     <p
       class="StatContent"
