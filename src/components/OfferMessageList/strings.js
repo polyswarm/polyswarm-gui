@@ -6,6 +6,7 @@ const strings = {
   malicious: 'Malicious',
   safe: 'Safe',
   files: 'Files:',
-  nectar: ' Nectar (NCT)'
+  nectar: ' Nectar (NCT)',
+  metadata: 'Metadata:'
 };
 export default strings;

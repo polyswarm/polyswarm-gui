@@ -6,7 +6,7 @@ import OfferSummary from '../OfferSummary';
 const offer = {
   author: 'author',
   expert: 'expert',
-  remaining: '100',
+  balance: '100',
   closed: false,
   messages: [
     {
@@ -33,7 +33,7 @@ const offer = {
 const closed = {
   author: 'author',
   expert: 'expert',
-  remaining: '100',
+  balance: '100',
   closed: true,
   messages: []
 };
