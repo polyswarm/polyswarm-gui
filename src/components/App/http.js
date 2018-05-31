@@ -14,19 +14,31 @@ class HttpApp {
 
   setAccount(address, keyfile, password) {
     return new Promise((resolve, reject) => {
-      if (this.transactions) {
-        this.transactions.close();
-      }
+      require('fs').stat(keyfile.path, (err) => {
+        if (err) {
+          reject();
+        } else {
+          resolve();
+        }
+      });
+    })
+      .then(() => new Promise((resolve, reject) => {
+        if (!web3Utils.isAddress(address) ) {
+          reject();
+        } else {
+          resolve();
+        }
+      }))
+      .then(() => new Promise((resolve) => {
+        if (this.transactions) {
+          this.transactions.close();
+        }
 
-      // TODO check that file exists
-      if (!web3Utils.isAddress(address) ) {
-        reject();
-      }
-      this.address = address;
-      this.keyfile = keyfile;
-      this.password = password;
-      resolve();
-    });
+        this.address = address;
+        this.keyfile = keyfile;
+        this.password = password;
+        resolve();
+      }));
   }
 
   getBounty(bounty) {
