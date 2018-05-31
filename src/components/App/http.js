@@ -13,18 +13,20 @@ class HttpApp {
   }
 
   setAccount(address, keyfile, password) {
-    if (this.transactions) {
-      this.transactions.close();
-    }
+    return new Promise((resolve, reject) => {
+      if (this.transactions) {
+        this.transactions.close();
+      }
 
-    // TODO check that file exists
-    if (!web3Utils.isAddress(address) ) {
-      return false;
-    }
-    this.address = address;
-    this.keyfile = keyfile;
-    this.password = password;
-    return true;
+      // TODO check that file exists
+      if (!web3Utils.isAddress(address) ) {
+        reject();
+      }
+      this.address = address;
+      this.keyfile = keyfile;
+      this.password = password;
+      resolve();
+    });
   }
 
   getBounty(bounty) {
@@ -43,7 +45,7 @@ class HttpApp {
           throw Error('Cannot get bounties.');
         }
       })
-      
+
       .then(response => response.json())
       .then(json => json.result)
       .then(bounty => this.getBountyIsActive(bounty))
@@ -210,28 +212,27 @@ class HttpApp {
     const address = this.address;
     const password = this.password;
 
-    if (!keyfile || !address || !web3Utils.isAddress(address) || !password) {
-      return;
-    }
-
-    const path = require('path');
-    new Promise(resolve => {
+    return new Promise((resolve, reject) => {
+      const path = require('path');
+      if (!keyfile || !address || !web3Utils.isAddress(address) || !password) {
+        reject();
+      }
       // We double up on the dirname to trim keystore, which importfromfile adds
       const trimmed = path.dirname(path.dirname(keyfile.path));
       const enc_key = keythereum.importFromFile(address, trimmed);
-      const key = keythereum.recover(password, enc_key);
+      keythereum.recover(password, enc_key, (key) => {
+        const websocket = new WebSocket(ws+'/transactions');
 
-      const websocket = new WebSocket(ws+'/transactions');
+        websocket.onmessage = (msg) => {
+          const {id, data} = JSON.parse(msg.data);
+          const {chainId} = data;
+          const tx = new EthereumTx(data);
+          tx.sign(key);
 
-      websocket.onmessage = (msg) => {
-        const {id, data} = JSON.parse(msg.data);
-        const {chainId} = data;
-        const tx = new EthereumTx(data);
-        tx.sign(key);
-
-        websocket.send(JSON.stringify({'id': id, 'chainId': chainId, 'data': tx.serialize().toString('hex')}));
-      };
-      resolve(websocket);
+          websocket.send(JSON.stringify({'id': id, 'chainId': chainId, 'data': tx.serialize().toString('hex')}));
+        };
+        resolve(websocket);
+      });
     })
       .then(websocket => {
         this.transactions = websocket;

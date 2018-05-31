@@ -214,9 +214,10 @@ class App extends Component {
   onKeySelected(keyfile, address, password) {
     this.setState({address, modalOpen: false});
 
-    this.http.setAccount(address, keyfile, password);
-    this.http.listenForTransactions();
-    this.getWallet();
+    this.http.setAccount(address, keyfile, password)
+      .then(() => this.http.listenForTransactions())
+      .then(() => this.getWallet())
+      .catch(() => {});
   }
 
   onCloseWelcome() {
