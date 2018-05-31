@@ -10,7 +10,7 @@ class BountyInfo extends Component {
 
   render() {
     const { props: { bounty, requestsInProgress, onBackPressed, wallet,
-      address, onRequestWalletChange } } = this;
+      address } } = this;
 
     return (
       <div className='Bounty-Info'>
@@ -19,8 +19,7 @@ class BountyInfo extends Component {
           back={true}
           onBack={onBackPressed}
           address={address}
-          wallet={wallet}
-          onRequestWalletChange={onRequestWalletChange}/>
+          wallet={wallet}/>
         <div className='Bounty-Info-Container'>
           <BountySummary bounty={bounty} />
           <AssertionList className='Bounty-Info-Assertions'

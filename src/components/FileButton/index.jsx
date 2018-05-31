@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 // Component imports
-import strings from './strings';
 
 class FileButton extends Component {
   constructor(props) {

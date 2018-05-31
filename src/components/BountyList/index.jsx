@@ -25,6 +25,7 @@ class BountyList extends Component {
       {title: strings.newBounty, onClick: onCreateBounty},
       {title: strings.newOffer, onClick: onCreateOffer},
       {title: strings.relay, onClick: onOpenRelay},
+      {title: strings.changeWallet, onClick: onRequestWalletChange},
     ];
     return (
       <div className='BountyList'>
@@ -33,8 +34,7 @@ class BountyList extends Component {
           back={false}
           actions={headerActions}
           address={address}
-          wallet={wallet}
-          onRequestWalletChange={onRequestWalletChange}/>
+          wallet={wallet}/>
         <div className='BountyList-Content'>
           <ul>
             {bounties && bounties.map((bounty, index) => {

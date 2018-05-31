@@ -23,7 +23,7 @@ class OfferInfo extends Component {
 
   render() {
     const { props: { offer, address, addRequest, removeRequest, url, wallet,
-      onBackPressed, requestsInProgress, onError, onRequestWalletChange },
+      onBackPressed, requestsInProgress, onError },
     state: { request, pay } } = this;
 
     // only show actions if signing wallet is same as wallet used to create this
@@ -54,7 +54,6 @@ class OfferInfo extends Component {
             onError={onError}
             onFilesSent={this.onBack}
             addMessage={this.onAddMessage}
-            onRequestWalletChange={onRequestWalletChange}
             url={url}/>
         )}
         {pay && (
@@ -68,7 +67,6 @@ class OfferInfo extends Component {
             requestsInProgress={requestsInProgress}
             onError={onError}
             onBackPressed={this.onBack}
-            onRequestWalletChange={onRequestWalletChange}
             url={url}/>
         )}
         {!request && !pay && (
@@ -79,8 +77,7 @@ class OfferInfo extends Component {
               onBack={onBackPressed}
               address={address}
               wallet={wallet}
-              actions={headerActions}
-              onRequestWalletChange={onRequestWalletChange}/>
+              actions={headerActions}/>
             
             <div className='Offer-Info-Container'>
               <OfferSummary offer={offer}/>

@@ -39,8 +39,7 @@ class OfferPay extends Component {
 
   render() {
     const { state: { reward, reward_error } } = this;
-    const { props: { offer, wallet, address, requestsInProgress, onBackPressed,
-      onRequestWalletChange } } = this;
+    const { props: { offer, wallet, address, requestsInProgress, onBackPressed, } } = this;
 
     const title = strings.title + offer.expert;
     
@@ -51,8 +50,7 @@ class OfferPay extends Component {
           back={true}
           onBack={onBackPressed}
           address={address}
-          wallet={wallet}
-          onRequestWalletChange={onRequestWalletChange}/>
+          wallet={wallet}/>
         <div className='OfferPay-Content'>
           <div className='OfferPay-Center'>
             <h2>{strings.instructions}</h2>

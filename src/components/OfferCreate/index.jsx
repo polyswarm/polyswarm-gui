@@ -40,7 +40,7 @@ class OfferCreate extends Component {
 
   render() {
     const { state: { reward, reward_error, duration, duration_error, expert, expert_error } } = this;
-    const { props: {  address, onRequestWalletChange, requestsInProgress, onBackPressed } } = this;
+    const { props: {  address, requestsInProgress, onBackPressed } } = this;
 
     return (
       <div className='OfferCreate'>
@@ -49,8 +49,7 @@ class OfferCreate extends Component {
           back={true}
           onBack={onBackPressed}
           address={address}
-          wallet={wallet}
-          onRequestWalletChange={onRequestWalletChange}/>
+          wallet={wallet}/>
         <div className='OfferCreate-Content'>
           <div className='Offer-Values'>
             <h2>{strings.title}</h2>

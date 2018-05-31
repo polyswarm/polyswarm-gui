@@ -37,7 +37,7 @@ class OfferRequest extends Component {
   render() {
     const { state: { files } } = this;
     const { props: { offer, address, requestsInProgress, 
-      wallet, onBackPressed, onRequestWalletChange } } = this;
+      wallet, onBackPressed } } = this;
     
     return (
       <div className='OfferRequest'>
@@ -46,8 +46,7 @@ class OfferRequest extends Component {
           back={true}
           onBack={onBackPressed}
           address={address}
-          wallet={wallet}
-          onRequestWalletChange={onRequestWalletChange}/>
+          wallet={wallet}/>
         <div className='OfferRequest-Content'>
           <div className='OfferRequest-Files'>
             <h2>{strings.instructions}</h2>

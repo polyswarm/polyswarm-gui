@@ -47,8 +47,7 @@ class BountyCreate extends Component {
 
   render() {
     const { state: { files, reward, reward_error, duration, duration_error, next } } = this;
-    const { props: { wallet, address, onBackPressed, requestsInProgress,
-      onRequestWalletChange } } = this;
+    const { props: { wallet, address, onBackPressed, requestsInProgress } } = this;
 
     return (
       <div className='BountyCreate'>
@@ -57,8 +56,7 @@ class BountyCreate extends Component {
           back={true}
           onBack={onBackPressed}
           address={address}
-          wallet={wallet}
-          onRequestWalletChange={onRequestWalletChange}/>
+          wallet={wallet}/>
         <div className='BountyCreate-Content'>
           <div className='BountyCreate-Centered'>
             <div className='BountyCreate-Header'>

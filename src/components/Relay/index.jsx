@@ -38,8 +38,7 @@ class Relay extends Component {
 
   render() {
     const {state: {nectar_error, nectar, selected},
-      props: {address, wallet, onBackPressed,
-        requestsInProgress, onRequestWalletChange } } = this;
+      props: {address, wallet, onBackPressed, requestsInProgress } } = this;
 
     let homeAltered ='0';
     let sideAltered ='0';
@@ -58,8 +57,7 @@ class Relay extends Component {
           back={true}
           onBack={onBackPressed}
           address={address}
-          wallet={wallet}
-          onRequestWalletChange={onRequestWalletChange}/>
+          wallet={wallet}/>
         <div className='Relay-Content'>
           <div className='Relay-Centered'>
             <div className='Relay-Chain'>

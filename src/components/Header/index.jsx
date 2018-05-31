@@ -15,7 +15,7 @@ class Header extends Component {
   }
 
   render() {
-    const { props: { title, back, requests, actions: a, wallet, address, onRequestWalletChange } } = this;
+    const { props: { title, back, requests, actions: a, wallet, address } } = this;
     let image_path = '../public/img/polyswarm-white.svg';
     if (back) {
       image_path = '../public/img/back-arrow.svg';
@@ -64,11 +64,6 @@ class Header extends Component {
           </div>
         </div>
         <div className='Header-Address'>
-          <Button flat
-            header
-            onClick={onRequestWalletChange}>
-            {strings.change}
-          </Button>
           {ratio > 0 && (
             <React.Fragment>
               <p className='Header-Divided' style={{'fontSize' : `${ratio}vw`}}>
