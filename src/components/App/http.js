@@ -4,6 +4,7 @@ import web3Utils from 'web3-utils';
 import multihashes from 'multihashes';
 import EthereumTx from 'ethereumjs-tx';
 import keythereum from 'keythereum';
+import WebSocket from 'isomorphic-ws';
 
 class HttpApp {
   constructor(url, ws) {
@@ -213,21 +214,28 @@ class HttpApp {
       return;
     }
 
-    const enc_key = keythereum.importFromFile(address, keyfile);
-    const key = keythereum.recover(password, enc_key);
+    const path = require('path');
+    new Promise(resolve => {
+      // We double up on the dirname to trim keystore, which importfromfile adds
+      const trimmed = path.dirname(path.dirname(keyfile.path));
+      const enc_key = keythereum.importFromFile(address, trimmed);
+      const key = keythereum.recover(password, enc_key);
 
-    const websocket = new WebSocket(ws+'/transactions');
+      const websocket = new WebSocket(ws+'/transactions');
 
-    websocket.onmessage = (msg) => {
-      const {id, data} = JSON.parse(msg.data);
-      const {chainId} = data;
-      const tx = new EthereumTx(data);
-      tx.sign(key);
+      websocket.onmessage = (msg) => {
+        const {id, data} = JSON.parse(msg.data);
+        const {chainId} = data;
+        const tx = new EthereumTx(data);
+        tx.sign(key);
 
-      ws.send(JSON.stringify({'id': id, 'chainId': chainId, 'data': tx.serialize().toString('hex')}));
-    };
-
-    this.transactions = websocket;
+        websocket.send(JSON.stringify({'id': id, 'chainId': chainId, 'data': tx.serialize().toString('hex')}));
+      };
+      resolve(websocket);
+    })
+      .then(websocket => {
+        this.transactions = websocket;
+      });
   }
 
   listenForAssertions(assertionAddedCallback) {

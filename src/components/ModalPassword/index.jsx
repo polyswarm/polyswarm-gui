@@ -21,7 +21,7 @@ class ModalPassword extends Component {
 
     this.onChangePassword = this.onChangePassword.bind(this);
     this.onKeySelected = this.onKeySelected.bind(this);
-    this.onFilesSelected = this.onFilesSelected.bind(this);
+    this.onFileSelected = this.onFileSelected.bind(this);
     this.onCloseClick = this.onCloseClick.bind(this);
     this.onKeyPress = this.onKeyPress.bind(this);
     this.onUnlockClick = this.onUnlockClick.bind(this);
@@ -29,7 +29,7 @@ class ModalPassword extends Component {
   }
 
   render() {
-    const { state: { password_error, address, file }, props: { open } } = this;
+    const { state: { password_error, address, file, password }, props: { open } } = this;
     const filename = file ? file.name : 'Select a file.';
     return (
       <div className='ModalPassword'>
@@ -58,7 +58,7 @@ class ModalPassword extends Component {
                         placeholder={strings.address}
                         type='string'/>
                       <FileButton flat
-                        onFilesSelected={onFilesSelected}/>
+                        onFileSelected={this.onFileSelected}/>
                       {file && (
                         <AnimatedInput input_id='address'
                           readonly={address}
@@ -72,12 +72,11 @@ class ModalPassword extends Component {
                         onKeyPress={this.onKeyPress}
                         type='password'/>
                     </form>
-                    <p className='ModalMessage'>{strings.background}</p>
                     <span className='Modal-Button-Bar'>
                       <Button flat
                         disabled={!password || password_error}
                         onClick={this.onUnlockClick}>
-                        {walletList.length > 0 ? strings.unlock : strings.create}
+                        {strings.unlock}
                       </Button>
                       <Button
                         flat
@@ -99,15 +98,17 @@ class ModalPassword extends Component {
   onKeySelected(keyfile, address, password) {
     const { props: { onKeySelected }} = this;
     if (onKeySelected) {
-      onKeySelected(password);
+      onKeySelected(keyfile, address, password);
     }
   }
 
-  onFilesSelected(files) {
+  onFileSelected(files) {
     if (files.length > 0) {
-      const file = file[0];
-      const address = this.parseAddress(file);
-      this.setState({address, file});
+      const file = files[0];
+      this.parseAddress(file)
+        .then(address => {
+          this.setState({address, file});
+        });
     }
   }
 
@@ -135,11 +136,22 @@ class ModalPassword extends Component {
   onUnlockClick() {
     const { state: { password, file, address } } = this;
     if (password && password.length >= 0 && file && address) {
-      this.onKeySelected(keyfile, address, password);
+      this.onKeySelected(file, address, password);
     }
   }
 
   parseAddress(file) {
+    return new Promise((resolve, reject) => {
+      require('fs').readFile(file.path, 'utf8', (err, data) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        const parsed = JSON.parse(data);
+
+        resolve('0x'+parsed.address);
+      });
+    });
     
   }
 }

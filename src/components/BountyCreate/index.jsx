@@ -167,7 +167,7 @@ class BountyCreate extends Component {
   }
   
   createBounty() {
-    const { state: {reward, duration} ,props: { addBounty } } = this;
+    const { state: {reward, duration} ,props: { address, addBounty } } = this;
     const files = this.state.files.slice();
 
     const rewardWei = new BigNumber(reward).times(new BigNumber('1000000000000000000'));
@@ -183,7 +183,7 @@ class BountyCreate extends Component {
       })
         .then(() => http.uploadFiles(files))
         .then(artifact =>
-          http.uploadBounty(rewardWei.toString(), artifact, Number(duration))
+          http.uploadBounty(address, rewardWei.toString(), artifact, Number(duration))
         )
         .then(result => {
           if (addBounty) {
@@ -200,10 +200,7 @@ class BountyCreate extends Component {
           this.setState({ error: errorMessage });
 
           //Update app
-          const { props: { onWalletChange, onError } } = this;
-          if (onWalletChange) {
-            onWalletChange(false);
-          }
+          const { props: { onError } } = this;
           if (onError) {
             onError(errorMessage);
           }

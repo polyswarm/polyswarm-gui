@@ -21,11 +21,11 @@ class Header extends Component {
       image_path = '../public/img/back-arrow.svg';
     }
 
-    const nct = `${wallet.sideNct}${strings.nct}`;
-    const eth = `${wallet.sideEth}${strings.eth}`;
+    const nct = `${wallet.homeNct}${strings.nct}`;
+    const eth = `${wallet.homeEth}${strings.eth}`;
     const together = address + nct + eth;
 
-    const ratio = address.length > 0 && wallet.sideEth.length > 0 && wallet.sideNct.length > 0 ? 120 / together.length : -1;
+    const ratio = address && address.length > 0 && wallet.homeEth.length > 0 && wallet.homeNct.length > 0 ? 120 / together.length : -1;
     const actions = a || [];
 
     return (

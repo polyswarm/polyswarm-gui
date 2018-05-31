@@ -26,9 +26,11 @@ class DropTarget extends Component {
         onDragLeave={this.onDragLeaveHandler}>
         <div>
           <p>{strings.dragAndDrop}</p>
-          <FileButton 
-            multiple
-            onFileSelected={this.onFileSelectedHandler}/>
+          <form>
+            <FileButton 
+              multiple
+              onFileSelected={this.onFileSelectedHandler}/>
+          </form>
         </div>
       </div>
     );

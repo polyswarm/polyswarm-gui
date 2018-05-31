@@ -16,17 +16,15 @@ class FileButton extends Component {
     const labelClass = classNames('LabelButton', {'flat': flat});
     return(
       <React.Fragment>
-        <form>
-          <input id='file'
-            ref={((input)=> this.input = input)}
-            className='hidden'
-            type='file'
-            onChange={this.onFileChanged}
-            multiple={multiple}/>
-          <label 
-            className={labelClass}
-            htmlFor='file'>{strings.selectFile}</label>
-        </form>
+        <input id='file'
+          ref={((input)=> this.input = input)}
+          className='hidden'
+          type='file'
+          onChange={this.onFileChanged}
+          multiple={multiple}/>
+        <label 
+          className={labelClass}
+          htmlFor='file'>{strings.selectFile}</label>
       </React.Fragment>
     );
   }

@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import Uuid from 'uuid/v4';
 import {CSSTransition} from 'react-transition-group';
 import BigNumber from 'bignumber.js';
-import Store from 'electron-store';
 // Bounty imports
 import BountyCreate from '../BountyCreate';
 import BountyInfo from '../BountyInfo';
@@ -22,14 +21,18 @@ import ModalPassword from '../ModalPassword';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.store = new Store();
-    const bounties = this.store.get('bounties', []);
-    const first = this.store.get('first', true);
+    const {bounties, first} = this.preloadLocalStorage();
     this.http = new HttpApp(config.host, config.websocket_host);
+    const wallet = {
+      homeEth: 0,
+      sideEth: 0,
+      homeNct: 0,
+      sideNct: 0,
+    };
     this.cancel = false;
     this.state = {
-      address,
-      wallet: null,
+      address: null,
+      wallet,
       active: -1,
       bounties,
       createBounty: false,
@@ -113,7 +116,6 @@ class App extends Component {
             { createBounty && (
               <BountyCreate
                 {...this.getPropsForChild()}
-                onWalletChange={this.onRequestWalletChange}
                 addBounty={this.onAddBounty}
                 onBountyPosted={this.onBackPressed}/>
             )}
@@ -416,11 +418,35 @@ class App extends Component {
   }
 
   storeBounties(bounties) {
-    this.store.set('bounties', bounties);
+    if (this.hasLocalStorage()) {
+      localStorage.setItem('bounties', JSON.stringify(bounties));
+    }
+  }
+
+  hasLocalStorage() {
+    try {
+      localStorage.setItem('x', 'y');
+      localStorage.removeItem('x');
+      return true;
+    } catch(e) {
+      return false;
+    }
   }
 
   markSeen() {
-    localStorage.setItem('first', true);
+    if (this.hasLocalStorage()) {
+      localStorage.setItem('seen', JSON.stringify(true));
+    }
+  }
+
+  preloadLocalStorage() {
+    if (this.hasLocalStorage) {
+      const bounties = JSON.parse(localStorage.getItem('bounties')) || [];
+      const first = !JSON.parse(localStorage.getItem('seen'));
+      return {bounties, first};
+    } else {
+      return {bounties: [], first: true};
+    }
   }
 }
 export default App;

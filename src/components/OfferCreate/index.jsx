@@ -141,10 +141,7 @@ class OfferCreate extends Component {
           this.setState({ error: errorMessage });
 
           //Update app
-          const { props: { onWalletChange, onError } } = this;
-          if (onWalletChange) {
-            onWalletChange(false);
-          }
+          const { props: { onError } } = this;
           if (onError) {
             onError(errorMessage);
           }

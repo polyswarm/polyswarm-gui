@@ -105,11 +105,7 @@ class Relay extends Component {
   }
   
   onNectarChanged(nectar) {
-    const { state: {selected}, props: {walletList, address}} = this;
-    let wallet = {address: '', homeEth: '0', sideEth: '0', homeNct: '0', sideNct: '0'};
-    if (walletList && address >= 0 && walletList.length > address ) {
-      wallet = walletList[address];
-    }
+    const { state: {selected}, props: {wallet}} = this;
 
     let max = selected == 0 ? wallet.homeNct : wallet.sideNct;
     let error = null;
@@ -176,10 +172,7 @@ class Relay extends Component {
       this.setState({ error: errorMessage });
 
       //Update app
-      const { props: { onWalletChange, onError } } = this;
-      if (onWalletChange) {
-        onWalletChange(false);
-      }
+      const { props: { onError } } = this;
       if (onError) {
         onError(errorMessage);
       }
