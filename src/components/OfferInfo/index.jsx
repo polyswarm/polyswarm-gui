@@ -28,7 +28,7 @@ class OfferInfo extends Component {
 
     // only show actions if signing wallet is same as wallet used to create this
     let headerActions = [];
-    if (address === offer.author) {
+    if (address.toUpperCase() === offer.author.toUpperCase()) {
       headerActions = [
         {title: 'Pay', onClick: this.onPayClick},
         {title: 'Request', onClick: this.onRequestClick},
