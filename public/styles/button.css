@@ -40,6 +40,7 @@
   line-height: 20px;
   margin-top: 0;
   padding: 5px;
+  text-transform: uppercase;
 }
 
 .header-cancel,
@@ -53,6 +54,7 @@
   line-height: 20px;
   margin-top: 0;
   padding: 5px;
+  text-transform: uppercase;
 }
 
 .header:hover,

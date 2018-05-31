@@ -29,7 +29,9 @@ class DropTarget extends Component {
           <form>
             <FileButton 
               multiple
-              onFileSelected={this.onFileSelectedHandler}/>
+              onFileSelected={this.onFileSelectedHandler}>
+              {strings.clickHere}
+            </FileButton>
           </form>
         </div>
       </div>

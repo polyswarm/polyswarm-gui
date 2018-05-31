@@ -30,7 +30,8 @@ class ModalPassword extends Component {
 
   render() {
     const { state: { password_error, address, file, password }, props: { open } } = this;
-    const filename = file ? file.name : 'Select a file.';
+    const filename = file ? file.name : strings.na;
+    let addr = file ? address : strings.na;
     return (
       <div className='ModalPassword'>
         <CSSTransition
@@ -53,18 +54,18 @@ class ModalPassword extends Component {
                       {strings.header}
                     </header>
                     <form>
+                      <FileButton flat
+                        onFileSelected={this.onFileSelected}>
+                        {strings.selectKeystore}
+                      </FileButton>
                       <AnimatedInput input_id='filename'
                         readonly={filename}
+                        placeholder={strings.addressFile}
+                        type='string'/>
+                      <AnimatedInput input_id='address'
+                        readonly={addr}
                         placeholder={strings.address}
                         type='string'/>
-                      <FileButton flat
-                        onFileSelected={this.onFileSelected}/>
-                      {file && (
-                        <AnimatedInput input_id='address'
-                          readonly={address}
-                          placeholder={strings.address}
-                          type='string'/>
-                      )}
                       <AnimatedInput input_id='password'
                         onChange={this.onChangePassword}
                         error={password_error}

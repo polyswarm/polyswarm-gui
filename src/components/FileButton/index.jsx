@@ -12,8 +12,8 @@ class FileButton extends Component {
   }
 
   render() {
-    const {props: {flat, multiple} } = this;
-    const labelClass = classNames('LabelButton', {'flat': flat});
+    const {props: {flat, multiple, children} } = this;
+    const labelClass = classNames({'flat': flat, 'LabelButton': !flat});
     return(
       <React.Fragment>
         <input id='file'
@@ -24,7 +24,7 @@ class FileButton extends Component {
           multiple={multiple}/>
         <label 
           className={labelClass}
-          htmlFor='file'>{strings.selectFile}</label>
+          htmlFor='file'>{children}</label>
       </React.Fragment>
     );
   }
