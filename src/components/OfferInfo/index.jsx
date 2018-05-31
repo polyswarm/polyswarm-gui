@@ -23,18 +23,20 @@ class OfferInfo extends Component {
 
   render() {
     const { props: { offer, addRequest, removeRequest, url, walletList,
-      onBackPressed, requestsInProgress, onError, onWalletChange },
+      onBackPressed, requestsInProgress, onError, onRequestWalletChange, address },
     state: { request, pay } } = this;
-
-    const index = walletList.findIndex((wallet) => wallet.address === offer.author);
 
     const wallet = walletList[index];
     const shortened = [wallet];
-    
-    const headerActions = [
-      {title: 'Pay', onClick: this.onPayClick},
-      {title: 'Request', onClick: this.onRequestClick},
-    ];
+
+    // only show actions if signing wallet is same as wallet used to create this
+    let headerActions = [];
+    if (address === offer.author) {
+      headerActions = [
+        {title: 'Pay', onClick: this.onPayClick},
+        {title: 'Request', onClick: this.onRequestClick},
+      ];
+    }
 
     let last = '0';
     if (offer.messages) {
@@ -54,8 +56,8 @@ class OfferInfo extends Component {
             onBackPressed={this.onBack}
             onError={onError}
             onFilesSent={this.onBack}
-            onWalletChange={onWalletChange}
             addMessage={this.onAddMessage}
+            onRequestWalletChange={onRequestWalletChange}
             url={url}/>
         )}
         {pay && (
@@ -68,7 +70,7 @@ class OfferInfo extends Component {
             requestsInProgress={requestsInProgress}
             onError={onError}
             onBackPressed={this.onBack}
-            onWalletChange={onWalletChange}
+            onRequestWalletChange={onRequestWalletChange}
             url={url}/>
         )}
         {!request && !pay && (
@@ -77,10 +79,10 @@ class OfferInfo extends Component {
               requests={requestsInProgress}
               back={true}
               onBack={onBackPressed}
-              address={wallet.address}
-              nct={wallet.nct}
-              eth={wallet.eth}
-              actions={headerActions}/>
+              address={address}
+              wallet={wallet}
+              actions={headerActions}
+              onRequestWalletChange={onRequestWalletChange}/>
             
             <div className='Offer-Info-Container'>
               <OfferSummary offer={offer}/>
@@ -116,8 +118,9 @@ class OfferInfo extends Component {
 
 OfferInfo.propTypes = {
   offer: PropTypes.object.isRequired,
-  onWalletChange: PropTypes.func,
-  walletList: PropTypes.array,
+  wallet: PropTypes.object,
+  address: PropTypes.string,
+  onRequestWalletChange: PropTypes.func,
   addRequest: PropTypes.func,
   removeRequest: PropTypes.func,
   url: PropTypes.string,

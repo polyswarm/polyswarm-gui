@@ -1,6 +1,7 @@
 // Vendor imports
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 // Component imports
 import strings from './strings';
 
@@ -11,6 +12,8 @@ class FileButton extends Component {
   }
 
   render() {
+    const {props: {flat, multiple} } = this;
+    const labelClass = classNames('LabelButton', {'flat': flat});
     return(
       <React.Fragment>
         <form>
@@ -19,8 +22,10 @@ class FileButton extends Component {
             className='hidden'
             type='file'
             onChange={this.onFileChanged}
-            multiple/>
-          <label htmlFor='file'>{strings.selectFile}</label>
+            multiple={multiple}/>
+          <label 
+            className={labelClass}
+            htmlFor='file'>{strings.selectFile}</label>
         </form>
       </React.Fragment>
     );
@@ -41,5 +46,6 @@ class FileButton extends Component {
 
 FileButton.propTypes = {
   onFileSelected: PropTypes.func,
+  multiple: PropTypes.bool,
 };
 export default FileButton;

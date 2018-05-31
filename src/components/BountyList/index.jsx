@@ -18,13 +18,8 @@ class BountyList extends Component {
   }
 
   render() {
-    const {props: {bounties, requestsInProgress, walletList, address,
-      onCreateBounty, onCreateOffer, onOpenRelay }} = this;
-
-    let wallet = {address: '', eth: '0', nct: '0'};
-    if (walletList && address >= 0 && walletList.length > address ) {
-      wallet = walletList[address];
-    }
+    const {props: {bounties, requestsInProgress, wallet, address,
+      onCreateBounty, onCreateOffer, onOpenRelay, onRequestWalletChange }} = this;
 
     const headerActions = [
       {title: strings.newBounty, onClick: onCreateBounty},
@@ -37,9 +32,9 @@ class BountyList extends Component {
           requests={requestsInProgress}
           back={false}
           actions={headerActions}
-          address={wallet.address}
-          nct={wallet.nct}
-          eth={wallet.eth}/>
+          address={address}
+          wallet={wallet}
+          onRequestWalletChange={onRequestWalletChange}/>
         <div className='BountyList-Content'>
           <ul>
             {bounties && bounties.map((bounty, index) => {
@@ -187,13 +182,14 @@ class BountyList extends Component {
   }
 }
 BountyList.proptypes = {
-  address: PropTypes.number,
+  address: PropTypes.string,
   bounties: PropTypes.array,
   onBountySelected: PropTypes.func,
   onBountyRemoved: PropTypes.func,
   onCreateBounty: PropTypes.func,
   onCreateOffer: PropTypes.func,
   requestsInProgress: PropTypes.array,
-  walletList: PropTypes.array,
+  wallet: PropTypes.object,
+  onRequestWalletChange: PropTypes.func,
 };
 export default BountyList;

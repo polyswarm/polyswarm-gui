@@ -7,7 +7,6 @@ import BigNumber from 'bignumber.js';
 import AnimatedInput from '../AnimatedInput';
 import Button from '../Button';
 import Header from '../Header';
-import ModalPassword from '../ModalPassword';
 // Component imports
 import strings from './strings';
 import HttpOfferPay from './http';
@@ -31,7 +30,6 @@ class OfferPay extends Component {
     this.addPayRequest = this.addPayRequest.bind(this);
     this.removePayRequest = this.removePayRequest.bind(this);
     this.validateFields = this.validateFields.bind(this);
-    this.onWalletChangeHandler = this.onWalletChangeHandler.bind(this);
   }
 
   componentDidMount() {
@@ -41,29 +39,20 @@ class OfferPay extends Component {
 
   render() {
     const { state: { reward, reward_error } } = this;
-    const { props: { offer, url, walletList, addRequest, removeRequest,
-      requestsInProgress, onBackPressed } } = this;
+    const { props: { offer, wallet, address, requestsInProgress, onBackPressed,
+      onRequestWalletChange } } = this;
 
-    const address = walletList.findIndex((wallet) => wallet.address === offer.author);
-    const wallet = walletList[address];
     const title = strings.title + offer.expert;
+    
     return (
       <div className='OfferPay'>
         <Header title={title}
           requests={requestsInProgress}
           back={true}
           onBack={onBackPressed}
-          address={wallet.address}
-          nct={wallet.nct}
-          eth={wallet.eth}/>
-        <ModalPassword
-          ref={modal => (this.modal = modal)}
-          url={url}
-          walletList={walletList}
           address={address}
-          onWalletChange={this.onWalletChangeHandler}
-          addRequest={addRequest}
-          removeRequest={removeRequest}/>
+          wallet={wallet}
+          onRequestWalletChange={onRequestWalletChange}/>
         <div className='OfferPay-Content'>
           <div className='OfferPay-Center'>
             <h2>{strings.instructions}</h2>
@@ -93,25 +82,13 @@ class OfferPay extends Component {
   }
   
   onClickHandler() {
-    this.modal.open();
+    this.payExpert();
   }
   
   onRewardChanged(reward) {
     this.setState({reward: reward}, () => {
       this.validateFields();
     });
-  }
-  
-  onWalletChangeHandler(didUnlock) {
-    const { props: { onWalletChange } } = this;
-    if (onWalletChange) {
-      onWalletChange();
-    }
-    if (didUnlock) {
-      return this.payExpert();
-    } else {
-      return null;
-    }
   }
 
   payExpert() {
@@ -187,10 +164,10 @@ class OfferPay extends Component {
 }
 
 OfferPay.propTypes = {
-  walletList: PropTypes.array,
-  address: PropTypes.number,
+  wallet: PropTypes.object,
+  address: PropTypes.string,
   onError: PropTypes.func,
-  onWalletChange: PropTypes.func,
+  onRequestWalletChange: PropTypes.func,
   addOffer: PropTypes.func,
   addRequest: PropTypes.func,
   removeRequest: PropTypes.func,

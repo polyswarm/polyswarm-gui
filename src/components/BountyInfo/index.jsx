@@ -9,12 +9,8 @@ import Header from '../Header';
 class BountyInfo extends Component {
 
   render() {
-    const { props: { bounty, requestsInProgress, onBackPressed, walletList, address } } = this;
-
-    let wallet = {address: '', eth: '0', nct: '0'};
-    if (walletList && address >= 0 && walletList.length > address ) {
-      wallet = walletList[address];
-    }
+    const { props: { bounty, requestsInProgress, onBackPressed, wallet,
+      address, onRequestWalletChange } } = this;
 
     return (
       <div className='Bounty-Info'>
@@ -22,9 +18,9 @@ class BountyInfo extends Component {
           requests={requestsInProgress}
           back={true}
           onBack={onBackPressed}
-          address={wallet.address}
-          nct={wallet.nct}
-          eth={wallet.eth}/>
+          address={address}
+          wallet={wallet}
+          onRequestWalletChange={onRequestWalletChange}/>
         <div className='Bounty-Info-Container'>
           <BountySummary bounty={bounty} />
           <AssertionList className='Bounty-Info-Assertions'
@@ -38,8 +34,9 @@ class BountyInfo extends Component {
 BountyInfo.propTypes = {
   bounty: PropTypes.object.isRequired,
   onBackPressed: PropTypes.func,
-  walletList: PropTypes.array,
+  onRequestWalletChange: PropTypes.func,
+  wallet: PropTypes.object,
   requestsInProgress: PropTypes.array,
-  address: PropTypes.number,
+  address: PropTypes.string,
 };
 export default BountyInfo;

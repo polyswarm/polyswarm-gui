@@ -14,6 +14,7 @@ const strings = {
   requestUnlockWallet: 'Unlocking Wallet',
   nectar: 'Nectar (NCT)',
   eth: 'Ether (ETH)',
+  mustHavePw: 'Must enter a password',
 };
 
 export default strings;
