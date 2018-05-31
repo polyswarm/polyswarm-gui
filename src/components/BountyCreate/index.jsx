@@ -9,7 +9,6 @@ import AnimatedInput from '../AnimatedInput';
 import DropTarget from '../DropTarget';
 import FileList from '../FileList';
 import Header from '../Header';
-import ModalPassword from '../ModalPassword';
 // Component imports
 import strings from './strings';
 import Http from './http';
@@ -36,7 +35,6 @@ class BountyCreate extends Component {
     this.onNextClick = this.onNextClick.bind(this);
     this.onRewardChanged = this.onRewardChanged.bind(this);
     this.createBounty = this.createBounty.bind(this);
-    this.onWalletChangeHandler = this.onWalletChangeHandler.bind(this);
     this.addCreateBountyRequest = this.addCreateBountyRequest.bind(this);
     this.removeCreateBountyRequest = this.removeCreateBountyRequest.bind(this);
     this.validateFields = this.validateFields.bind(this);
@@ -49,13 +47,7 @@ class BountyCreate extends Component {
 
   render() {
     const { state: { files, reward, reward_error, duration, duration_error, next } } = this;
-    const { props: { url, walletList, addRequest, removeRequest, address, 
-      onBackPressed, requestsInProgress } } = this;
-
-    let wallet = {address: '', eth: '0', nct: '0'};
-    if (walletList && address >= 0 && walletList.length > address ) {
-      wallet = walletList[address];
-    }
+    const { props: { wallet, address, onBackPressed, requestsInProgress } } = this;
 
     return (
       <div className='BountyCreate'>
@@ -63,17 +55,8 @@ class BountyCreate extends Component {
           requests={requestsInProgress}
           back={true}
           onBack={onBackPressed}
-          address={wallet.address}
-          nct={wallet.nct}
-          eth={wallet.eth}/>
-        <ModalPassword
-          ref={modal => (this.modal = modal)}
-          url={url}
-          walletList={walletList}
           address={address}
-          onWalletChange={this.onWalletChangeHandler}
-          addRequest={addRequest}
-          removeRequest={removeRequest}/>
+          wallet={wallet}/>
         <div className='BountyCreate-Content'>
           <div className='BountyCreate-Centered'>
             <div className='BountyCreate-Header'>
@@ -148,7 +131,7 @@ class BountyCreate extends Component {
   }
   
   onClickHandler() {
-    this.modal.open();
+    this.createBounty();
   }
   
   onDurationChanged(duration) {
@@ -181,18 +164,8 @@ class BountyCreate extends Component {
     });
   }
   
-  onWalletChangeHandler(didUnlock) {
-    const { props: { onWalletChange } } = this;
-    if (onWalletChange) {
-      onWalletChange();
-    }
-    if (didUnlock) {
-      this.createBounty();
-    }
-  }
-
   createBounty() {
-    const { state: {reward, duration} ,props: { addBounty } } = this;
+    const { state: {reward, duration} ,props: { address, addBounty } } = this;
     const files = this.state.files.slice();
 
     const rewardWei = new BigNumber(reward).times(new BigNumber('1000000000000000000'));
@@ -208,7 +181,7 @@ class BountyCreate extends Component {
       })
         .then(() => http.uploadFiles(files))
         .then(artifact =>
-          http.uploadBounty(rewardWei.toString(), artifact, Number(duration))
+          http.uploadBounty(address, rewardWei.toString(), artifact, Number(duration))
         )
         .then(result => {
           if (addBounty) {
@@ -225,10 +198,7 @@ class BountyCreate extends Component {
           this.setState({ error: errorMessage });
 
           //Update app
-          const { props: { onWalletChange, onError } } = this;
-          if (onWalletChange) {
-            onWalletChange(false);
-          }
+          const { props: { onError } } = this;
           if (onError) {
             onError(errorMessage);
           }
@@ -276,9 +246,9 @@ class BountyCreate extends Component {
 }
 
 BountyCreate.propTypes = {
-  walletList: PropTypes.array,
-  address: PropTypes.number,
-  onWalletChange: PropTypes.func,
+  wallet: PropTypes.object,
+  address: PropTypes.string,
+  onRequestWalletChange: PropTypes.func,
   onError: PropTypes.func,
   onBackPressed: PropTypes.func,
   addBounty: PropTypes.func,

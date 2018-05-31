@@ -15,17 +15,17 @@ class Header extends Component {
   }
 
   render() {
-    const { props: { title, back, requests, actions: a, address, nct, eth } } = this;
+    const { props: { title, back, requests, actions: a, wallet, address } } = this;
     let image_path = '../public/img/polyswarm-white.svg';
     if (back) {
       image_path = '../public/img/back-arrow.svg';
     }
 
-    const main = `${strings.mainnet}${nct}${strings.nct}${eth}${strings.eth}`;
-    const side = `${strings.sidenet}${nct}${strings.nct}`;
-    const together = address + main + side;
+    const nct = `${wallet.homeNct}${strings.nct}`;
+    const eth = `${wallet.homeEth}${strings.eth}`;
+    const together = address + nct + eth;
 
-    const ratio = address && eth && nct > 0 ? 120 / together.length : -1;
+    const ratio = address && address.length > 0 && wallet.homeEth.length > 0 && wallet.homeNct.length > 0 ? 120 / together.length : -1;
     const actions = a || [];
 
     return (
@@ -70,10 +70,10 @@ class Header extends Component {
                 {address}
               </p>
               <p className='Header-Divided' style={{'fontSize' : `${ratio}vw`}}>
-                {main}
+                {nct}
               </p>
               <p style={{'fontSize' : `${ratio}vw`}}>
-                {side}
+                {eth}
               </p>
             </React.Fragment>
           )}
@@ -108,11 +108,10 @@ Header.propTypes = {
   title: PropTypes.string,
   back: PropTypes.bool,
   actions: PropTypes.array,
-  address: PropTypes.string,
-  nct: PropTypes.string,
-  eth: PropTypes.string,
   onBack: PropTypes.func,
+  onRequestWalletChange: PropTypes.func,
   requests: PropTypes.array,
-
+  wallet: PropTypes.object,
+  address: PropTypes.string,
 };
 export default Header;

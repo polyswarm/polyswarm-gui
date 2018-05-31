@@ -8,7 +8,6 @@ import AnimatedInput from '../AnimatedInput';
 import Button from '../Button';
 import ChainInfo from '../ChainInfo';
 import Header from '../Header';
-import ModalPassword from '../ModalPassword';
 import RelayDropdown from '../RelayDropdown';
 // Component imports
 import strings from  './strings.js';
@@ -39,13 +38,7 @@ class Relay extends Component {
 
   render() {
     const {state: {nectar_error, nectar, selected},
-      props: {address, walletList, url, onBackPressed,
-        requestsInProgress, addRequest, removeRequest } } = this;
-
-    let wallet = {address: '', eth: '0', nct: '0'};
-    if (walletList && address >= 0 && walletList.length > address ) {
-      wallet = walletList[address];
-    }
+      props: {address, wallet, onBackPressed, requestsInProgress } } = this;
 
     let homeAltered ='0';
     let sideAltered ='0';
@@ -54,8 +47,8 @@ class Relay extends Component {
       if (!nectar) {
         nct = 0;
       }
-      homeAltered = new BigNumber(wallet.nct).minus(new BigNumber(`${selected? '-' : ''}${nct}`)).toString();
-      sideAltered = new BigNumber(wallet.nct).plus(new BigNumber(`${selected? '-' : ''}${nct}`)).toString();
+      homeAltered = new BigNumber(wallet.homeNct).minus(new BigNumber(`${selected? '-' : ''}${nct}`)).toString();
+      sideAltered = new BigNumber(wallet.sideNct).plus(new BigNumber(`${selected? '-' : ''}${nct}`)).toString();
     }
     return(
       <div className='Relay'>
@@ -63,25 +56,16 @@ class Relay extends Component {
           requests={requestsInProgress}
           back={true}
           onBack={onBackPressed}
-          address={wallet.address}
-          nct={wallet.nct}
-          eth={wallet.eth}/>
-        <ModalPassword
-          ref={modal => (this.modal = modal)}
-          url={url}
-          walletList={walletList}
           address={address}
-          onWalletChange={this.onWalletChangeHandler}
-          addRequest={addRequest}
-          removeRequest={removeRequest}/>
+          wallet={wallet}/>
         <div className='Relay-Content'>
           <div className='Relay-Centered'>
             <div className='Relay-Chain'>
               <ChainInfo title={strings.before}
                 homeName={strings.main}
-                homeBalance={wallet.nct}
+                homeBalance={wallet.homeNct}
                 sideName={strings.side}
-                sideBalance={wallet.nct} />
+                sideBalance={wallet.sideNct} />
               <ChainInfo title={strings.after}
                 homeName={strings.main}
                 homeBalance={homeAltered}
@@ -110,17 +94,18 @@ class Relay extends Component {
   }
   
   onButtonClick() {
-    this.modal.open();
+    const { state: {selected} } =this;
+    if (selected == 1) {
+      return this.transfer(false);
+    } else {
+      return this.transfer(true);
+    }
   }
   
   onNectarChanged(nectar) {
-    const { state: {selected}, props: {walletList, address}} = this;
-    let wallet = {address: '', eth: '0', nct: '0'};
-    if (walletList && address >= 0 && walletList.length > address ) {
-      wallet = walletList[address];
-    }
+    const { state: {selected}, props: {wallet}} = this;
 
-    let max = selected == 0 ? wallet.nct : wallet.nct;
+    let max = selected == 0 ? wallet.homeNct : wallet.sideNct;
     let error = null;
     if (nectar && nectar.length > 0 && new BigNumber(nectar).comparedTo(new BigNumber(max)) > 0) {
       error = `${strings.tooHigh}${max}`;
@@ -132,21 +117,6 @@ class Relay extends Component {
   
   onSelectionChanged(index) {
     this.setState({selected: index});
-  }
-  
-  onWalletChangeHandler(didUnlock) {
-    const { state: {selected}, props: { onWalletChange } } = this;
-    if (onWalletChange) {
-      onWalletChange();
-    }
-    if (didUnlock) {
-      if (selected == 1) {
-        return this.transfer(false);
-      } else {
-        return this.transfer(true);
-      }
-    }
-    return null;
   }
 
   addRelayRequest(id) {
@@ -200,10 +170,7 @@ class Relay extends Component {
       this.setState({ error: errorMessage });
 
       //Update app
-      const { props: { onWalletChange, onError } } = this;
-      if (onWalletChange) {
-        onWalletChange(false);
-      }
+      const { props: { onError } } = this;
       if (onError) {
         onError(errorMessage);
       }
@@ -213,14 +180,14 @@ class Relay extends Component {
 }
 Relay.proptypes = {
   onTransfer: PropTypes.func,
-  address: PropTypes.number,
-  walletList: PropTypes.array,
+  address: PropTypes.string,
+  wallet: PropTypes.object,
   url: PropTypes.string,
   onBackPressed: PropTypes.func,
   requestsInProgress: PropTypes.array,
   addRequest: PropTypes.func,
   removeRequest: PropTypes.func,
-  onWalletChange: PropTypes.func,
+  onRequestWalletChange: PropTypes.func,
   onError: PropTypes.func
 };
 export default Relay;

@@ -1,9 +1,14 @@
 import multihashes from 'multihashes';
+import web3Utils from 'web3-utils';
 
 class Http {
   constructor(url) {
     this.url = url;
     this.xhr = null;
+  }
+
+  getUrlAccount(account) {
+    return '?account=' + account;
   }
 
   uploadFiles(files) {
@@ -49,8 +54,8 @@ class Http {
       });
   }
 
-  uploadBounty(amount, artifactUri, duration) {
-    const url = this.url + '/bounties';
+  uploadBounty(address, amount, artifactUri, duration) {
+    const url = this.url + '/bounties'+ this.getUrlAccount(address);
     return new Promise((resolve, reject)=> {
       const hash = multihashes.fromB58String(artifactUri);
       try {
@@ -72,15 +77,21 @@ class Http {
           reject('Invalid bounty.');
         }
       }))
-      .then(bounty =>
-        fetch(url, {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          method: 'post',
-          body: bounty
-        })
-      )
+      .then(bounty => {
+        if (web3Utils.isAddress(address)) {
+          return fetch(url, {
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            method: 'post',
+            body: bounty
+          });
+        } else {
+          return new Promise((resolve, reject) => {
+            reject(address+' is not a valid Ethereum address.');
+          });
+        }
+      })
       .then(response => {
         if (response.ok) {
           return response;

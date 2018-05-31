@@ -4,6 +4,7 @@ const strings = {
   nct: ' NCT ',
   sidenet: 'Side: ',
   eth: ' ETH',
+  change: 'Change Wallets',
 };
 
 export default strings;

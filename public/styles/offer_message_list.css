@@ -3,6 +3,8 @@
   color: black;
   overflow: auto;
   padding: 20px;
+  height: auto;
+  overflow-y: auto;
   width: 100%;
 }
 

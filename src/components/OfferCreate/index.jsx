@@ -8,7 +8,6 @@ import web3Utils from 'web3-utils';
 import AnimatedInput from '../AnimatedInput';
 import Button from '../Button';
 import Header from '../Header';
-import ModalPassword from '../ModalPassword';
 // Component imports
 import strings from './strings';
 import HttpOfferCreate from './http';
@@ -32,7 +31,6 @@ class OfferCreate extends Component {
     this.addCreateOfferRequest = this.addCreateOfferRequest.bind(this);
     this.removeCreateOfferRequest = this.removeCreateOfferRequest.bind(this);
     this.validateFields = this.validateFields.bind(this);
-    this.onWalletChangeHandler = this.onWalletChangeHandler.bind(this);
   }
 
   componentDidMount() {
@@ -42,10 +40,7 @@ class OfferCreate extends Component {
 
   render() {
     const { state: { reward, reward_error, duration, duration_error, expert, expert_error } } = this;
-    const { props: { url, walletList, addRequest, removeRequest, address,
-      requestsInProgress, onBackPressed } } = this;
-
-    const wallet = walletList[address] || {address: null, eth: null, nct: null};
+    const { props: {  address, requestsInProgress, onBackPressed } } = this;
 
     return (
       <div className='OfferCreate'>
@@ -53,17 +48,8 @@ class OfferCreate extends Component {
           requests={requestsInProgress}
           back={true}
           onBack={onBackPressed}
-          address={wallet.address}
-          nct={wallet.nct}
-          eth={wallet.eth}/>
-        <ModalPassword
-          ref={modal => (this.modal = modal)}
-          url={url}
-          walletList={walletList}
           address={address}
-          onWalletChange={this.onWalletChangeHandler}
-          addRequest={addRequest}
-          removeRequest={removeRequest}/>
+          wallet={wallet}/>
         <div className='OfferCreate-Content'>
           <div className='Offer-Values'>
             <h2>{strings.title}</h2>
@@ -103,7 +89,7 @@ class OfferCreate extends Component {
   }
   
   onClickHandler() {
-    this.modal.open();
+    this.createOffer();
   }
   
   onDurationChanged(duration) {
@@ -122,16 +108,6 @@ class OfferCreate extends Component {
     this.setState({reward: reward}, () => {
       this.validateFields();
     });
-  }
-  
-  onWalletChangeHandler(didUnlock) {
-    const { props: { onWalletChange } } = this;
-    if (onWalletChange) {
-      onWalletChange();
-    }
-    if (didUnlock) {
-      this.createOffer();
-    }
   }
 
   createOffer() {
@@ -164,10 +140,7 @@ class OfferCreate extends Component {
           this.setState({ error: errorMessage });
 
           //Update app
-          const { props: { onWalletChange, onError } } = this;
-          if (onWalletChange) {
-            onWalletChange(false);
-          }
+          const { props: { onError } } = this;
           if (onError) {
             onError(errorMessage);
           }
@@ -222,13 +195,13 @@ class OfferCreate extends Component {
 }
 
 OfferCreate.propTypes = {
-  walletList: PropTypes.array,
-  address: PropTypes.number,
+  wallet: PropTypes.object,
+  address: PropTypes.string,
   onError: PropTypes.func,
-  onWalletChange: PropTypes.func,
   addOffer: PropTypes.func,
   addRequest: PropTypes.func,
   removeRequest: PropTypes.func,
-  url: PropTypes.string
+  url: PropTypes.string,
+  onRequestWalletChange: PropTypes.func,
 };
 export default OfferCreate;

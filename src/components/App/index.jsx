@@ -16,24 +16,32 @@ import Welcome from '../Welcome';
 import HttpApp from './http';
 import config from '../../config';
 import strings from './strings';
+import ModalPassword from '../ModalPassword';
 
 class App extends Component {
   constructor(props) {
     super(props);
     const {bounties, first} = this.preloadLocalStorage();
     this.http = new HttpApp(config.host, config.websocket_host);
+    const wallet = {
+      homeEth: 0,
+      sideEth: 0,
+      homeNct: 0,
+      sideNct: 0,
+    };
     this.cancel = false;
     this.state = {
-      address: 0,
-      walletList: [],
+      address: null,
+      wallet,
       active: -1,
-      bounties: bounties,
+      bounties,
       createBounty: false,
       createOffer: false,
       relay: false,
-      first: first,
+      first,
       errorMessage: null,
       requestsInProgress: [],
+      modalOpen: true,
     };
 
     this.onAddBounty = this.onAddBounty.bind(this);
@@ -43,15 +51,16 @@ class App extends Component {
     this.onSelectBounty = this.onSelectBounty.bind(this);
     this.onCreateBounty = this.onCreateBounty.bind(this);
     this.onCreateOffer = this.onCreateOffer.bind(this);
-    this.onOpenRelay = this.onOpenRelay.bind(this);
     this.onCloseWelcome = this.onCloseWelcome.bind(this);
+    this.onKeySelected = this.onKeySelected.bind(this);
+    this.onOpenRelay = this.onOpenRelay.bind(this);
     this.onErrorDismissed = this.onErrorDismissed.bind(this);
     this.onPostError = this.onPostError.bind(this);
-    this.onWalletChangeHandler = this.onWalletChangeHandler.bind(this);
+    this.onRequestWalletChange = this.onRequestWalletChange.bind(this);
     this.addRequest = this.addRequest.bind(this);
     this.removeRequest = this.removeRequest.bind(this);
     this.getData = this.getData.bind(this);
-    this.getWallets = this.getWallets.bind(this);
+    this.getWallet = this.getWallet.bind(this);
     this.updateOnAssertion = this.updateOnAssertion.bind(this);
   }
 
@@ -66,11 +75,11 @@ class App extends Component {
 
   componentDidMount() {
     this.getData();
-    this.getWallets();
+    this.getWallet();
     this.timer = setInterval(() => {
-      const {state: {first}} = this;
-      if (!first) {
-        this.getWallets();
+      const {state: { first }} = this;
+      if (!first ) {
+        this.getWallet();
       }
     }, 5000);
   }
@@ -84,9 +93,8 @@ class App extends Component {
   }
 
   render() {
-
     const { state: { active, bounties, createBounty, createOffer, first, 
-      errorMessage, relay } } = this;
+      errorMessage, relay, modalOpen } } = this;
 
     return (
       <div className='App'>
@@ -102,25 +110,23 @@ class App extends Component {
         </CSSTransition>
         {!first && (
           <React.Fragment>
+            <ModalPassword
+              open={modalOpen}
+              onKeySelected={this.onKeySelected}/>
             { createBounty && (
               <BountyCreate
                 {...this.getPropsForChild()}
-                onWalletChange={this.onWalletChangeHandler}
                 addBounty={this.onAddBounty}
                 onBountyPosted={this.onBackPressed}/>
             )}
             { createOffer && (
               <OfferCreate
                 {...this.getPropsForChild()}
-                onWalletChange={this.onWalletChangeHandler}
                 addOffer={this.onAddOffer}
                 onBountyPosted={this.onBackPressed}/>
             )}
             { relay && (
-              <Relay
-                {...this.getPropsForChild()}
-                onWalletChange={this.onWalletChangeHandler}
-              />
+              <Relay {...this.getPropsForChild()}/>
             )}
             { !createBounty && !createOffer && !relay && active < 0 && (
               <BountyList
@@ -136,7 +142,6 @@ class App extends Component {
             { !createOffer && active >=0 && bounties[active].type === 'offer' && (
               <OfferInfo
                 {...this.getPropsForChild()}
-                onWalletChange={this.onWalletChangeHandler}
                 // This will just kickoff a refresh of this offer
                 onAddMessage={this.onAddOffer}
                 offer={bounties[active]}/>
@@ -206,17 +211,26 @@ class App extends Component {
     this.setState({createOffer: true, active: -1});
   }
 
-  onOpenRelay() {
-    this.setState({relay: true, active: -1});
+  onKeySelected(keyfile, address, password) {
+    this.setState({address, modalOpen: false});
+
+    this.http.setAccount(address, keyfile, password)
+      .then(() => this.http.listenForTransactions())
+      .then(() => this.getWallet())
+      .catch(() => {});
   }
 
   onCloseWelcome() {
     this.setState({first: false});
     this.markSeen();
   }
-
+  
   onErrorDismissed() {
     this.setState({errorMessage: null});
+  }
+  
+  onOpenRelay() {
+    this.setState({relay: true, active: -1});
   }
 
   onPostError(message) {
@@ -251,8 +265,8 @@ class App extends Component {
     }
   }
 
-  onWalletChangeHandler() {
-    this.getWallets();
+  onRequestWalletChange() {
+    this.setState({modalOpen: true});
   }
 
   removeRequest(title, id/*, success*/) {
@@ -346,13 +360,13 @@ class App extends Component {
 
   getPropsForChild() {
     const {host: url} = config;
-    const { state: { active, bounties, walletList, requestsInProgress, address } } = this;
+    const { state: { active, bounties, wallet, requestsInProgress, address } } = this;
     return({
       url,
       active,
       address,
       bounties,
-      walletList,
+      wallet,
       requestsInProgress,
       onError: this.onPostError,
       addRequest: this.addRequest,
@@ -361,60 +375,46 @@ class App extends Component {
       onOpenRelay: this.onOpenRelay,
       removeRequest: this.removeRequest,
       onCreateBounty: this.onCreateBounty,
+      onRequestWalletChange: this.onRequestWalletChange
     });
   }
 
-  getWallets() {
+  getWallet() {
     const http = this.http;
-    return http.getWallets()
-      .then(addresses => addresses.map(address => {
-        return({address: address});
-      }))
-      .then(wallets => {
-        const promises = wallets.map((wallet) => {
-          const e = http.getEth(wallet.address)
-            .then(balance =>
-              new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000))
-            )
-            .then((b) => `${b.toNumber()}`);
+    const chains = ['home', 'side'];
+    const eth = chains.map(chain => http.getEth(chain)
+      .then(balance =>
+        new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000))
+      )
+      .then((b) => `${b.toNumber()}`)
+    );
 
-          const n = http.getNct(wallet.address)
-            .then(balance =>
-              new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000))
-            )
-            .then((b) => `${b.toNumber()}`);
+    const nct = chains.map(chain => http.getNct(chain)
+      .then(balance =>
+        new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000))
+      )
+      .then((b) => `${b.toNumber()}`)
+    );
 
-          const promises = [e, n];
-          return Promise.all(promises).then(values => {
-            return({
-              address: wallet.address,
-              eth: values[0],
-              nct: values[1]
-            });
-          });
-        });
-        return Promise.all(promises);
-      })
-      .then((wallets) => new Promise(resolve =>
-        this.setState({walletList: wallets}, resolve)
-      ))
-      .then(() => http.getUnlockedWallet())
-      .then((address) => new Promise((resolve, reject) => {
+    const promises = eth.concat(nct);
+    return Promise.all(promises).then(values => {
+      return({
+        homeEth: values[0],
+        sideEth: values[1],
+        homeNct: values[2],
+        sideNct: values[3]
+      });
+    })
+      .then((wallet) => new Promise((resolve, reject) => {
         if (this.cancel) {
           reject();
         } else {
-          resolve(address);
+          resolve(wallet);
         }
       }))
-      .then(address => {
-        const {state: {walletList}} = this;
-        if (!address) {
-          this.setState({ address: 0 });
-        } else {
-          const index = walletList.findIndex((account => account.address === address));
-          this.setState({ address: index });
-        }
-      })
+      .then((wallet) => new Promise(resolve =>
+        this.setState({wallet: wallet}, resolve)
+      ))
       .catch(() => {});
   }
 
@@ -450,5 +450,4 @@ class App extends Component {
     }
   }
 }
-
 export default App;

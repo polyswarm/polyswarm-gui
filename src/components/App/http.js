@@ -2,6 +2,9 @@ import BigNumber from 'bignumber.js';
 import validator from 'validator';
 import web3Utils from 'web3-utils';
 import multihashes from 'multihashes';
+import EthereumTx from 'ethereumjs-tx';
+import keythereum from 'keythereum';
+import WebSocket from 'isomorphic-ws';
 
 class HttpApp {
   constructor(url, ws) {
@@ -9,32 +12,33 @@ class HttpApp {
     this.ws = ws;
   }
 
-  getUnlockedWallet() {
-    return fetch(this.url+'/accounts/active')
-      .then(response => {
-        if (response.ok) {
-          return response;
+  setAccount(address, keyfile, password) {
+    return new Promise((resolve, reject) => {
+      require('fs').stat(keyfile.path, (err) => {
+        if (err) {
+          reject();
         } else {
-          throw new Error('Unable to access accounts');
+          resolve();
         }
-      })
-      .then(response => response.json())
-      .then(json => json.result)
-      .catch(() => null);
-  }
+      });
+    })
+      .then(() => new Promise((resolve, reject) => {
+        if (!web3Utils.isAddress(address) ) {
+          reject();
+        } else {
+          resolve();
+        }
+      }))
+      .then(() => new Promise((resolve) => {
+        if (this.transactions) {
+          this.transactions.close();
+        }
 
-  getWallets() {
-    return fetch(this.url+'/accounts')
-      .then(response => {
-        if (response.ok) {
-          return response;
-        } else {
-          throw new Error('Unable to access accounts');
-        }
-      })
-      .then(response => response.json())
-      .then(json => json.result)
-      .catch(() => []);
+        this.address = address;
+        this.keyfile = keyfile;
+        this.password = password;
+        resolve();
+      }));
   }
 
   getBounty(bounty) {
@@ -53,7 +57,7 @@ class HttpApp {
           throw Error('Cannot get bounties.');
         }
       })
-      
+
       .then(response => response.json())
       .then(json => json.result)
       .then(bounty => this.getBountyIsActive(bounty))
@@ -170,8 +174,9 @@ class HttpApp {
       });
   }
 
-  getEth(wallet) {
+  getEth(chain) {
     const url = this.url;
+    const wallet = this.address;
     return new Promise((resolve, reject) => {
       if (web3Utils.isAddress(wallet)) {
         resolve(wallet);
@@ -179,7 +184,7 @@ class HttpApp {
         reject(`${wallet} is not an Ethereum address`);
       }
     })
-      .then(address => fetch(url+'/accounts/'+address+'/balance/eth'))
+      .then(address => fetch(url+'/balances/'+address+'/eth?chain='+chain))
       .then(response => {
         if (response.ok) {
           return response;
@@ -191,8 +196,9 @@ class HttpApp {
       .catch(() => 0);
   }
 
-  getNct(wallet) {
+  getNct(chain) {
     const url = this.url;
+    const wallet = this.address;
     return new Promise((resolve, reject) => {
       if (web3Utils.isAddress(wallet)) {
         resolve(wallet);
@@ -200,7 +206,7 @@ class HttpApp {
         reject(`${wallet} is not an Ethereum address`);
       }
     })
-      .then(address => fetch(url+'/accounts/'+address+'/balance/nct'))
+      .then(address => fetch(url+'/balances/'+address+'/nct?chain='+chain))
       .then(response => {
         if (response.ok) {
           return response;
@@ -210,6 +216,39 @@ class HttpApp {
       .then(response => response.json())
       .then(json => json.result+'')
       .catch(() => 0);
+  }
+
+  listenForTransactions() {
+    const ws = this.ws;
+    const keyfile = this.keyfile;
+    const address = this.address;
+    const password = this.password;
+
+    return new Promise((resolve, reject) => {
+      const path = require('path');
+      if (!keyfile || !address || !web3Utils.isAddress(address) || !password) {
+        reject();
+      }
+      // We double up on the dirname to trim keystore, which importfromfile adds
+      const trimmed = path.dirname(path.dirname(keyfile.path));
+      const enc_key = keythereum.importFromFile(address, trimmed);
+      keythereum.recover(password, enc_key, (key) => {
+        const websocket = new WebSocket(ws+'/transactions');
+
+        websocket.onmessage = (msg) => {
+          const {id, data} = JSON.parse(msg.data);
+          const {chainId} = data;
+          const tx = new EthereumTx(data);
+          tx.sign(key);
+
+          websocket.send(JSON.stringify({'id': id, 'chainId': chainId, 'data': tx.serialize().toString('hex')}));
+        };
+        resolve(websocket);
+      });
+    })
+      .then(websocket => {
+        this.transactions = websocket;
+      });
   }
 
   listenForAssertions(assertionAddedCallback) {
@@ -217,7 +256,7 @@ class HttpApp {
     // anytime we get an assertion, check if it matches a guid
     // if it does, add it to the assertions for that object
     const ws = this.ws;
-    const websocket = new WebSocket(ws);
+    const websocket = new WebSocket(ws+'/events/home');
 
     websocket.onmessage = (event) => {
       const message = JSON.parse(event.data);

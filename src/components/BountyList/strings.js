@@ -16,5 +16,6 @@ const strings = {
   newBounty: '+ Bounty',
   newOffer: '+ Offer',
   relay: 'Relay',
+  changeWallet: 'Change Wallet',
 };
 export default strings;
