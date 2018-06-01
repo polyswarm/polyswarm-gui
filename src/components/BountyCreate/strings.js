@@ -8,6 +8,6 @@ const strings = {
   next: 'Next',
   back: 'Previous',
   first: '1. Select Files',
-  last: '2. Set Reward & Duration',
+  last: '2. Set Reward & Duration'
 };
 export default strings;

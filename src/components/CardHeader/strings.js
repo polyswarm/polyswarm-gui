@@ -1,5 +1,5 @@
 const strings = {
   view: 'View',
-  delete: 'Delete',
+  delete: 'Delete'
 };
 export default strings;

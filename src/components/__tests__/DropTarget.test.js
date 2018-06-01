@@ -1,6 +1,6 @@
 import React from 'react';
-import {render, mount} from 'enzyme';
-import {renderToJson} from 'enzyme-to-json';
+import { render, mount } from 'enzyme';
+import { renderToJson } from 'enzyme-to-json';
 import DropTarget from '../DropTarget';
 
 it('renders without crashing', () => {
@@ -11,7 +11,7 @@ it('renders without crashing', () => {
 it('should call onFileSelected when files are dropped', () => {
   // arrange
   const filesSelected = jest.fn();
-  const wrapper = mount(<DropTarget onFilesSelected={filesSelected}/>);
+  const wrapper = mount(<DropTarget onFilesSelected={filesSelected} />);
   const instance = wrapper.instance();
   const preventDefault = jest.fn();
   const clear = jest.fn();
@@ -22,11 +22,11 @@ it('should call onFileSelected when files are dropped', () => {
       items: {
         0: {
           kind: 'file',
-          getAsFile: spyItem,
+          getAsFile: spyItem
         },
         length: 1,
-        clear: clear,
-      },
+        clear: clear
+      }
     }
   };
 
@@ -41,7 +41,7 @@ it('should call onFileSelected when files are dropped', () => {
 it('should upload files from items when present', () => {
   // arrange
   const filesSelected = jest.fn();
-  const wrapper = mount(<DropTarget onFilesSelected={filesSelected}/>);
+  const wrapper = mount(<DropTarget onFilesSelected={filesSelected} />);
   const instance = wrapper.instance();
   const preventDefault = jest.fn();
   const clear = jest.fn();
@@ -55,11 +55,11 @@ it('should upload files from items when present', () => {
       items: {
         0: {
           kind: 'file',
-          getAsFile: spyItem,
+          getAsFile: spyItem
         },
         length: 1,
-        clear: clear,
-      },
+        clear: clear
+      }
     }
   };
 
@@ -78,10 +78,10 @@ it('should upload files from items when present', () => {
   expect(filesSelected.mock.calls).toMatchSnapshot();
 });
 
-it('should upload froms from files when items not present',() => {
+it('should upload froms from files when items not present', () => {
   // arrange
   const filesSelected = jest.fn();
-  const wrapper = mount(<DropTarget onFilesSelected={filesSelected}/>);
+  const wrapper = mount(<DropTarget onFilesSelected={filesSelected} />);
   const instance = wrapper.instance();
   const preventDefault = jest.fn();
   const clearData = jest.fn();
@@ -89,7 +89,7 @@ it('should upload froms from files when items not present',() => {
     preventDefault: preventDefault,
     dataTransfer: {
       clearData: clearData,
-      files: ['file'],
+      files: ['file']
     }
   };
 

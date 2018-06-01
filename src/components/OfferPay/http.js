@@ -12,8 +12,7 @@ class HttpOfferPay {
       } else {
         reject('Invalid GUID');
       }
-    })
-      .then((valid) => new Promise(resolve => resolve()));
+    }).then(valid => new Promise(resolve => resolve()));
   }
 }
 export default HttpOfferPay;

@@ -14,7 +14,7 @@ class HttpApp {
 
   setAccount(address, keyfile, password) {
     return new Promise((resolve, reject) => {
-      require('fs').stat(keyfile.path, (err) => {
+      require('fs').stat(keyfile.path, err => {
         if (err) {
           reject();
         } else {
@@ -22,23 +22,29 @@ class HttpApp {
         }
       });
     })
-      .then(() => new Promise((resolve, reject) => {
-        if (!web3Utils.isAddress(address) ) {
-          reject();
-        } else {
-          resolve();
-        }
-      }))
-      .then(() => new Promise((resolve) => {
-        if (this.transactions) {
-          this.transactions.close();
-        }
+      .then(
+        () =>
+          new Promise((resolve, reject) => {
+            if (!web3Utils.isAddress(address)) {
+              reject();
+            } else {
+              resolve();
+            }
+          })
+      )
+      .then(
+        () =>
+          new Promise(resolve => {
+            if (this.transactions) {
+              this.transactions.close();
+            }
 
-        this.address = address;
-        this.keyfile = keyfile;
-        this.password = password;
-        resolve();
-      }));
+            this.address = address;
+            this.keyfile = keyfile;
+            this.password = password;
+            resolve();
+          })
+      );
   }
 
   getBounty(bounty) {
@@ -49,7 +55,7 @@ class HttpApp {
         reject('Invalid GUID');
       }
     })
-      .then((guid) => fetch(this.url+'/bounties/'+guid))
+      .then(guid => fetch(this.url + '/bounties/' + guid))
       .then(response => {
         if (response.ok) {
           return response;
@@ -62,7 +68,9 @@ class HttpApp {
       .then(json => json.result)
       .then(bounty => this.getBountyIsActive(bounty))
       .then(bounty => {
-        const amount = new BigNumber(bounty.amount).dividedBy(new BigNumber('1000000000000000000')).toNumber();
+        const amount = new BigNumber(bounty.amount)
+          .dividedBy(new BigNumber('1000000000000000000'))
+          .toNumber();
         bounty.amount = amount;
         bounty.type = 'bounty';
         return bounty;
@@ -80,12 +88,12 @@ class HttpApp {
         reject('Invalid GUID');
       }
     })
-      .then(() => new Promise((resolve) => resolve(offer)))
+      .then(() => new Promise(resolve => resolve(offer)))
       .catch(() => null);
   }
 
   getArtifactsForBounty(bounty) {
-    return new Promise((resolve, reject)=> {
+    return new Promise((resolve, reject) => {
       const hash = multihashes.fromB58String(bounty.uri);
       try {
         multihashes.validate(hash);
@@ -94,7 +102,7 @@ class HttpApp {
         reject(error);
       }
     })
-      .then((uri) => fetch(this.url+'/artifacts/'+uri))
+      .then(uri => fetch(this.url + '/artifacts/' + uri))
       .then(response => {
         if (response.ok) {
           return response;
@@ -105,14 +113,14 @@ class HttpApp {
       .then(response => response.json())
       .then(json => json.result)
       .then(files => {
-        return files.map((file) => {
+        return files.map(file => {
           return file.name;
         });
       })
       .then(filesnames => {
-        return filesnames.map((name) => {
+        return filesnames.map(name => {
           const trimmed = name.trim();
-          return {name: trimmed, good: 0, total: 0, assertions: []};
+          return { name: trimmed, good: 0, total: 0, assertions: [] };
         });
       })
       .then(files => {
@@ -129,7 +137,7 @@ class HttpApp {
         reject('Invalid GUID');
       }
     })
-      .then(guid => fetch(this.url+'/bounties/'+guid+'/assertions'))
+      .then(guid => fetch(this.url + '/bounties/' + guid + '/assertions'))
       .then(response => {
         if (response.ok) {
           return response;
@@ -140,13 +148,15 @@ class HttpApp {
       .then(response => response.json())
       .then(json => json.result)
       .then(assertions => {
-        return assertions.map((assertion) => {
-          const bid = new BigNumber(assertion.bid).dividedBy(new BigNumber('1000000000000000000')).toNumber();
+        return assertions.map(assertion => {
+          const bid = new BigNumber(assertion.bid)
+            .dividedBy(new BigNumber('1000000000000000000'))
+            .toNumber();
           return {
             author: assertion.author,
             bid: bid,
             verdicts: assertion.verdicts,
-            metadata: assertion.metadata,
+            metadata: assertion.metadata
           };
         });
       })
@@ -167,7 +177,7 @@ class HttpApp {
       })
       .then(response => response.json())
       .then(json => json.result)
-      .then(bounties => bounties.findIndex(b => b.guid === bounty.guid) >= 0 )
+      .then(bounties => bounties.findIndex(b => b.guid === bounty.guid) >= 0)
       .then(found => {
         bounty.expired = !found;
         return bounty;
@@ -184,7 +194,9 @@ class HttpApp {
         reject(`${wallet} is not an Ethereum address`);
       }
     })
-      .then(address => fetch(url+'/balances/'+address+'/eth?chain='+chain))
+      .then(address =>
+        fetch(url + '/balances/' + address + '/eth?chain=' + chain)
+      )
       .then(response => {
         if (response.ok) {
           return response;
@@ -192,7 +204,7 @@ class HttpApp {
         throw Error('Failed to get balance');
       })
       .then(response => response.json())
-      .then(json => json.result+'')
+      .then(json => json.result + '')
       .catch(() => 0);
   }
 
@@ -206,7 +218,9 @@ class HttpApp {
         reject(`${wallet} is not an Ethereum address`);
       }
     })
-      .then(address => fetch(url+'/balances/'+address+'/nct?chain='+chain))
+      .then(address =>
+        fetch(url + '/balances/' + address + '/nct?chain=' + chain)
+      )
       .then(response => {
         if (response.ok) {
           return response;
@@ -214,7 +228,7 @@ class HttpApp {
         throw Error('Failed to get balance');
       })
       .then(response => response.json())
-      .then(json => json.result+'')
+      .then(json => json.result + '')
       .catch(() => 0);
   }
 
@@ -232,23 +246,28 @@ class HttpApp {
       // We double up on the dirname to trim keystore, which importfromfile adds
       const trimmed = path.dirname(path.dirname(keyfile.path));
       const enc_key = keythereum.importFromFile(address, trimmed);
-      keythereum.recover(password, enc_key, (key) => {
-        const websocket = new WebSocket(ws+'/transactions');
+      keythereum.recover(password, enc_key, key => {
+        const websocket = new WebSocket(ws + '/transactions');
 
-        websocket.onmessage = (msg) => {
-          const {id, data} = JSON.parse(msg.data);
-          const {chainId} = data;
+        websocket.onmessage = msg => {
+          const { id, data } = JSON.parse(msg.data);
+          const { chainId } = data;
           const tx = new EthereumTx(data);
           tx.sign(key);
 
-          websocket.send(JSON.stringify({'id': id, 'chainId': chainId, 'data': tx.serialize().toString('hex')}));
+          websocket.send(
+            JSON.stringify({
+              id: id,
+              chainId: chainId,
+              data: tx.serialize().toString('hex')
+            })
+          );
         };
         resolve(websocket);
       });
-    })
-      .then(websocket => {
-        this.transactions = websocket;
-      });
+    }).then(websocket => {
+      this.transactions = websocket;
+    });
   }
 
   listenForAssertions(assertionAddedCallback) {
@@ -256,20 +275,22 @@ class HttpApp {
     // anytime we get an assertion, check if it matches a guid
     // if it does, add it to the assertions for that object
     const ws = this.ws;
-    const websocket = new WebSocket(ws+'/events/home');
+    const websocket = new WebSocket(ws + '/events/home');
 
-    websocket.onmessage = (event) => {
+    websocket.onmessage = event => {
       const message = JSON.parse(event.data);
 
       if (message.event === 'assertion') {
         const body = message.data;
-        const bid = new BigNumber(body.bid).dividedBy(new BigNumber('1000000000000000000')).toNumber();
+        const bid = new BigNumber(body.bid)
+          .dividedBy(new BigNumber('1000000000000000000'))
+          .toNumber();
         const assertion = {
           guid: body.bounty_guid,
           bid: bid,
           verdicts: body.verdicts,
           metadata: body.metadata,
-          author: body.author,
+          author: body.author
         };
         assertionAddedCallback(assertion);
       }

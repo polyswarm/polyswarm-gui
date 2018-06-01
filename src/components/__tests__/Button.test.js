@@ -1,6 +1,6 @@
 import React from 'react';
-import {render, mount} from 'enzyme';
-import {renderToJson} from 'enzyme-to-json';
+import { render, mount } from 'enzyme';
+import { renderToJson } from 'enzyme-to-json';
 import Button from '../Button';
 
 it('renders without crashing', () => {

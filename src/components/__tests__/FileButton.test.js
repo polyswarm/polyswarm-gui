@@ -1,6 +1,6 @@
 import React from 'react';
-import {render, mount} from 'enzyme';
-import {renderToJson} from 'enzyme-to-json';
+import { render, mount } from 'enzyme';
+import { renderToJson } from 'enzyme-to-json';
 import FileButton from '../FileButton';
 
 it('renders without crashing', () => {
@@ -11,9 +11,7 @@ it('renders without crashing', () => {
 it('calls the provided fileSelected function', () => {
   // arramnge
   const fileSelected = jest.fn();
-  const wrapper = mount(
-    <FileButton onFileSelected={fileSelected}/>
-  );
+  const wrapper = mount(<FileButton onFileSelected={fileSelected} />);
   const instance = wrapper.instance();
   const event = {
     target: {
@@ -30,9 +28,7 @@ it('calls the provided fileSelected function', () => {
 it('clears the input of all files when done', () => {
   // arramnge
   const fileSelected = jest.fn();
-  const wrapper = mount(
-    <FileButton onFileSelected={fileSelected}/>
-  );
+  const wrapper = mount(<FileButton onFileSelected={fileSelected} />);
   const instance = wrapper.instance();
   const event = {
     target: {
@@ -40,7 +36,7 @@ it('clears the input of all files when done', () => {
     }
   };
   instance.input.value = 'fileName';
-  
+
   wrapper.find('input').simulate('change', event);
 
   // assert

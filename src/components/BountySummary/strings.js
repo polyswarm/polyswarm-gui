@@ -10,6 +10,6 @@ const strings = {
   no: 'No',
   safe: 'Safe',
   malicious: 'Malicious',
-  pending: 'Pending…',
+  pending: 'Pending…'
 };
 export default strings;
