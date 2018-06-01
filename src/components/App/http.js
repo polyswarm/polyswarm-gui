@@ -4,7 +4,6 @@ import web3Utils from 'web3-utils';
 import multihashes from 'multihashes';
 import EthereumTx from 'ethereumjs-tx';
 import keythereum from 'keythereum';
-import WebSocket from 'isomorphic-ws';
 
 class HttpApp {
   constructor(url, ws) {

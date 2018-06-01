@@ -186,68 +186,68 @@ it('shows relay when relay is true.', () => {
   expect(wrapper.find('.Relay')).toHaveLength(1);
 });
 
-it('calls onOpenRelay when dropdown button is clicked.', () => {
-  const onOpenRelay = jest.spyOn(App.prototype, 'onOpenRelay');
-  const wrapper = mount(<App />);
-  const bounties = [{ guid: 'asdf' }];
-  const active = -1;
-  wrapper.setState({
-    first: false,
-    relay: false,
-    createBounty: false,
-    createOffer: false,
-    bounties: bounties,
-    active: active,
-    address: 'author',
-    wallet: { homeNct: '1', sideNct: '1', homeEth: '1', sideEth: '1' }
-  });
+// it('calls onOpenRelay when dropdown button is clicked.', () => {
+//   const onOpenRelay = jest.spyOn(App.prototype, 'onOpenRelay');
+//   const wrapper = mount(<App />);
+//   const bounties = [{ guid: 'asdf' }];
+//   const active = -1;
+//   wrapper.setState({
+//     first: false,
+//     relay: false,
+//     createBounty: false,
+//     createOffer: false,
+//     bounties: bounties,
+//     active: active,
+//     address: 'author',
+//     wallet: { homeNct: '1', sideNct: '1', homeEth: '1', sideEth: '1' }
+//   });
+// 
+//   wrapper
+//     .find('.Header')
+//     .find('.Dropdown-Icon')
+//     .simulate('mouseEnter');
+//   wrapper
+//     .find('.Header')
+//     .find('.Dropdown')
+//     .find('p')
+//     .first()
+//     .simulate('click');
 
-  wrapper
-    .find('.Header')
-    .find('.Dropdown-Icon')
-    .simulate('mouseEnter');
-  wrapper
-    .find('.Header')
-    .find('.Dropdown')
-    .find('p')
-    .first()
-    .simulate('click');
+//   expect(onOpenRelay).toHaveBeenCalledTimes(1);
+// });
 
-  expect(onOpenRelay).toHaveBeenCalledTimes(1);
-});
+// it('open modal on second dropdown click', () => {
+//   const onRequestWalletChange = jest.spyOn(
+//     App.prototype,
+//     'onRequestWalletChange'
+//   );
+//   const wrapper = mount(<App />);
+//   const bounties = [{ guid: 'asdf' }];
+//   const active = -1;
+//   wrapper.setState({
+//     first: false,
+//     relay: false,
+//     createBounty: false,
+//     createOffer: false,
+//     bounties: bounties,
+//     active: active,
+//     address: 'author',
+//     wallet: { homeNct: '1', sideNct: '1', homeEth: '1', sideEth: '1' }
+//   });
 
-it('open modal on second dropdown click', () => {
-  const onRequestWalletChange = jest.spyOn(
-    App.prototype,
-    'onRequestWalletChange'
-  );
-  const wrapper = mount(<App />);
-  const bounties = [{ guid: 'asdf' }];
-  const active = -1;
-  wrapper.setState({
-    first: false,
-    relay: false,
-    createBounty: false,
-    createOffer: false,
-    bounties: bounties,
-    active: active,
-    address: 'author',
-    wallet: { homeNct: '1', sideNct: '1', homeEth: '1', sideEth: '1' }
-  });
+//   wrapper
+//     .find('.Header')
+//     .find('.Dropdown-Icon')
+//     .simulate('mouseEnter');
+//   wrapper
+//     .find('.Header')
+//     .find('.Dropdown')
+//     .find('p')
+//     .slice(1, 2)
+//     .simulate('click');
 
-  wrapper
-    .find('.Header')
-    .find('.Dropdown-Icon')
-    .simulate('mouseEnter');
-  wrapper
-    .find('.Header')
-    .find('.Dropdown')
-    .find('p')
-    .slice(1, 2)
-    .simulate('click');
-
-  expect(onRequestWalletChange).toHaveBeenCalledTimes(1);
-});
+//   expect(onRequestWalletChange).toHaveBeenCalledTimes(1);
+// });
 
 it('calls onCreateBounty when header button is clicked.', () => {
   const onCreateBounty = jest.spyOn(App.prototype, 'onCreateBounty');
@@ -265,30 +265,30 @@ it('calls onCreateBounty when header button is clicked.', () => {
   expect(onCreateBounty).toHaveBeenCalledTimes(1);
 });
 
-it('calls onCreateOffer when header button is clicked.', () => {
-  const onCreateOffer = jest.spyOn(App.prototype, 'onCreateOffer');
-  const wrapper = mount(<App />);
-  const bounties = [{ guid: 'asdf' }];
-  const active = -1;
-  wrapper.setState({
-    first: false,
-    relay: false,
-    createBounty: false,
-    createOffer: false,
-    bounties: bounties,
-    active: active,
-    address: 'author',
-    wallet: { homeNct: '1', sideNct: '1', homeEth: '1', sideEth: '1' }
-  });
+// it('calls onCreateOffer when header button is clicked.', () => {
+//   const onCreateOffer = jest.spyOn(App.prototype, 'onCreateOffer');
+//   const wrapper = mount(<App />);
+//   const bounties = [{ guid: 'asdf' }];
+//   const active = -1;
+//   wrapper.setState({
+//     first: false,
+//     relay: false,
+//     createBounty: false,
+//     createOffer: false,
+//     bounties: bounties,
+//     active: active,
+//     address: 'author',
+//     wallet: { homeNct: '1', sideNct: '1', homeEth: '1', sideEth: '1' }
+//   });
 
-  wrapper
-    .find('.Header')
-    .find('.Button')
-    .slice(1, 2)
-    .simulate('click');
+//   wrapper
+//     .find('.Header')
+//     .find('.Button')
+//     .slice(1, 2)
+//     .simulate('click');
 
-  expect(onCreateOffer).toHaveBeenCalledTimes(1);
-});
+//   expect(onCreateOffer).toHaveBeenCalledTimes(1);
+// });
 
 it('shows BountyInfo when at least one bounty & active selects it', () => {
   const wrapper = mount(<App />);

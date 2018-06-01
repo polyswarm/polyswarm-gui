@@ -8,7 +8,7 @@ exports[`renders without crashing 1`] = `
     class="Welcome-Jumbo"
   >
     <h1>
-      Welcome to PolySwarm,
+      Welcome to the PolySwarm Beta,
     </h1>
     <h2>
       The first 
