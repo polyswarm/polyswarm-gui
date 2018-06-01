@@ -21,11 +21,8 @@ const offer = {
   ]
 };
 
-const walletList = [
-  {address:'author', nct: '1', eth: '1'},
-  {address:'demo', nct: '1', eth: '1'},
-  {address:'omed', nct: '1', eth: '1'}
-];
+const wallet = {homeNct: '1', sideNct: '1', homeEth: '1', sideEth: '1'};
+const address = 'author';
 
 const mockUploadFiles = jest.fn().mockImplementation(() => {
   return new Promise(resolve => resolve());
@@ -61,14 +58,16 @@ beforeEach(() => {
 it('renders without crashing', () => {
   const wrapper = render(<OfferRequest 
     offer={offer}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
 
 it('deletes the index 0 when onFileRemoved called', () => {
   const wrapper = shallow(<OfferRequest 
     offer={offer}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   const instance = wrapper.instance();
   const files = [
     {name: 'demo'},
@@ -85,7 +84,8 @@ it('deletes the index 0 when onFileRemoved called', () => {
 it('deletes the file at index when onFileRemoved called', () => {
   const wrapper = shallow(<OfferRequest 
     offer={offer}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   const instance = wrapper.instance();
   const files = [
     {name: 'demo'},
@@ -102,7 +102,8 @@ it('deletes the file at index when onFileRemoved called', () => {
 it('deletes all files when onClearAll is called', () => {
   const wrapper = shallow(<OfferRequest 
     offer={offer}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   const instance = wrapper.instance();
   const files = [
     {name: 'demo'},
@@ -120,7 +121,8 @@ it('deletes all files when onClearAll is called', () => {
 it('doesn\'t delete the file at index when out of bounds', () => {
   const wrapper = shallow(<OfferRequest 
     offer={offer}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   const instance = wrapper.instance();
   const files = [
     {name: 'demo'},
@@ -137,7 +139,8 @@ it('doesn\'t delete the file at index when out of bounds', () => {
 it('doesn\'t delete the file at index when negative', () => {
   const wrapper = shallow(<OfferRequest 
     offer={offer}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   const instance = wrapper.instance();
   const files = [
     {name: 'demo'},
@@ -154,7 +157,8 @@ it('doesn\'t delete the file at index when negative', () => {
 it('doesn\'t throw with an empty file array when onFileRemoved called', () => {
   const wrapper = shallow(<OfferRequest 
     offer={offer}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   const instance = wrapper.instance();
 
   //act
@@ -164,7 +168,8 @@ it('doesn\'t throw with an empty file array when onFileRemoved called', () => {
 it('stores additional files in state.files', () => {
   const wrapper = shallow(<OfferRequest 
     offer={offer}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   const instance = wrapper.instance();
   const files = [
     {name: 'demo'},
@@ -178,22 +183,12 @@ it('stores additional files in state.files', () => {
   expect(instance.state.files).toEqual([{name: 'demo'}, {name: 'omed'}, {name: 'asdf'}]);
 });
 
-it('calls sendMessage if onWalletChangeHandler called with true', () => {
+it('calls sendMessage when button is clicked', () => {
   const sendMessage = jest.spyOn(OfferRequest.prototype, 'sendMessage');
-  const wrapper = shallow(<OfferRequest 
-    offer={offer}
-    walletList={walletList}/>);
-  const instance = wrapper.instance();
-
-  instance.onWalletChangeHandler(true);
-  
-  expect(sendMessage).toHaveBeenCalledTimes(1);
-});
-
-it('opens the modal when the button is clicked', () => {
   const wrapper = mount(<OfferRequest 
     offer={offer}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   const files = [
     {name: 'demo'},
     {name: 'omed'},
@@ -202,13 +197,14 @@ it('opens the modal when the button is clicked', () => {
 
   wrapper.find('.OfferRequest-Button').find('button').simulate('click');
 
-  expect(wrapper.find('.ModalPassword')).toHaveLength(1);
+  expect(sendMessage).toHaveBeenCalledTimes(1);
 });
 
 it('enables the button when at least one file is present', (done) => {
   const wrapper = mount(<OfferRequest 
     offer={offer}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   const files = [
     {name: 'demo'},
     {name: 'omed'},
@@ -227,7 +223,8 @@ it('enables the button when at least one file is present', (done) => {
 it('calls upload files when send message is called', (done) => {
   const wrapper = mount(<OfferRequest 
     offer={offer}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   const instance = wrapper.instance();
   const files = [
     {name: 'demo'},
@@ -249,7 +246,8 @@ it('calls upload files when send message is called', (done) => {
 it('calls send request if upload succeeds', (done) => {
   const wrapper = mount(<OfferRequest 
     offer={offer}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   const instance = wrapper.instance();
   const files = [
     {name: 'demo'},
@@ -272,8 +270,9 @@ it('calls addMessage if sendRequest succeeds', (done) => {
   const addMessage = jest.fn();
   const wrapper = mount(<OfferRequest 
     offer={offer}
+    address={address}
     addMessage={addMessage}
-    walletList={walletList}/>);
+    wallet={wallet}/>);
   const instance = wrapper.instance();
   const files = [
     {name: 'demo'},
@@ -311,8 +310,9 @@ it('calls onError if uploadFiles fails', (done) => {
   const onError = jest.fn();
   const wrapper = mount(<OfferRequest 
     offer={offer}
+    address={address}
     onError={onError}
-    walletList={walletList}/>);
+    wallet={wallet}/>);
   const instance = wrapper.instance();
   const files = [
     {name: 'demo'},
@@ -350,8 +350,9 @@ it('calls onError if sendRequest fails', (done) => {
   const onError = jest.fn();
   const wrapper = mount(<OfferRequest 
     offer={offer}
+    address={address}
     onError={onError}
-    walletList={walletList}/>);
+    wallet={wallet}/>);
   const instance = wrapper.instance();
   const files = [
     {name: 'demo'},
