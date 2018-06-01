@@ -60,6 +60,9 @@ exports[`renders without crashing 1`] = `
             <p>
               Relay
             </p>
+            <p>
+              Change Wallet
+            </p>
           </div>
         </div>
       </div>
@@ -67,7 +70,23 @@ exports[`renders without crashing 1`] = `
     <div
       class="Header-Address"
     >
-      
+      <p
+        class="Header-Divided"
+        style="font-size:7.0588235294117645vw"
+      >
+        author
+      </p>
+      <p
+        class="Header-Divided"
+        style="font-size:7.0588235294117645vw"
+      >
+        1 NCT 
+      </p>
+      <p
+        style="font-size:7.0588235294117645vw"
+      >
+        1 ETH
+      </p>
     </div>
   </header>
   <div
