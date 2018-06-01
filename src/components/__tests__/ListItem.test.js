@@ -1,6 +1,6 @@
 import React from 'react';
-import {render, mount} from 'enzyme';
-import {renderToJson, mountToJson} from 'enzyme-to-json';
+import { render, mount } from 'enzyme';
+import { renderToJson, mountToJson } from 'enzyme-to-json';
 import ListItem from '../ListItem';
 
 it('renders without crashing', () => {
@@ -37,14 +37,22 @@ it('shows remove button when hovered', () => {
 it('adds the active class when active property is true', () => {
   const remove = jest.fn();
   const item = 'asdf';
-  const wrapper = render(<ListItem remove={remove} active>{item}</ListItem>);
+  const wrapper = render(
+    <ListItem remove={remove} active>
+      {item}
+    </ListItem>
+  );
   expect(wrapper.hasClass('active')).toBeTruthy();
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
 
 it('adds the alternate class when active and alternate properties are true', () => {
   const item = 'asdf';
-  const wrapper = render(<ListItem active alternate>{item}</ListItem>);
+  const wrapper = render(
+    <ListItem active alternate>
+      {item}
+    </ListItem>
+  );
   expect(wrapper.hasClass('alternate')).toBeTruthy();
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
@@ -56,9 +64,13 @@ it('adds neither extra class when just alternate property is true', () => {
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
 
-it('shows the badge when alert is set',() => {
+it('shows the badge when alert is set', () => {
   const item = 'asdf';
-  const wrapper = render(<ListItem alert active>{item}</ListItem>);
+  const wrapper = render(
+    <ListItem alert active>
+      {item}
+    </ListItem>
+  );
   expect(wrapper.find('.alert')).toHaveLength(1);
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });

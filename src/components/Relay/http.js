@@ -10,12 +10,12 @@ class HttpRelay {
   }
 
   withdraw(address, amount) {
-    const url = this.url + '/relay/withdrawal'+ this.getUrlAccount(address);
+    const url = this.url + '/relay/withdrawal' + this.getUrlAccount(address);
     return this.transfer(url, address, amount);
   }
 
   deposit(address, amount) {
-    const url = this.url + '//relay/deposit'+ this.getUrlAccount(address);
+    const url = this.url + '//relay/deposit' + this.getUrlAccount(address);
     return this.transfer(url, address, amount);
   }
 
@@ -23,7 +23,7 @@ class HttpRelay {
     return new Promise((resolve, reject) => {
       if (amount) {
         const body = JSON.stringify({
-          amount: amount,
+          amount: amount
         });
         resolve(body);
       } else {
@@ -41,7 +41,7 @@ class HttpRelay {
           });
         } else {
           return new Promise((resolve, reject) => {
-            reject(address+' is not a valid Ethereum address.');
+            reject(address + ' is not a valid Ethereum address.');
           });
         }
       })
@@ -51,10 +51,9 @@ class HttpRelay {
         }
         return new Promise(resolve => {
           resolve(response.json());
-        })
-          .then(json => {
-            throw Error(json.message);
-          });
+        }).then(json => {
+          throw Error(json.message);
+        });
       })
       .then(response => response.json())
       .then(body => body.result);

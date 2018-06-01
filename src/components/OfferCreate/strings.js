@@ -5,7 +5,7 @@ const strings = {
   requestCreateOffer: 'Creating Offer',
   reward: 'Maximum Reward (NCT)',
   duration: 'Duration (Blocks)',
-  expert: 'Expert\'s Ethereum Address',
+  expert: "Expert's Ethereum Address",
   openOffer: 'Open Offer Channel',
   title: 'Enter Expert, max reward and duration.'
 };

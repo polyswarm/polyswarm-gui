@@ -1,12 +1,14 @@
 import { app, BrowserWindow } from 'electron';
-import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
+import installExtension, {
+  REACT_DEVELOPER_TOOLS
+} from 'electron-devtools-installer';
 import { enableLiveReload } from 'electron-compile';
 import { spawn } from 'child_process';
 import ps from 'ps-node';
 import config from './config';
 import path from 'path';
 
-if(require('electron-squirrel-startup')) app.quit();
+if (require('electron-squirrel-startup')) app.quit();
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -23,7 +25,7 @@ const createWindow = async () => {
     show: false,
     width: 1400,
     height: 800,
-    icon: path.resolve(__dirname, '..', 'public', 'favicon.ico'),
+    icon: path.resolve(__dirname, '..', 'public', 'favicon.ico')
   });
 
   // Open the DevTools.
@@ -31,7 +33,7 @@ const createWindow = async () => {
     await installExtension(REACT_DEVELOPER_TOOLS);
   }
 
-  mainWindow.on('close', (e) => {
+  mainWindow.on('close', e => {
     if (pid != null) {
       e.preventDefault();
       if (process.platform === 'win32') {
@@ -70,10 +72,9 @@ const createWindow = async () => {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow();
-  startBackend(process.platform)
-    .then((p) => {
-      pid = p;
-    });
+  startBackend(process.platform).then(p => {
+    pid = p;
+  });
 });
 
 // Quit when all windows are closed.
@@ -95,8 +96,8 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-const startBackend = (platform) => {
-  return new Promise((resolve) => {
+const startBackend = platform => {
+  return new Promise(resolve => {
     const spawnOptions = {
       detached: true,
       cwd: path.resolve(`${__dirname}`, '..', `${config.daemon}/`),
@@ -118,7 +119,7 @@ const startBackend = (platform) => {
     default:
       throw Error(`Application does not support platform ${platform}`);
     }
-    
+
     const daemon = spawn(command, args, spawnOptions);
     resolve(daemon.pid);
   });

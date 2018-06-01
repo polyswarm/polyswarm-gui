@@ -1,4 +1,4 @@
 const strings = {
-  selectFile: 'click here.',
+  selectFile: 'click here.'
 };
 export default strings;
