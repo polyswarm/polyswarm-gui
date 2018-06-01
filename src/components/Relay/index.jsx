@@ -134,7 +134,7 @@ class Relay extends Component {
   }
 
   transfer(isDeposit) {
-    const { state: {nectar, nectar_error} } = this;
+    const { state: {nectar, nectar_error}, props: {address} } = this;
 
     const nectarWei = new BigNumber(nectar).times(new BigNumber('1000000000000000000'));
 
@@ -144,12 +144,11 @@ class Relay extends Component {
       this.addRelayRequest(uuid);
       let promise;
       if (isDeposit) {
-        promise = http.deposit(nectarWei.toString());
+        promise = http.deposit(address, nectarWei.toString());
       } else {
-        promise = http.withdraw(nectarWei.toString());
+        promise = http.withdraw(address, nectarWei.toString());
       }
       return promise
-        .then(result => this.addMessage(result))
         .catch(error => this.handleError(error))
         .then(() => {
           this.removeRelayRequest(uuid);
