@@ -84,7 +84,7 @@ it('enables the Go button when nectar meets length requirements in AnimatedInput
     wallet={wallet}/>);
   wrapper.find('.AnimatedInput').find('input').simulate('change', {target: {value: '1'}});
 
-  expect(wrapper.find('.Button').props().disabled).toBeFalsy();
+  expect(wrapper.find('.Button').props().disabled).toBeTruthy();
 });
 
 it('disables the Go button when nectar length is 0', () => {
@@ -106,7 +106,8 @@ it('calls setstate with the nectar when nectar modified', () => {
 
   wrapper.find('.AnimatedInput').find('input').simulate('change', {target: {value: '1'}});
 
-  expect(setState).toHaveBeenCalledWith({nectar: '1', nectar_error: null});
+  expect(setState).toHaveBeenCalledWith({nectar: '1',
+    nectar_error: 'This feature is disabled until the PolySwarm Sidechain goes live very soon.'});
 });
 
 it('calls setstate with the nectar & error true when nectar is 0 or lower', () => {
@@ -118,7 +119,9 @@ it('calls setstate with the nectar & error true when nectar is 0 or lower', () =
   setState.mockClear();
   wrapper.find('.AnimatedInput').find('input').simulate('change', {target: {value: '0'}});
 
-  expect(setState).toHaveBeenCalledWith({nectar: '0', nectar_error: 'Must enter a value above 0'});
+  expect(setState).toHaveBeenCalledWith({nectar: '0',
+    nectar_error: 'This feature is disabled until the PolySwarm Sidechain goes live very soon.'
+  });
 });
 
 it('calls setState with error when nectar is greater than the main chain balance on withdrawal', () => {
@@ -132,7 +135,7 @@ it('calls setState with error when nectar is greater than the main chain balance
   wrapper.find('.AnimatedInput').find('input').simulate('change', {target: {value: '1.1'}});
 
   expect(setState).toHaveBeenCalledWith({nectar: '1.1',
-    nectar_error: 'Must enter a value below the source chain\'s balance: 1'});
+    nectar_error: 'This feature is disabled until the PolySwarm Sidechain goes live very soon.'});
 });
 
 it('calls setState with error when nectar is greater than the main chain balance on deposit', () => {
@@ -145,21 +148,10 @@ it('calls setState with error when nectar is greater than the main chain balance
   wrapper.find('.AnimatedInput').find('input').simulate('change', {target: {value: '1.1'}});
 
   expect(setState).toHaveBeenCalledWith({nectar: '1.1',
-    nectar_error: 'Must enter a value below the source chain\'s balance: 1'});
+    nectar_error: 'This feature is disabled until the PolySwarm Sidechain goes live very soon.'});
 });
 
-it('opens the modal when button is clicked', () => {
-  
-  const wrapper = mount(<Relay
-    address={address}
-    wallet={wallet}/>);
-  wrapper.find('.AnimatedInput').find('input').simulate('change', {target: {value: '1'}});
-  wrapper.find('.Button').simulate('click');
-
-  expect(wrapper.find('.ModalPassword')).toHaveLength(1);
-});
-
-it('calls transfer when onWalletChange handler is called and didUnlock is true', () => {
+it('calls transfer when button is clicked', () => {
   const transfer = jest.spyOn(Relay.prototype, 'transfer');
   
   const wrapper = mount(<Relay
@@ -168,7 +160,7 @@ it('calls transfer when onWalletChange handler is called and didUnlock is true',
   wrapper.setState({nectar: '1'});
   wrapper.find('.Button').simulate('click');
 
-  expect(transfer).toHaveBeenCalledTimes(1);
+  expect(transfer).toHaveBeenCalledTimes(0);
 });
 
 it('calls http.deposit when deposit selected', () => {
@@ -180,7 +172,7 @@ it('calls http.deposit when deposit selected', () => {
 
   wrapper.find('.Button').simulate('click');
 
-  expect(mockDeposit).toHaveBeenCalledTimes(1);
+  expect(mockDeposit).toHaveBeenCalledTimes(0);
 });
 
 it('calls http.withdraw when withdraw selected', () => {
@@ -192,7 +184,7 @@ it('calls http.withdraw when withdraw selected', () => {
 
   wrapper.find('.Button').simulate('click');
 
-  expect(mockWithdraw).toHaveBeenCalledTimes(1);
+  expect(mockWithdraw).toHaveBeenCalledTimes(0);
 });
 
 it('calls onError if deposit fails', (done) => {
@@ -221,7 +213,7 @@ it('calls onError if deposit fails', (done) => {
   instance.transfer(true)
     .then(() => {
       try {
-        expect(onError).toHaveBeenCalledTimes(1);
+        expect(onError).toHaveBeenCalledTimes(0);
         done();
       } catch (error) {
         done.fail(error);
@@ -255,7 +247,7 @@ it('calls onError if withdrawal fails', (done) => {
   instance.transfer(true)
     .then(() => {
       try {
-        expect(onError).toHaveBeenCalledTimes(1);
+        expect(onError).toHaveBeenCalledTimes(0);
         done();
       } catch (error) {
         done.fail(error);
