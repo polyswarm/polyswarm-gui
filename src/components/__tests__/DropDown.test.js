@@ -10,9 +10,9 @@ it('renders without crashing', () => {
 
 it('shows children when hovered', () => {
   const wrapper = mount(
-  <Dropdown>
-    <p>Child</p>
-  </Dropdown>
+    <Dropdown>
+      <p>Child</p>
+    </Dropdown>
   );
 
   wrapper.simulate('mouseEnter');

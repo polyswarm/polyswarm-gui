@@ -24,7 +24,6 @@ it('Changes selected value when an option is clicked', () => {
   wrapper.find('.RelayDropdown-Choices').find('p').last().simulate('click');
   
   expect(wrapper.find('p').first().text()).toEqual('Withdraw');
-
 });
 
 it('Calls setState when a row is clicked', () => {
@@ -33,7 +32,6 @@ it('Calls setState when a row is clicked', () => {
 
   wrapper.simulate('mouseEnter');
   wrapper.find('.RelayDropdown-Choices').find('p').last().simulate('click');
-
 
   expect(setState).toHaveBeenCalledWith({selected: 1});
 });
@@ -45,7 +43,6 @@ it('Calls onSelectionChanged when a row is clicked', () => {
   wrapper.simulate('mouseEnter');
   wrapper.find('.RelayDropdown-Choices').find('p').last().simulate('click');
 
-
   expect(onSelectionChanged).toHaveBeenCalledWith(1);
 });
 
@@ -55,7 +52,6 @@ it('Does not call onSelectionChanged when the already selected row is clicked', 
 
   wrapper.simulate('mouseEnter');
   wrapper.find('.RelayDropdown-Choices').find('p').first().simulate('click');
-
 
   expect(onSelectionChanged).toHaveBeenCalledTimes(0);
 });

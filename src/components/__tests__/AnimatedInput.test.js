@@ -43,7 +43,7 @@ it('calls setState when value changed', () => {
 it('adds error class when error is set in props', () => {
   const wrapper = shallow(<AnimatedInput error='error'/>);
   
-expect(wrapper.find('.AnimatedInput-Error')).toHaveLength(1);
+  expect(wrapper.find('.AnimatedInput-Error')).toHaveLength(1);
 });
 
 it('shows the error test that is set', () => {
@@ -61,5 +61,5 @@ it('sets the type when put in prop', () => {
 it('sets the id on the input with type_id', () => {
   const wrapper = mount(<AnimatedInput input_id='i'/>);
 
-  expect(wrapper.find('input').props().id).toEqual('i')
+  expect(wrapper.find('input').props().id).toEqual('i');
 });

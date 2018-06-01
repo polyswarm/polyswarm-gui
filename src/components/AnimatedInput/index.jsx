@@ -42,7 +42,7 @@ class AnimatedInput extends Component {
       'AnimatedInput-Error': error,
       'AnimatedInput-Readonly': readonly
     });
-    return (
+    return(
       <div className='AnimatedInput'>
         <CSSTransition
           in={(!first && value != null && typeof value != 'undefined' && `${value}`.length > 0) || focused}

@@ -12,7 +12,7 @@ it('renders without crashing', () => {
   };
   const artifacts = [
     {name: 'evil_file'},
-  ]
+  ];
   const wrapper = render(<AssertionRow assertion={assertion} artifacts={artifacts}/>);
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
@@ -25,7 +25,7 @@ it('sets card title to author: address', () => {
   };
   const artifacts = [
     {name: 'evil_file'},
-  ]
+  ];
   const wrapper = render(<AssertionRow assertion={assertion} artifacts={artifacts}/>);
 
   expect(wrapper.find('.CardHeader').text()).toEqual('Author: asdf');
@@ -40,7 +40,7 @@ it('sets the subheader to be the bid in NCT', () => {
   };
   const artifacts = [
     {name: 'evil_file'},
-  ]
+  ];
   const wrapper = render(<AssertionRow assertion={assertion} artifacts={artifacts}/>);
 
   expect(wrapper.find('.CardHeader').find('p').text()).toEqual('10 Nectar (NCT)');
@@ -55,7 +55,7 @@ it('puts the metadata as a statrow', () => {
   };
   const artifacts = [
     {name: 'evil_file'},
-  ]
+  ];
   const wrapper = render(<AssertionRow assertion={assertion} artifacts={artifacts}/>);
 
   expect(wrapper.find('.StatRow').first().find('p').last().text()).toEqual('Some virus');
@@ -71,7 +71,7 @@ it('displays each file with it\'s verdict as a statrow', () => {
   const artifacts = [
     {name: 'evil_file'},
     {name: 'good_file'},
-  ]
+  ];
   const wrapper = mount(<AssertionRow assertion={assertion} artifacts={artifacts}/>);
 
   expect(wrapper.find('.StatTitle').at(1).text()).toEqual('evil_file');
@@ -90,7 +90,7 @@ it('assigns Assertion-Malignant when there is only one malicious verdict', () =>
   const artifacts = [
     {name: 'evil_file'},
     {name: 'good_file'},
-  ]
+  ];
   const wrapper = render(<AssertionRow assertion={assertion} artifacts={artifacts}/>);
 
   expect(wrapper.find('.CardHeader').hasClass('Assertion-Malignant')).toBeTruthy();
@@ -107,7 +107,7 @@ it('assigns Assertion-Benign when no malicious verdict', () => {
   const artifacts = [
     {name: 'evil_file'},
     {name: 'good_file'},
-  ]
+  ];
   const wrapper = render(<AssertionRow assertion={assertion} artifacts={artifacts}/>);
 
   expect(wrapper.find('.CardHeader').hasClass('Assertion-Malignant')).toBeFalsy();
