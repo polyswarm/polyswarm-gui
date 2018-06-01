@@ -121,9 +121,9 @@ class ModalPassword extends Component {
   }
 
   onCloseClick() {
-    const { state: { unlocking } } = this;
-    if (!unlocking) {
-      this.close();
+    const { props: { onModalRequestClose } } = this;
+    if (onModalRequestClose) {
+      onModalRequestClose();
     }
   }
 
@@ -160,5 +160,6 @@ class ModalPassword extends Component {
 ModalPassword.proptypes = {
   open: PropTypes.bool,
   onKeySelected: PropTypes.func,
+  onModalRequestClose: PropTypes.func,
 };
 export default ModalPassword;
