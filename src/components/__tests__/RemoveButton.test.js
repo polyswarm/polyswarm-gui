@@ -1,6 +1,6 @@
 import React from 'react';
-import {render, mount} from 'enzyme';
-import {renderToJson} from 'enzyme-to-json';
+import { render, mount } from 'enzyme';
+import { renderToJson } from 'enzyme-to-json';
 import RemoveButton from '../RemoveButton';
 
 it('renders without crashing', () => {

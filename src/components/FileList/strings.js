@@ -1,5 +1,5 @@
 const strings = {
   title: 'Files',
-  clearAll: 'Clear',
+  clearAll: 'Clear'
 };
 export default strings;

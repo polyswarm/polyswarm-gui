@@ -1,6 +1,6 @@
 import React from 'react';
-import {render, mount} from 'enzyme';
-import {renderToJson} from 'enzyme-to-json';
+import { render, mount } from 'enzyme';
+import { renderToJson } from 'enzyme-to-json';
 import Welcome from '../Welcome';
 import App from '../App';
 
@@ -11,7 +11,7 @@ it('renders without crashing', () => {
 
 it('should call onClick when button is clicked', () => {
   const onClick = jest.fn();
-  const wrapper = mount(<Welcome onClick={onClick}/>);
+  const wrapper = mount(<Welcome onClick={onClick} />);
 
   wrapper.find('button').simulate('click');
 
@@ -20,11 +20,14 @@ it('should call onClick when button is clicked', () => {
 
 it('should close when button is clicked', () => {
   const wrapper = mount(<App />);
-  wrapper.setState({first: true});
+  wrapper.setState({ first: true });
 
   expect(wrapper.find('.Welcome')).toHaveLength(1);
 
-  wrapper.find('.Welcome').find('button').simulate('click');
+  wrapper
+    .find('.Welcome')
+    .find('button')
+    .simulate('click');
 
   expect(wrapper.find('.Welcome')).toHaveLength(0);
 });

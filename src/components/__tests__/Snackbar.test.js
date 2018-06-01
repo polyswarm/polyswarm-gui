@@ -1,6 +1,6 @@
 import React from 'react';
-import {render, mount} from 'enzyme';
-import {renderToJson} from 'enzyme-to-json';
+import { render, mount } from 'enzyme';
+import { renderToJson } from 'enzyme-to-json';
 import Snackbar from '../Snackbar';
 
 it('renders without crashing', () => {
@@ -10,7 +10,7 @@ it('renders without crashing', () => {
 
 it('shows the text given as the message property', () => {
   const message = 'Show this error?';
-  const wrapper = mount(<Snackbar message={message}/>);
+  const wrapper = mount(<Snackbar message={message} />);
 
   expect(wrapper.find('p').text()).toEqual('Show this error?');
 });
@@ -18,7 +18,7 @@ it('shows the text given as the message property', () => {
 it('calls hide when button is clicked', () => {
   const hide = jest.spyOn(Snackbar.prototype, 'hide');
   const message = 'Show this error?';
-  const wrapper = mount(<Snackbar message={message}/>);
+  const wrapper = mount(<Snackbar message={message} />);
 
   wrapper.find('button').simulate('click');
 
@@ -28,8 +28,8 @@ it('calls hide when button is clicked', () => {
 it('calls onDismiss when dismiss is clicked', () => {
   const onDismiss = jest.fn();
   const message = 'Show this error?';
-  const wrapper = mount(<Snackbar message={message} onDismiss={onDismiss}/>);
-  
+  const wrapper = mount(<Snackbar message={message} onDismiss={onDismiss} />);
+
   const instance = wrapper.find('CSSTransition').instance();
   instance.onExited();
 

@@ -55,8 +55,8 @@ class Http {
   }
 
   uploadBounty(address, amount, artifactUri, duration) {
-    const url = this.url + '/bounties'+ this.getUrlAccount(address);
-    return new Promise((resolve, reject)=> {
+    const url = this.url + '/bounties' + this.getUrlAccount(address);
+    return new Promise((resolve, reject) => {
       const hash = multihashes.fromB58String(artifactUri);
       try {
         multihashes.validate(hash);
@@ -65,18 +65,21 @@ class Http {
         reject(error);
       }
     })
-      .then((uri) => new Promise((resolve, reject) => {
-        if (amount && duration ) {
-          const bounty = JSON.stringify({
-            amount: amount,
-            duration: duration,
-            uri: uri
-          });
-          resolve(bounty);
-        } else {
-          reject('Invalid bounty.');
-        }
-      }))
+      .then(
+        uri =>
+          new Promise((resolve, reject) => {
+            if (amount && duration) {
+              const bounty = JSON.stringify({
+                amount: amount,
+                duration: duration,
+                uri: uri
+              });
+              resolve(bounty);
+            } else {
+              reject('Invalid bounty.');
+            }
+          })
+      )
       .then(bounty => {
         if (web3Utils.isAddress(address)) {
           return fetch(url, {
@@ -88,7 +91,7 @@ class Http {
           });
         } else {
           return new Promise((resolve, reject) => {
-            reject(address+' is not a valid Ethereum address.');
+            reject(address + ' is not a valid Ethereum address.');
           });
         }
       })
@@ -98,10 +101,9 @@ class Http {
         }
         return new Promise(resolve => {
           resolve(response.json());
-        })
-          .then(json => {
-            throw Error(json.message);
-          });
+        }).then(json => {
+          throw Error(json.message);
+        });
       })
       .then(response => response.json())
       .then(body => body.result);

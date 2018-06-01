@@ -8,7 +8,7 @@
     "plugin:react-perf/recommended"
   ],
   "rules": {
-    "quotes": [2, "single"],
+    "quotes": [2, "single", {"avoidEscape": true, "allowTemplateLiterals": true}],
     "strict": [2, "never"],
     "indent": ["error", 2],
     "semi": [2, "always"],
@@ -16,7 +16,7 @@
     "react/jsx-uses-react": 2,
     "react/jsx-uses-vars": 2,
     "react/react-in-jsx-scope": 2,
-    "comma-dangle": ["off"],
+    "comma-dangle": [1],
     "no-alert": "error",
     "jsx-quotes": ["error", "prefer-single"],
     "no-console": ["error", {
@@ -25,10 +25,10 @@
     "no-unused-vars": ["error", {
       "vars": "local",
       "args": "after-used",
-      "ignoreRestSiblings": false,
-    }],
+      "ignoreRestSiblings": false
+    }]
   },
   "plugins": [
     "react"
-  ],
+  ]
 }

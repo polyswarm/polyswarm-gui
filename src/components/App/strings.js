@@ -4,7 +4,7 @@ const strings = {
   requestAllData: 'Refreshing',
   requestWallets: 'Updating Wallets',
   requestGetBounty: 'Getting Bounty',
-  requestGetOffer: 'Getting Offer',
+  requestGetOffer: 'Getting Offer'
 };
 
 export default strings;

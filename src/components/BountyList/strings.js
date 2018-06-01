@@ -1,5 +1,5 @@
 const strings = {
-  empty: 'You haven\'t posted any bounties. Click \'+ BOUNTY\' to post one.',
+  empty: "You haven't posted any bounties. Click '+ BOUNTY' to post one.",
   view: 'View',
   delete: 'Delete',
   resolved: ' (CLOSED)',
@@ -16,6 +16,6 @@ const strings = {
   newBounty: '+ Bounty',
   newOffer: '+ Offer',
   relay: 'Relay',
-  changeWallet: 'Change Wallet',
+  changeWallet: 'Change Wallet'
 };
 export default strings;

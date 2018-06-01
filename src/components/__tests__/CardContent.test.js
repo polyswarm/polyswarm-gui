@@ -1,6 +1,6 @@
 import React from 'react';
-import {render, mount} from 'enzyme';
-import {renderToJson} from 'enzyme-to-json';
+import { render, mount } from 'enzyme';
+import { renderToJson } from 'enzyme-to-json';
 import CardContent from '../CardContent';
 
 it('renders without crashing', () => {
@@ -31,4 +31,3 @@ it('shows multiple children when passed', () => {
   expect(wrapper.find('p')).toHaveLength(2);
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
-

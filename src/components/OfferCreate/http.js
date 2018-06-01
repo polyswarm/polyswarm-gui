@@ -12,10 +12,12 @@ class HttpOfferCreate {
       } else {
         reject(`${wallet} is not an ethereum address`);
       }
-    })
-      .then(() => new Promise((resolve) => {
-        resolve(true);
-      }));
+    }).then(
+      () =>
+        new Promise(resolve => {
+          resolve(true);
+        })
+    );
   }
 }
 export default HttpOfferCreate;

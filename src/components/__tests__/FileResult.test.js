@@ -1,6 +1,6 @@
 import React from 'react';
-import {render, mount} from 'enzyme';
-import {renderToJson, mountToJson} from 'enzyme-to-json';
+import { render, mount } from 'enzyme';
+import { renderToJson, mountToJson } from 'enzyme-to-json';
 import FileResult from '../FileResult';
 
 it('renders without crashing', () => {
@@ -37,7 +37,7 @@ it('returns null when given 1 over 0', () => {
   expect(FileResult.computeIndicator(1, 0)).toEqual(null);
 });
 
-it('doesnt show any Indicator if good isn\'t used', () => {
+it("doesnt show any Indicator if good isn't used", () => {
   const wrapper = mount(<FileResult total={100}>asdf</FileResult>);
 
   expect(wrapper.find('.FileResult-Indicator-Good')).toHaveLength(0);
@@ -46,7 +46,7 @@ it('doesnt show any Indicator if good isn\'t used', () => {
   expect(mountToJson(wrapper)).toMatchSnapshot();
 });
 
-it('doesnt show any Indicator if total isn\'t used', () => {
+it("doesnt show any Indicator if total isn't used", () => {
   const wrapper = mount(<FileResult good={100}>asdf</FileResult>);
 
   expect(wrapper.find('.FileResult-Indicator-Good')).toHaveLength(0);
@@ -56,7 +56,11 @@ it('doesnt show any Indicator if total isn\'t used', () => {
 });
 
 it('doesnt show any Indicator if good is null', () => {
-  const wrapper = mount(<FileResult good={null} total={100}>asdf</FileResult>);
+  const wrapper = mount(
+    <FileResult good={null} total={100}>
+      asdf
+    </FileResult>
+  );
 
   expect(wrapper.find('.FileResult-Indicator-Good')).toHaveLength(0);
   expect(wrapper.find('.FileResult-Indicator-Warning')).toHaveLength(0);
@@ -65,7 +69,11 @@ it('doesnt show any Indicator if good is null', () => {
 });
 
 it('doesnt show any Indicator if total is null', () => {
-  const wrapper = mount(<FileResult good={10} total={null}>asdf</FileResult>);
+  const wrapper = mount(
+    <FileResult good={10} total={null}>
+      asdf
+    </FileResult>
+  );
 
   expect(wrapper.find('.FileResult-Indicator-Good')).toHaveLength(0);
   expect(wrapper.find('.FileResult-Indicator-Warning')).toHaveLength(0);
@@ -74,7 +82,11 @@ it('doesnt show any Indicator if total is null', () => {
 });
 
 it('shows good when ratio > 70%', () => {
-  const wrapper = mount(<FileResult good={70} total={100}>asdf</FileResult>);
+  const wrapper = mount(
+    <FileResult good={70} total={100}>
+      asdf
+    </FileResult>
+  );
 
   expect(wrapper.find('.FileResult-Indicator-Good')).toHaveLength(1);
   expect(wrapper.find('.FileResult-Indicator-Good').text()).toEqual('70 / 100');
@@ -82,23 +94,39 @@ it('shows good when ratio > 70%', () => {
 });
 
 it('shows warning when ratio at 69%', () => {
-  const wrapper = mount(<FileResult good={69} total={100}>asdf</FileResult>);
+  const wrapper = mount(
+    <FileResult good={69} total={100}>
+      asdf
+    </FileResult>
+  );
 
   expect(wrapper.find('.FileResult-Indicator-Warning')).toHaveLength(1);
-  expect(wrapper.find('.FileResult-Indicator-Warning').text()).toEqual('69 / 100');
+  expect(wrapper.find('.FileResult-Indicator-Warning').text()).toEqual(
+    '69 / 100'
+  );
   expect(mountToJson(wrapper)).toMatchSnapshot();
 });
 
 it('shows warning when ratio at 50%', () => {
-  const wrapper = mount(<FileResult good={50} total={100}>asdf</FileResult>);
+  const wrapper = mount(
+    <FileResult good={50} total={100}>
+      asdf
+    </FileResult>
+  );
 
   expect(wrapper.find('.FileResult-Indicator-Warning')).toHaveLength(1);
-  expect(wrapper.find('.FileResult-Indicator-Warning').text()).toEqual('50 / 100');
+  expect(wrapper.find('.FileResult-Indicator-Warning').text()).toEqual(
+    '50 / 100'
+  );
   expect(mountToJson(wrapper)).toMatchSnapshot();
 });
 
 it('shows bad when ratio at 49%', () => {
-  const wrapper = mount(<FileResult good={49} total={100}>asdf</FileResult>);
+  const wrapper = mount(
+    <FileResult good={49} total={100}>
+      asdf
+    </FileResult>
+  );
 
   expect(wrapper.find('.FileResult-Indicator-Bad')).toHaveLength(1);
   expect(wrapper.find('.FileResult-Indicator-Bad').text()).toEqual('49 / 100');
@@ -106,7 +134,11 @@ it('shows bad when ratio at 49%', () => {
 });
 
 it('shows bad when ratio is 0%', () => {
-  const wrapper = mount(<FileResult good={0} total={100}>asdf</FileResult>);
+  const wrapper = mount(
+    <FileResult good={0} total={100}>
+      asdf
+    </FileResult>
+  );
 
   expect(wrapper.find('.FileResult-Indicator-Bad')).toHaveLength(1);
   expect(wrapper.find('.FileResult-Indicator-Bad').text()).toEqual('0 / 100');

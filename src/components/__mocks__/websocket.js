@@ -13,7 +13,7 @@ class WebSocket {
             Author: 'asdf',
             Bid: 50,
             Metadata: 'Nothing to see here',
-            verdicts: [false, false],
+            verdicts: [false, false]
           }
         };
         onmessage(assertion);
