@@ -14,6 +14,17 @@ You can continue to use the same wallet on both chains. You can transfer, post b
 
 On first launch, you will be greeted with a welcome screen. Click the 'Get Started' button to find the main screen. The Welcome screen is only displayed once.
 
+# Select a key
+
+<img style='width: 100%;' src='./docs/img/modal.png'>
+
+Past the welcome screen the application wants you to select an Etherum private key file & unlock it. The application listens for requests from polyswarmd, signs them and pushes them on to
+the chain. 
+
+To choose a key, click the button labeled *Click here to select Ethereum private key file.* If you select a proper file, it will pull the address & populate the field for you. Enter the password, and click unlock. 
+
+Every time you open the application you will have to choose the keyfile & enter your password.
+
 # Bounty & Offer List
 
 <img style='width: 100%;' src='./docs/img/main_screen.png'>
@@ -28,7 +39,7 @@ After the Welcome Screen, you will find yourself at a list of bounties and offer
 From the Main Screen, click '+ Bounty' in the top header bar. This will open a screen with a set of top buttons, a large drop target, and a list of added files. 
 Click the button in the drop target, or drag and drop files to all them. When you have all the files you want added, click 'Next'. This opens the second screen where you can enter your reward amount in Nectar, and the duration of the bounty. The duration is the number of blocks. Each block is about 10-20 seconds. 
 
-Click the 'Create # file Bounty.` This opens a modal dialog where you can set the account you are posting with, and enter your password. Click 'Unlock' to post the bounty. This will return you to the main screen, where you can view the bounty, when it is eventually posted to the chain, or create more. 
+Click the 'Create # file Bounty.` This will return you to the main screen, where you can view the bounty, when it is eventually posted to the chain, or create more. 
 
 If an error occurs while the bounty is being posted, a Snack bar will open on the bottom right of the screen with the error received. 
 
@@ -46,7 +57,7 @@ Expert assertions are shown on the right hand side, as individual cards per asse
 
 <img style='width: 100%;' src='./docs/img/create_offer.png'>
 
-From the Main Screen, click '+ Offer' to open the offer channel screen. Offer channels are meant to be a long running channel between an Ambassador and a reliable security Expert. To create the contract, fill in the required fields: the address of the security expert, the maximum reward for the contract, and a maximum duration for the contract. Click the 'Open Offer Channel' button to open a modal where you can choose a wallet and unlock it.
+From the Main Screen, click '+ Offer' to open the offer channel screen. Offer channels are meant to be a long running channel between an Ambassador and a reliable security Expert. To create the contract, fill in the required fields: the address of the security expert, the maximum reward for the contract, and a maximum duration for the contract. Click the 'Open Offer Channel' button to open the channel.
 
 # Viewing the offer status
 
@@ -62,7 +73,7 @@ All messages in this context are sent off chain.
 
 <img style='width: 100%;' src='./docs/img/pay.png'>
 
-To pay a security expert for work done in relation to an offer channel, click the 'Pay' Button when looking at that offer's details. Enter the amount and click the 'Pay' Button. Like normal, this will prompt for the password to the wallet. This modal does not give you the option to choose the account. The offer channel contracts will only allow the original poster to pay the expert.
+To pay a security expert for work done in relation to an offer channel, click the 'Pay' Button when looking at that offer's details. This is only available if the account signing transactions is the same one used to create the offer channel. Enter the amount and click the 'Pay' Button. 
 
 There are a few validations that must be passed in order to pay the expert. First, a payment must be over the minimum value of 0.0625. Second, the payment value is actually the accumulated max value. You must enter the total value you want to pay the expert. 
 
