@@ -160,8 +160,8 @@ it('shows relay when relay is true.', () => {
     relay: true,
     bounties: bounties,
     active: active,
-    address: 0,
-    walletList: [{address: 'asdf', nct: '0', eth: '0'}]
+    address: 'author',
+    wallet: {homeNct: '1', sideNct: '1', homeEth: '1', sideEth: '1'}
   });
 
   expect(wrapper.find('.Relay')).toHaveLength(1);
@@ -178,14 +178,35 @@ it('calls onOpenRelay when dropdown button is clicked.', () => {
     createOffer: false,
     bounties: bounties,
     active: active,
-    address: 0,
-    walletList: [{address: 'asdf', nct: '0', eth: '0'}]
+    address: 'author',
+    wallet: {homeNct: '1', sideNct: '1', homeEth: '1', sideEth: '1'}
   });
 
   wrapper.find('.Header').find('.Dropdown-Icon').simulate('mouseEnter');
-  wrapper.find('.Header').find('.Dropdown').find('p').simulate('click');
+  wrapper.find('.Header').find('.Dropdown').find('p').first().simulate('click');
 
   expect(onOpenRelay).toHaveBeenCalledTimes(1);
+});
+
+it('open modal on second dropdown click', () => {
+  const onRequestWalletChange = jest.spyOn(App.prototype, 'onRequestWalletChange');
+  const wrapper = mount(<App />);
+  const bounties = [{guid:'asdf'}];
+  const active = -1;
+  wrapper.setState({first: false,
+    relay: false,
+    createBounty: false,
+    createOffer: false,
+    bounties: bounties,
+    active: active,
+    address: 'author',
+    wallet: {homeNct: '1', sideNct: '1', homeEth: '1', sideEth: '1'}
+  });
+
+  wrapper.find('.Header').find('.Dropdown-Icon').simulate('mouseEnter');
+  wrapper.find('.Header').find('.Dropdown').find('p').slice(1, 2).simulate('click');
+
+  expect(onRequestWalletChange).toHaveBeenCalledTimes(1);
 });
 
 it('calls onCreateBounty when header button is clicked.', () => {
@@ -205,9 +226,17 @@ it('calls onCreateOffer when header button is clicked.', () => {
   const wrapper = mount(<App />);
   const bounties = [{guid:'asdf'}];
   const active = -1;
-  wrapper.setState({first: false, bounties: bounties, active: active});
+  wrapper.setState({first: false,
+    relay: false,
+    createBounty: false,
+    createOffer: false,
+    bounties: bounties,
+    active: active,
+    address: 'author',
+    wallet: {homeNct: '1', sideNct: '1', homeEth: '1', sideEth: '1'}
+  });
 
-  wrapper.find('.Button').slice(1,2).simulate('click');
+  wrapper.find('.Header').find('.Button').slice(1, 2).simulate('click');
 
   expect(onCreateOffer).toHaveBeenCalledTimes(1);
 });
@@ -230,8 +259,8 @@ it('shows OfferInfo when at least one offer & active selects it', () => {
     createOffer: false,
     bounties: bounties,
     active: active,
-    address: 0,
-    walletList: [{address: 'asdf', nct: '0', eth: '0'}]
+    address: 'author',
+    wallet: {homeNct: '1', sideNct: '1', homeEth: '1', sideEth: '1'}
   });
 
   expect(wrapper.find('.Offer-Info')).toHaveLength(1);
@@ -633,7 +662,7 @@ it('doesn\'t call increments when getWallets is called', (done) => {
   const instance = wrapper.instance();
   addRequest.mockClear();
 
-  const promise = instance.getWallets();
+  const promise = instance.getWallet();
 
   promise.then(() =>{
     try {
@@ -651,7 +680,7 @@ it('doesn\'t call decrement when getWallets finishes', (done) => {
   const instance = wrapper.instance();
   removeRequest.mockClear();
 
-  const promise = instance.getWallets();
+  const promise = instance.getWallet();
 
   promise.then(() =>{
     try {
@@ -969,17 +998,6 @@ it('reads seen from localStorage and puts it into state as first on startup', ()
   const instance = wrapper.instance();
 
   expect(instance.state.first).toBeFalsy();
-});
-
-it('calls getWallets when oNWalletChangeHandler called', () => {
-  const getWallets = jest.spyOn(App.prototype, 'getWallets');
-  const wrapper = shallow(<App />);
-  const instance = wrapper.instance();
-  getWallets.mockClear();
-
-  instance.onWalletChangeHandler();
-
-  expect(getWallets).toHaveBeenCalledTimes(1);
 });
 
 it('sets the error message when onPostError is called', () => {
