@@ -42,13 +42,6 @@ exports[`renders without crashing 1`] = `
     </div>
   </header>
   <div
-    class="ModalPassword"
-  >
-    <div>
-      
-    </div>
-  </div>
-  <div
     class="OfferCreate-Content"
   >
     <div

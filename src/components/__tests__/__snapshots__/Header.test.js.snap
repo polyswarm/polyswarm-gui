@@ -35,7 +35,23 @@ exports[`renders without crashing 1`] = `
   <div
     class="Header-Address"
   >
-    
+    <p
+      class="Header-Divided"
+      style="font-size:7.0588235294117645vw"
+    >
+      author
+    </p>
+    <p
+      class="Header-Divided"
+      style="font-size:7.0588235294117645vw"
+    >
+      1 NCT 
+    </p>
+    <p
+      style="font-size:7.0588235294117645vw"
+    >
+      1 ETH
+    </p>
   </div>
 </header>
 `;
@@ -81,20 +97,20 @@ exports[`should show the address and balances 1`] = `
   >
     <p
       class="Header-Divided"
-      style="font-size:3.6363636363636362vw"
+      style="font-size:7.0588235294117645vw"
     >
-      asdf
+      author
     </p>
     <p
       class="Header-Divided"
-      style="font-size:3.6363636363636362vw"
+      style="font-size:7.0588235294117645vw"
     >
-      Main: 1 NCT 2 ETH
+      1 NCT 
     </p>
     <p
-      style="font-size:3.6363636363636362vw"
+      style="font-size:7.0588235294117645vw"
     >
-      Side: 1 NCT 
+      1 ETH
     </p>
   </div>
 </header>
@@ -135,7 +151,23 @@ exports[`shows title props 1`] = `
   <div
     class="Header-Address"
   >
-    
+    <p
+      class="Header-Divided"
+      style="font-size:7.0588235294117645vw"
+    >
+      author
+    </p>
+    <p
+      class="Header-Divided"
+      style="font-size:7.0588235294117645vw"
+    >
+      1 NCT 
+    </p>
+    <p
+      style="font-size:7.0588235294117645vw"
+    >
+      1 ETH
+    </p>
   </div>
 </header>
 `;

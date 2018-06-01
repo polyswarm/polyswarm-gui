@@ -34,22 +34,21 @@ const offer = {
   ]
 };
 
-const walletList = [
-  {address:'author', nct: '1', eth: '1'},
-  {address:'demo', nct: '1', eth: '1'},
-  {address:'omed', nct: '1', eth: '1'}
-];
+const wallet = {homeNct: '1', sideNct: '1', homeEth: '1', sideEth: '1'};
+const address = 'author';
 
 it('renders without crashing', () => {
   const wrapper = render(<OfferInfo 
-    walletList={walletList}
+    wallet={wallet}
+    address={address}
     offer={offer}/>);
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
 
 it('shows OfferPay on pay click', () => {
   const wrapper = mount(<OfferInfo 
-    walletList={walletList}
+    wallet={wallet}
+    address={address}
     offer={offer}/>);
   wrapper.find('.Header').find('.Button').first().simulate('click');
 
@@ -58,7 +57,8 @@ it('shows OfferPay on pay click', () => {
 
 it('shows OfferRequest on request click', () => {
   const wrapper = mount(<OfferInfo 
-    walletList={walletList}
+    wallet={wallet}
+    address={address}
     offer={offer}/>);
   wrapper.find('.Header').find('.Button').last().simulate('click');
 
@@ -68,7 +68,8 @@ it('shows OfferRequest on request click', () => {
 it('calls prop onAddMessage when addMessage is called', () => {
   const onAddMessage = jest.fn();
   const wrapper = mount(<OfferInfo
-    walletList={walletList}
+    wallet={wallet}
+    address={address}
     offer={offer}
     onAddMessage={onAddMessage}
   />);

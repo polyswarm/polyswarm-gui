@@ -1,19 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders without crashing 1`] = `
-<form>
+Array [
   <input
     class="hidden"
     id="file"
-    multiple=""
     type="file"
-  >
+>
     
-  </input>
+</input>,
   <label
+    class="LabelButton"
     for="file"
-  >
-    click here.
-  </label>
-</form>
+>
+    
+</label>,
+]
 `;

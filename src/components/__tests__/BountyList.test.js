@@ -3,8 +3,13 @@ import {render, mount} from 'enzyme';
 import {renderToJson} from 'enzyme-to-json';
 import BountyList from '../BountyList';
 
+const wallet = {homeNct: '1', sideNct: '1', homeEth: '1', sideEth: '1'};
+const address = 'author';
+
 it('renders without crashing', () => {
-  const wrapper = render(<BountyList />);
+  const wrapper = render(<BountyList
+    address={address}
+    wallet={wallet} />);
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
 
@@ -13,7 +18,10 @@ it('shows all bounties passed as cards', () => {
     {guid: 'asdf', type:'bounty'},
     {guid: 'fdsa', type:'bounty'}
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(wrapper.find('.Card')).toHaveLength(2);
   expect(wrapper.find('.CardHeader-Title').first().text()).toBe('asdf (ACTIVE)');
@@ -26,7 +34,10 @@ it('selects the bounty when the card is clicked', () => {
     {guid: 'asdf', type:'bounty'},
     {guid: 'fdsa', type:'bounty'}
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
   wrapper.find('.Card').first().simulate('click');
 
   expect(onBountySelected).toHaveBeenCalledWith(0);
@@ -38,7 +49,10 @@ it('calls prop onBountySelected when the card is clicked', () => {
     {guid: 'asdf', type:'bounty'},
     {guid: 'fdsa', type:'bounty'}
   ];
-  const wrapper = mount(<BountyList bounties={bounties} onBountySelected={onBountySelected}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties} onBountySelected={onBountySelected}/>);
   wrapper.find('.Card').first().simulate('click');
 
   expect(onBountySelected).toHaveBeenCalledWith(0);
@@ -50,7 +64,10 @@ it('selects the bounty when view on the card is clicked', () => {
     {guid: 'asdf', type:'bounty'},
     {guid: 'fdsa', type:'bounty'}
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
   wrapper.find('.Dropdown-Choices').first().find('p').first().simulate('click');
 
   expect(onBountySelected).toHaveBeenCalledWith(0);
@@ -62,7 +79,10 @@ it('calls prop onBountySelected when view on the card is clicked', () => {
     {guid: 'asdf', type:'bounty'},
     {guid: 'fdsa', type:'bounty'}
   ];
-  const wrapper = mount(<BountyList bounties={bounties} onBountySelected={onBountySelected}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties} onBountySelected={onBountySelected}/>);
   wrapper.find('.CardHeader').find('.Dropdown-Choices').first().find('p').first().simulate('click');
 
   expect(onBountySelected).toHaveBeenCalledWith(0);
@@ -74,7 +94,10 @@ it('calls method onBountyRemoved when remove on the card is clicked', () => {
     {guid: 'asdf', type:'bounty'},
     {guid: 'fdsa', type:'bounty'}
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
   wrapper.find('.CardHeader').find('.Dropdown-Choices').first().find('p').last().simulate('click');
 
   expect(onBountyRemoved).toHaveBeenCalledWith(0);
@@ -86,7 +109,10 @@ it('calls prop onBountyRemoved when remove on the card is clicked', () => {
     {guid: 'asdf', type:'bounty'},
     {guid: 'fdsa', type:'bounty'}
   ];
-  const wrapper = mount(<BountyList bounties={bounties} onBountyRemoved={onBountyRemoved}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties} onBountyRemoved={onBountyRemoved}/>);
   wrapper.find('.CardHeader').find('.Dropdown-Choices').first().find('p').last().simulate('click');
 
   expect(onBountyRemoved).toHaveBeenCalledWith(0);
@@ -96,7 +122,10 @@ it('puts a subheader on the CardHeader when amount is valid', () => {
   const bounties = [
     {guid: 'asdf', amount: '123', type: 'bounty'}
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(wrapper.find('.CardHeader-Sub')).toHaveLength(1);
   expect(wrapper.find('.CardHeader-Sub').text()).toEqual('123 Nectar (NCT)');
@@ -112,7 +141,10 @@ it('adds 3 statrows per bounty', () => {
       type: 'bounty'
     }
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(wrapper.find('.CardContent').find('.StatRow')).toHaveLength(3);
 });
@@ -127,7 +159,10 @@ it('displays a StatRow with author on a bounty card', () => {
       type: 'bounty'
     }
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(wrapper.find('.StatRow').first().find('.StatContent').text()).toEqual('author');
 });
@@ -142,7 +177,10 @@ it('displays a StatRow with the number of assertions', () => {
       type: 'bounty'
     }
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(wrapper.find('.StatRow').slice(1, 2).find('.StatContent').text()).toEqual('0');
 });
@@ -157,7 +195,10 @@ it('displays a StatRow with the name of the file in the bounty', () => {
       type: 'bounty'
     }
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
   
   expect(wrapper.find('.StatRow').slice(2, 3).find('.StatContent').text()).toEqual('file');
 });
@@ -171,7 +212,10 @@ it('displays a StatRow with a csv of files in the bounty', () => {
     artifacts: [{'name':'file'},{'name':'other'}],
     type: 'bounty'
   }];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(wrapper.find('.StatRow').slice(2, 3).find('.StatContent').text()).toEqual('file, other');
 });
@@ -188,7 +232,10 @@ it('adds 5 statrows per offer', () => {
       type: 'offer',
     }
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(wrapper.find('.CardContent').find('.StatRow')).toHaveLength(5);
 });
@@ -205,7 +252,10 @@ it('adds (ACTIVE) to Card headers when neither expired for resolved', () => {
       artifacts: [{'name':'file'}, {'name':'other'}],
     }
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(wrapper.find('.CardHeader-Title').text()).toEqual('asdf (ACTIVE)');
 });
@@ -222,7 +272,10 @@ it('adds (CLOSED) when a bounty is resolved', () => {
       artifacts: [{'name':'file'}, {'name':'other'}],
     }
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(wrapper.find('.CardHeader-Title').text()).toEqual('asdf (CLOSED)');
 });
@@ -239,7 +292,10 @@ it('adds (CLOSED) when a bounty is resolved, even if expired', () => {
       artifacts: [{'name':'file'}, {'name':'other'}],
     }
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(wrapper.find('.CardHeader-Title').text()).toEqual('asdf (CLOSED)');
 });
@@ -256,7 +312,10 @@ it('adds (EXPIRED) when a bounty has passed it\'s expiration block', () => {
       artifacts: [{'name':'file'}, {'name':'other'}],
     }
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(wrapper.find('.CardHeader-Title').text()).toEqual('asdf (EXPIRED)');
 });
@@ -275,7 +334,10 @@ it('adds update to CardHeaders where bounty.updated is true', () => {
       artifacts: [{'name':'file'}, {'name':'other'}],
     }
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(wrapper.find('.CardHeader').hasClass('update')).toBeTruthy();
 });
@@ -293,7 +355,10 @@ it('calls renderBounty when a bounty is in bounty list', () => {
       artifacts: [{'name':'file'}, {'name':'other'}],
     }
   ];
-  mount(<BountyList bounties={bounties}/>);
+  mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(renderBounty).toHaveBeenCalledTimes(1);
 });
@@ -311,7 +376,10 @@ it('adds (ACTIVE) to Card headers when neither expired for resolved', () => {
       type: 'offer',
     }
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(wrapper.find('.CardHeader-Title').text()).toEqual('asdf (ACTIVE)');
 });
@@ -329,7 +397,10 @@ it('adds (CLOSED) when a offer is closed', () => {
       type: 'offer',
     }
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(wrapper.find('.CardHeader-Title').text()).toEqual('asdf (CLOSED)');
 });
@@ -347,7 +418,10 @@ it('adds update to CardHeaders where offer.updated is true', () => {
       type: 'offer',
     }
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(wrapper.find('.CardHeader').hasClass('update')).toBeTruthy();
 });
@@ -366,16 +440,22 @@ it('adds the initial max value for the offer channel as the subheader', () => {
       type: 'offer',
     }
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(wrapper.find('.CardHeader-Sub').text()).toEqual('100 Nectar (NCT)');
 });
 
 it('puts the addr and current balances in the header when walletlist and address specified', () => {
-  const walletList = [{address: 'asdf', nct: '1', eth: '1'}];
-  const wrapper = mount(<BountyList walletList={walletList} address={0}/>);
 
-  expect(wrapper.find('.Header-Address').text()).toEqual('asdfMain: 1 NCT 1 ETHSide: 1 NCT ');
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    address={address}/>);
+
+  expect(wrapper.find('.Header-Address').text()).toEqual('author1 NCT 1 ETH');
 });
 
 it('displays a StatRow with author', () => {
@@ -390,7 +470,10 @@ it('displays a StatRow with author', () => {
       type: 'offer',
     }
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(wrapper.find('.StatRow').first().find('.StatContent').text()).toEqual('author');
 });
@@ -407,7 +490,10 @@ it('displays a StatRow with expert', () => {
       type: 'offer',
     }
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(wrapper.find('.StatRow').slice(1, 2).find('.StatContent').text()).toEqual('expert');
 });
@@ -424,7 +510,10 @@ it('displays a StatRow with the amount of the most recent payment', () => {
       type: 'offer',
     }
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(wrapper.find('.StatRow').slice(2, 3).find('.StatContent').text()).toEqual('1000 Nectar (NCT)');
 });
@@ -441,7 +530,10 @@ it('displays a StatRow with the number of messages', () => {
       type: 'offer',
     }
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(wrapper.find('.StatRow').slice(3, 4).find('.StatContent').text()).toEqual('1');
 });
@@ -458,7 +550,10 @@ it('displays a StatRow with a csv of files in the offer request', () => {
       type: 'offer',
     }
   ];
-  const wrapper = mount(<BountyList bounties={bounties}/>);
+  const wrapper = mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(wrapper.find('.StatRow').slice(4, 5).find('.StatContent').text()).toEqual('file, other');
 });
@@ -477,7 +572,10 @@ it('calls renderOffer when an offer is in bounty list', () => {
     }
   ];
   renderOffer.mockClear();
-  mount(<BountyList bounties={bounties}/>);
+  mount(<BountyList
+    address={address}
+    wallet={wallet}
+    bounties={bounties}/>);
 
   expect(renderOffer).toHaveBeenCalledTimes(1);
 });

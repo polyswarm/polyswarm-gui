@@ -21,11 +21,8 @@ const offer = {
   ]
 };
 
-const walletList = [
-  {address:'author', nct: '1', eth: '1'},
-  {address:'demo', nct: '1', eth: '1'},
-  {address:'omed', nct: '1', eth: '1'}
-];
+const wallet = {homeNct: '1', sideNct: '1', homeEth: '1', sideEth: '1'};
+const address = 'author';
 
 const mockPay = jest.fn().mockImplementation(() => {
   return new Promise(resolve => resolve());
@@ -54,7 +51,8 @@ beforeEach(() => {
 
 it('renders without crashing', () => {
   const wrapper = render(<OfferPay offer={offer}
-    walletList={walletList}
+    address={address}
+    wallet={wallet}
     last={'.5'}/>);
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
@@ -62,7 +60,8 @@ it('renders without crashing', () => {
 it('sets reward when input entered into field', () => {
   const setState = jest.spyOn(OfferPay.prototype, 'setState');
   const wrapper = mount(<OfferPay offer={offer}
-    walletList={walletList}
+    address={address}
+    wallet={wallet}
     last={'.5'} />);
   setState.mockClear();
 
@@ -74,7 +73,8 @@ it('sets reward when input entered into field', () => {
 it('displays an error when nectar is below 0.0625', () => {
   const setState = jest.spyOn(OfferPay.prototype, 'setState');
   const wrapper = mount(<OfferPay offer={offer}
-    walletList={walletList}
+    address={address}
+    wallet={wallet}
     last={'.5'}/>);
   setState.mockClear();
 
@@ -86,7 +86,8 @@ it('displays an error when nectar is below 0.0625', () => {
 it('displays an error when nectar is below the latest payment', () => {
   const setState = jest.spyOn(OfferPay.prototype, 'setState');
   const wrapper = mount(<OfferPay offer={offer}
-    walletList={walletList}
+    address={address}
+    wallet={wallet}
     last={'.5'}/>);
   setState.mockClear();
 
@@ -95,36 +96,36 @@ it('displays an error when nectar is below the latest payment', () => {
   expect(setState.mock.calls[1][0]).toEqual({reward_error: 'Reward must be higher than last payment of 0.5.'});
 });
 
-it('calls payExpert when onWalletChangedHandler is called with true', () => {
+it('calls payExpert when button is clicked', () => {
   const payExpert = jest.spyOn(OfferPay.prototype, 'payExpert');
   const wrapper = mount(<OfferPay offer={offer}
-    walletList={walletList}
+    address={address}
+    wallet={wallet}
     last={'.5'}/>);
-  const instance = wrapper.instance();
-  wrapper.setState({reward: 5});
+  wrapper.setState({reward: '5'});
 
-  instance.onWalletChangeHandler(true);
+  wrapper.find('.OfferPay-Content').find('.Button').simulate('click');
 
   expect(payExpert).toHaveBeenCalledTimes(1);
 });
 
-it('calls http.pay when onWalletChangedHandler is called with true', (done) => {
+it('calls http.pay when payExpert is called', (done) => {
   const wrapper = mount(<OfferPay offer={offer}
-    walletList={walletList}
+    address={address}
+    wallet={wallet}
     last={'.5'}/>);
   const instance = wrapper.instance();
   wrapper.setState({reward: '5'});
 
-  instance.onWalletChangeHandler(true)
+  instance.payExpert()
     .then(() => {
-      try {
+      try{
         expect(mockPay).toHaveBeenCalledTimes(1);
         done();
-      } catch (e) {
-        done.fail(e);
+      } catch (error) {
+        done.fail(error);
       }
     });
-
 });
 
 it('calls addMessage when http.pay success', (done) => {
@@ -132,7 +133,8 @@ it('calls addMessage when http.pay success', (done) => {
   const wrapper = mount(<OfferPay 
     addMessage={addMessage}
     offer={offer}
-    walletList={walletList}
+    address={address}
+    wallet={wallet}
     last={'.5'}/>);
   const instance = wrapper.instance();
   wrapper.setState({reward: 5});
@@ -166,7 +168,8 @@ it('calls onError when http.pay fails', (done) => {
   const wrapper = mount(<OfferPay
     onError={onError}
     offer={offer}
-    walletList={walletList}
+    address={address}
+    wallet={wallet}
     last={'.5'}/>);
   const instance = wrapper.instance();
   wrapper.setState({reward: 5});
@@ -180,16 +183,4 @@ it('calls onError when http.pay fails', (done) => {
         done.fail(error);
       }
     });
-});
-
-it('opens the modal when button is clicked', () => {
-  const wrapper = mount(<OfferPay
-    offer={offer}
-    walletList={walletList}
-    last={'.5'}/>);
-  wrapper.setState({reward: 5});
-
-  wrapper.find('.OfferPay-Content').find('.Button').simulate('click');
-
-  expect(wrapper.find('.ModalPassword')).toHaveLength(1);
 });

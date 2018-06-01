@@ -62,6 +62,7 @@ class App extends Component {
     this.getData = this.getData.bind(this);
     this.getWallet = this.getWallet.bind(this);
     this.updateOnAssertion = this.updateOnAssertion.bind(this);
+    this.onModalRequestClose = this.onModalRequestClose.bind(this);
   }
 
   componentDidUpdate(_, prevState) {
@@ -112,6 +113,7 @@ class App extends Component {
           <React.Fragment>
             <ModalPassword
               open={modalOpen}
+              onModalRequestClose={this.onModalRequestClose}
               onKeySelected={this.onKeySelected}/>
             { createBounty && (
               <BountyCreate
@@ -218,6 +220,13 @@ class App extends Component {
       .then(() => this.http.listenForTransactions())
       .then(() => this.getWallet())
       .catch(() => {});
+  }
+
+  onModalRequestClose() {
+    const {state: {address}} = this;
+    if (address) {
+      this.setState({modalOpen: false});
+    }
   }
 
   onCloseWelcome() {

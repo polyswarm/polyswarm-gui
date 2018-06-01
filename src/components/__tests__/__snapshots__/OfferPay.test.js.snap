@@ -40,30 +40,23 @@ exports[`renders without crashing 1`] = `
     >
       <p
         class="Header-Divided"
-        style="font-size:3.4285714285714284vw"
+        style="font-size:7.0588235294117645vw"
       >
         author
       </p>
       <p
         class="Header-Divided"
-        style="font-size:3.4285714285714284vw"
+        style="font-size:7.0588235294117645vw"
       >
-        Main: 1 NCT 1 ETH
+        1 NCT 
       </p>
       <p
-        style="font-size:3.4285714285714284vw"
+        style="font-size:7.0588235294117645vw"
       >
-        Side: 1 NCT 
+        1 ETH
       </p>
     </div>
   </header>
-  <div
-    class="ModalPassword"
-  >
-    <div>
-      
-    </div>
-  </div>
   <div
     class="OfferPay-Content"
   >
