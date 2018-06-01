@@ -40,7 +40,7 @@ class OfferCreate extends Component {
 
   render() {
     const { state: { reward, reward_error, duration, duration_error, expert, expert_error } } = this;
-    const { props: {  address, requestsInProgress, onBackPressed } } = this;
+    const { props: {  wallet, address, requestsInProgress, onBackPressed } } = this;
 
     return (
       <div className='OfferCreate'>

@@ -4,11 +4,8 @@ import {renderToJson} from 'enzyme-to-json';
 import OfferCreate from '../OfferCreate';
 import HttpOfferCreate from '../OfferCreate/http';
 
-const walletList = [
-  {address:'author', nct: '1', eth: '1'},
-  {address:'demo', nct: '1', eth: '1'},
-  {address:'omed', nct: '1', eth: '1'}
-];
+const wallet = {homeNct: '1', sideNct: '1', homeEth: '1', sideEth: '1'};
+const address = 'author';
 
 const mockCreateOffer = jest.fn().mockImplementation(() => {
   return new Promise(resolve => resolve());
@@ -36,12 +33,14 @@ beforeEach(() => {
 });
 
 it('renders without crashing', () => {
-  const wrapper = render(<OfferCreate walletList={walletList}/>);
+  const wrapper = render(<OfferCreate wallet={wallet}/>);
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
 
 it('disables the button when max reward is less than 0.0625', (done) =>{
-  const wrapper = mount(<OfferCreate walletList={walletList}/>);
+  const wrapper = mount(<OfferCreate 
+    address={address}
+    wallet={wallet}/>);
   const instance = wrapper.instance();
   
   instance.onDurationChanged('300');
@@ -59,7 +58,9 @@ it('disables the button when max reward is less than 0.0625', (done) =>{
 });
 
 it('disables the button when duration is 0', (done) => {
-  const wrapper = mount(<OfferCreate  walletList={walletList}/>);
+  const wrapper = mount(<OfferCreate 
+    address={address}
+    wallet={wallet}/>);
   const instance = wrapper.instance();
   
   instance.onDurationChanged('0');
@@ -77,7 +78,9 @@ it('disables the button when duration is 0', (done) => {
 });
 
 it('disables the button when duration is negative', (done) => {
-  const wrapper = mount(<OfferCreate  walletList={walletList}/>);
+  const wrapper = mount(<OfferCreate 
+    address={address}
+    wallet={wallet}/>);
   const instance = wrapper.instance();
 
   instance.onDurationChanged('-300');
@@ -95,7 +98,9 @@ it('disables the button when duration is negative', (done) => {
 });
 
 it('disables the button when expert address is not an ethereum address', (done) => {
-  const wrapper = mount(<OfferCreate walletList={walletList}/>);
+  const wrapper = mount(<OfferCreate 
+    address={address}
+    wallet={wallet}/>);
   const instance = wrapper.instance();
 
   instance.onDurationChanged('300');
@@ -113,7 +118,9 @@ it('disables the button when expert address is not an ethereum address', (done) 
 });
 
 it('enables the button when reward, duration and expert are filled with valid values', (done) => {
-  const wrapper = mount(<OfferCreate walletList={walletList}/>);
+  const wrapper = mount(<OfferCreate 
+    address={address}
+    wallet={wallet}/>);
   const instance = wrapper.instance();
 
   instance.onDurationChanged('300');
@@ -130,8 +137,11 @@ it('enables the button when reward, duration and expert are filled with valid va
   });
 });
 
-it('opens the modal window when the button is clicked', (done) => {
-  const wrapper = mount(<OfferCreate walletList={walletList}/>);
+it('calls createOffer when the button is clicked', (done) => {
+  const createOffer = jest.spyOn(OfferCreate.prototype, 'createOffer');
+  const wrapper = mount(<OfferCreate 
+    address={address}
+    wallet={wallet}/>);
   const instance = wrapper.instance();
 
   instance.onDurationChanged('300');
@@ -141,7 +151,7 @@ it('opens the modal window when the button is clicked', (done) => {
   wrapper.setState({}, () => {
     wrapper.find('.Offer-Create-Upload').find('button').simulate('click');
     try {
-      expect(wrapper.find('.ModalPassword')).toHaveLength(1);
+      expect(createOffer).toHaveBeenCalledTimes(1);
       done();
     } catch (error) {
       done.fail(error);
@@ -149,22 +159,10 @@ it('opens the modal window when the button is clicked', (done) => {
   });
 });
 
-it('calls createOffer when onWalletChangedHandler is called with true', () => {
-  const createOffer = jest.spyOn(OfferCreate.prototype, 'createOffer');
-  const wrapper = mount(<OfferCreate walletList={walletList}/>);
-  const instance = wrapper.instance();
-
-  instance.onDurationChanged('300');
-  instance.onExpertChanged('0xAF8302a3786A35abEDdF19758067adc9a23597e5');
-  instance.onRewardChanged('1');
-
-  instance.onWalletChangeHandler(true);
-
-  expect(createOffer).toHaveBeenCalledTimes(1);
-});
-
 it('calls http.createOffer when onWalletChangedHandler is called with true', (done) => {
-  const wrapper = mount(<OfferCreate walletList={walletList}/>);
+  const wrapper = mount(<OfferCreate 
+    address={address}
+    wallet={wallet}/>);
   const instance = wrapper.instance();
 
   wrapper.setState({
@@ -191,7 +189,8 @@ it('calls prop addOffer if posted successfully', (done) => {
   const addOffer = jest.fn();
   const wrapper = mount(<OfferCreate 
     addOffer={addOffer}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   const instance = wrapper.instance();
 
   wrapper.setState({
@@ -228,7 +227,8 @@ it('calls prop onError when http.createOffer fails', (done) => {
   const onError = jest.fn();
   const wrapper = mount(<OfferCreate 
     onError={onError}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   const instance = wrapper.instance();
 
   wrapper.setState({
