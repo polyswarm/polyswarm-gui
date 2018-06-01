@@ -19,7 +19,7 @@ class Relay extends Component {
     this.state = {
       nectar: '',
       selected: 0,
-      nectar_error: null,
+      nectar_error: strings.disabled,
     };
 
     this.onButtonClick = this.onButtonClick.bind(this);
@@ -82,7 +82,7 @@ class Relay extends Component {
             </div>
             <div className='Relay-Button'>
               <Button
-                disabled={nectar_error || !nectar}
+                disabled={true || nectar_error || !nectar}
                 onClick={this.onButtonClick} >
                 {strings.transfer}
               </Button>
@@ -96,9 +96,9 @@ class Relay extends Component {
   onButtonClick() {
     const { state: {selected} } =this;
     if (selected == 1) {
-      return this.transfer(false);
+      // return this.transfer(false);
     } else {
-      return this.transfer(true);
+      // return this.transfer(true);
     }
   }
   
@@ -112,7 +112,7 @@ class Relay extends Component {
     } else if (nectar && nectar.length > 0 && new BigNumber(nectar).comparedTo(new BigNumber('0')) <= 0) {
       error = `${strings.tooLow}`;
     }
-    this.setState({nectar: nectar, nectar_error: error});
+    this.setState({nectar: nectar, nectar_error: strings.disabled});
   }
   
   onSelectionChanged(index) {
