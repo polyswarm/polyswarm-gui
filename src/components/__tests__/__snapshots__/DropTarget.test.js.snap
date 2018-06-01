@@ -18,6 +18,7 @@ exports[`renders without crashing 1`] = `
         
       </input>
       <label
+        class="LabelButton"
         for="file"
       >
         click here.
