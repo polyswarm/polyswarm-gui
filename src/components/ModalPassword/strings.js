@@ -15,7 +15,7 @@ const strings = {
   nectar: 'Nectar (NCT)',
   eth: 'Ether (ETH)',
   mustHavePw: 'Must enter a password',
-  selectKeystore: 'Click to select Ethereum private key file',
+  selectKeystore: 'Click here to select Ethereum private key file',
   addressFile: 'Private Key',
   na: 'N/A'
 };
