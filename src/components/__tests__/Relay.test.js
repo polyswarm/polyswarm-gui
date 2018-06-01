@@ -35,60 +35,63 @@ beforeEach(() => {
   });
 });
 
+const wallet = {homeNct: '1', sideNct: '1', homeEth: '1', sideEth: '1'};
+const address = 'author';
+
 it('renders without crashing', () => {
-  const walletList= [{address: 'asdf', nct: '1', eth: '0'}];
+
   const wrapper = render(<Relay
-    address={0}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
 
 it('calls onNectarChanged when AnimatedInput is changed', () => {
   const onNectarChanged = jest.spyOn(Relay.prototype, 'onNectarChanged');
-  const walletList= [{address: 'asdf', nct: '1', eth: '0'}];
+  
   const wrapper = mount(<Relay
-    address={0}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   wrapper.find('.AnimatedInput').find('input').simulate('change', {target: {value: '1'}});
 
   expect(onNectarChanged).toHaveBeenCalledWith('1');
 });
 
 it('disables the button when nectar is negative', () => {
-  const walletList= [{address: 'asdf', nct: '1', eth: '0'}];
+  
   const wrapper = mount(<Relay
-    address={0}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   wrapper.find('.AnimatedInput').find('input').simulate('change', {target: {value: '-1'}});
 
   expect(wrapper.find('.Button').props().disabled).toBeTruthy();
 });
 
 it('disables the button when nectar is greater than the source balance', () => {
-  const walletList= [{address: 'asdf', nct: '1', eth: '0'}];
+  
   const wrapper = mount(<Relay
-    address={0}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   wrapper.find('.AnimatedInput').find('input').simulate('change', {target: {value: '2'}});
 
   expect(wrapper.find('.Button').props().disabled).toBeTruthy();
 });
 
 it('enables the Go button when nectar meets length requirements in AnimatedInput', () => {
-  const walletList= [{address: 'asdf', nct: '1', eth: '0'}];
+  
   const wrapper = mount(<Relay
-    address={0}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   wrapper.find('.AnimatedInput').find('input').simulate('change', {target: {value: '1'}});
 
   expect(wrapper.find('.Button').props().disabled).toBeFalsy();
 });
 
 it('disables the Go button when nectar length is 0', () => {
-  const walletList= [{address: 'asdf', nct: '1', eth: '0'}];
+  
   const wrapper = mount(<Relay
-    address={0}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   wrapper.find('.AnimatedInput').find('input').simulate('change', {target: {value: ''}});
 
   expect(wrapper.find('.Button').props().disabled).toBeTruthy();
@@ -96,10 +99,10 @@ it('disables the Go button when nectar length is 0', () => {
 
 it('calls setstate with the nectar when nectar modified', () => {
   const setState = jest.spyOn(Relay.prototype, 'setState');
-  const walletList= [{address: 'asdf', nct: '1', eth: '0'}];
+  
   const wrapper = mount(<Relay
-    address={0}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
 
   wrapper.find('.AnimatedInput').find('input').simulate('change', {target: {value: '1'}});
 
@@ -108,10 +111,10 @@ it('calls setstate with the nectar when nectar modified', () => {
 
 it('calls setstate with the nectar & error true when nectar is 0 or lower', () => {
   const setState = jest.spyOn(Relay.prototype, 'setState');
-  const walletList= [{address: 'asdf', nct: '1', eth: '0'}];
+  
   const wrapper = mount(<Relay
-    address={0}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   setState.mockClear();
   wrapper.find('.AnimatedInput').find('input').simulate('change', {target: {value: '0'}});
 
@@ -120,10 +123,10 @@ it('calls setstate with the nectar & error true when nectar is 0 or lower', () =
 
 it('calls setState with error when nectar is greater than the main chain balance on withdrawal', () => {
   const setState = jest.spyOn(Relay.prototype, 'setState');
-  const walletList= [{address: 'asdf', nct: '1', eth: '0'}];
+  
   const wrapper = mount(<Relay
-    address={0}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   wrapper.setState({selected: 1});
   setState.mockClear();
   wrapper.find('.AnimatedInput').find('input').simulate('change', {target: {value: '1.1'}});
@@ -134,10 +137,10 @@ it('calls setState with error when nectar is greater than the main chain balance
 
 it('calls setState with error when nectar is greater than the main chain balance on deposit', () => {
   const setState = jest.spyOn(Relay.prototype, 'setState');
-  const walletList= [{address: 'asdf', nct: '1', eth: '0'}];
+  
   const wrapper = mount(<Relay
-    address={0}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   setState.mockClear();
   wrapper.find('.AnimatedInput').find('input').simulate('change', {target: {value: '1.1'}});
 
@@ -146,10 +149,10 @@ it('calls setState with error when nectar is greater than the main chain balance
 });
 
 it('opens the modal when button is clicked', () => {
-  const walletList= [{address: 'asdf', nct: '1', eth: '0'}];
+  
   const wrapper = mount(<Relay
-    address={0}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   wrapper.find('.AnimatedInput').find('input').simulate('change', {target: {value: '1'}});
   wrapper.find('.Button').simulate('click');
 
@@ -158,51 +161,36 @@ it('opens the modal when button is clicked', () => {
 
 it('calls transfer when onWalletChange handler is called and didUnlock is true', () => {
   const transfer = jest.spyOn(Relay.prototype, 'transfer');
-  const walletList= [{address: 'asdf', nct: '1', eth: '0'}];
+  
   const wrapper = mount(<Relay
-    address={0}
-    walletList={walletList}/>);
-  const instance = wrapper.instance();
+    address={address}
+    wallet={wallet}/>);
   wrapper.setState({nectar: '1'});
-  instance.onWalletChangeHandler(true);
+  wrapper.find('.Button').simulate('click');
 
   expect(transfer).toHaveBeenCalledTimes(1);
 });
 
-it('calls onWalletChange when onWalletChange handler is called and didUnlock is true', () => {
-  const onWalletChange = jest.fn();
-  const walletList= [{address: 'asdf', nct: '1', eth: '0'}];
-  const wrapper = mount(<Relay
-    onWalletChange={onWalletChange}
-    address={0}
-    walletList={walletList}/>);
-  wrapper.setState({nectar: '1'});
-  const instance = wrapper.instance();
-  instance.onWalletChangeHandler(true);
-
-  expect(onWalletChange).toHaveBeenCalledTimes(1);
-});
-
 it('calls http.deposit when deposit selected', () => {
-  const walletList= [{address: 'asdf', nct: '1', eth: '0'}];
+  
   const wrapper = mount(<Relay
-    address={0}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   wrapper.setState({nectar: '1'});
-  const instance = wrapper.instance();
-  instance.onWalletChangeHandler(true);
+
+  wrapper.find('.Button').simulate('click');
 
   expect(mockDeposit).toHaveBeenCalledTimes(1);
 });
 
 it('calls http.withdraw when withdraw selected', () => {
-  const walletList= [{address: 'asdf', nct: '1', eth: '0'}];
+  
   const wrapper = mount(<Relay
-    address={0}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   wrapper.setState({nectar: '1', selected: 1});
-  const instance = wrapper.instance();
-  instance.onWalletChangeHandler(true);
+
+  wrapper.find('.Button').simulate('click');
 
   expect(mockWithdraw).toHaveBeenCalledTimes(1);
 });
@@ -223,14 +211,14 @@ it('calls onError if deposit fails', (done) => {
     };
   });
   const onError = jest.fn();
-  const walletList= [{address: 'asdf', nct: '1', eth: '0'}];
+  
   const wrapper = mount(<Relay
     onError={onError}
-    address={0}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   wrapper.setState({nectar: '1'});
   const instance = wrapper.instance();
-  instance.onWalletChangeHandler(true)
+  instance.transfer(true)
     .then(() => {
       try {
         expect(onError).toHaveBeenCalledTimes(1);
@@ -257,14 +245,14 @@ it('calls onError if withdrawal fails', (done) => {
     };
   });
   const onError = jest.fn();
-  const walletList= [{address: 'asdf', nct: '1', eth: '0'}];
+  
   const wrapper = mount(<Relay
     onError={onError}
-    address={0}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   wrapper.setState({nectar: '1', selected: 1});
   const instance = wrapper.instance();
-  instance.onWalletChangeHandler(true)
+  instance.transfer(true)
     .then(() => {
       try {
         expect(onError).toHaveBeenCalledTimes(1);
@@ -276,10 +264,9 @@ it('calls onError if withdrawal fails', (done) => {
 });
 
 it('updates the after field balances when nectar amount entered', () => {
-  const walletList= [{address: 'asdf', nct: '1', eth: '0'}];
   const wrapper = mount(<Relay
-    address={0}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   wrapper.setState({nectar: .5});
 
   expect(wrapper.find('.ChainInfo').last().find('.StatContent').first().text()).toEqual('0.5 NCT');
@@ -287,10 +274,9 @@ it('updates the after field balances when nectar amount entered', () => {
 });
 
 it('Changes the balances when selected index is changed', () => {
-  const walletList= [{address: 'asdf', nct: '1', eth: '0'}];
   const wrapper = mount(<Relay
-    address={0}
-    walletList={walletList}/>);
+    address={address}
+    wallet={wallet}/>);
   wrapper.setState({nectar: .5, selected: 1});
 
   expect(wrapper.find('.ChainInfo').last().find('.StatContent').first().text()).toEqual('1.5 NCT');

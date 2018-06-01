@@ -154,7 +154,7 @@ class Relay extends Component {
           this.removeRelayRequest(uuid);
         });
     } else {
-      return null;
+      return new Promise((resolve) => resolve());
     }
   }
 
