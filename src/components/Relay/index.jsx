@@ -42,7 +42,7 @@ class Relay extends Component {
 
     let homeAltered ='0';
     let sideAltered ='0';
-    if (wallet.nct) {
+    if (wallet.homeNct && wallet.sideNct) {
       let nct = nectar;
       if (!nectar) {
         nct = 0;
