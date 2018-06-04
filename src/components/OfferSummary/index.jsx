@@ -46,6 +46,9 @@ class OfferSummary extends Component {
     return (
       <div className='OfferSummary'>
         <StatRow vertical
+          title={strings.contractAddr}
+          content={offer.address}/>
+        <StatRow vertical
           title={strings.poster}
           content={offer.author}/>
         <StatRow vertical

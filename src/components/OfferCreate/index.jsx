@@ -22,12 +22,15 @@ class OfferCreate extends Component {
       duration_error: null,
       expert: null,
       expert_error: null,
+      nectar_error: null,
+      nectar: null
     };
 
     this.onClickHandler = this.onClickHandler.bind(this);
     this.onDurationChanged = this.onDurationChanged.bind(this);
     this.onExpertChanged = this.onExpertChanged.bind(this);
     this.onRewardChanged = this.onRewardChanged.bind(this);
+    this.onWebsocketChanged = this.onWebsocketChanged.bind(this);
     this.addCreateOfferRequest = this.addCreateOfferRequest.bind(this);
     this.removeCreateOfferRequest = this.removeCreateOfferRequest.bind(this);
     this.validateFields = this.validateFields.bind(this);
@@ -68,10 +71,15 @@ class OfferCreate extends Component {
               error={duration_error}
               placeholder={strings.duration}
               input_id='duration'/>
+            <AnimatedInput type='text'
+              onChange={this.onWebsocketChanged}
+              error={websocket_error}
+              placeholder={strings.websocket}
+              input_id='websocket'/>
           </div>
           <div className='Offer-Create-Upload'>
             <Button
-              disabled={!reward || !duration || reward_error || duration_error || !expert || expert_error}
+              disabled={!reward || !duration || reward_error || duration_error || !expert || expert_error }
               onClick={this.onClickHandler}>
               {strings.openOffer}
             </Button>
@@ -97,34 +105,41 @@ class OfferCreate extends Component {
       this.validateFields();
     });
   }
-
+  
   onExpertChanged(expert) {
     this.setState({expert: expert}, () => {
       this.validateFields();
     });
   }
-  
+
   onRewardChanged(reward) {
     this.setState({reward: reward}, () => {
+      this.validateFields();
+    });
+  }
+  
+  onWebsocketChanged(websocket) {
+    this.setState({websocket: websocket}, () => {
       this.validateFields();
     });
   }
 
   createOffer() {
     const { state: {expert, expert_error, reward, reward_error, duration,
-      duration_error}, props: { addOffer } } = this;
+      duration_error, websocket, websocket_error}, props: { addOffer, address, key, token } } = this;
 
     const rewardWei = new BigNumber(reward).times(new BigNumber('1000000000000000000'));
 
     const http = this.http;
-    if (expert && reward && duration && !duration_error && !reward_error && !expert_error) {
+    if (expert && reward && duration && websocket && !duration_error && !reward_error && !expert_error && !websocket_error && nectar && !nectar_error) {
       const uuid = Uuid();
       this.addCreateOfferRequest(uuid);
       return new Promise(resolve => {
         this.onOfferPosted();
         resolve();
       })
-        .then(() => http.createOffer(expert, rewardWei.toString(), Number(duration)))
+        .then(() => http.createOffer(address, expert, Number(duration), websocket))
+        .then((result) => http.openOffer(result, token, key, address, rewardWei.toString()))
         .then(result => {
           if (addOffer) {
             addOffer(result);
@@ -168,24 +183,28 @@ class OfferCreate extends Component {
   }
 
   validateFields() {
-    const {state: {duration, reward, expert}} = this;
-
-    if (duration && duration < 1) {
-      this.setState({duration_error: 'Duration below 1.'});
+    const {state: {duration, reward,  expert, websocket}} = this;
+    if (duration && duration < 10) {
+      this.setState({duration_error: 'Duration below 10.'});
     } else if (duration && !Number.isInteger(Number(duration))) {
       this.setState({duration_error: 'Duration must be integer.'});
     } else {
       this.setState({duration_error: null});
     }
 
-    const min = new BigNumber('0.0625');
-    if (reward && new BigNumber(reward).comparedTo(min) < 0 ) {
-      this.setState({reward_error: 'Reward below 0.0625 minimum.'});
+    const min = new BigNumber('0');
+    if (reward && new BigNumber(reward).comparedTo(min) <= 0 ) {
+      this.setState({reward_error: 'Reward below 0.'});
     } else {
       this.setState({reward_error: null});
     }
 
-    //TODO validate expert
+    if (websocket && !websocket.startsWith('ws://')) {
+      this.setState({websocket_error: 'Value must be a websocket uri'});
+    } else {
+      this.setState({websocket_error: null});
+    }
+
     if (expert && !web3Utils.isAddress(expert)) {
       this.setState({expert_error: 'Expert address must be a valid Ethereum address.'});
     } else {
@@ -203,5 +222,6 @@ OfferCreate.propTypes = {
   removeRequest: PropTypes.func,
   url: PropTypes.string,
   onRequestWalletChange: PropTypes.func,
+  key: PropTypes.object,
 };
 export default OfferCreate;

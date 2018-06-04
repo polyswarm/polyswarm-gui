@@ -73,9 +73,9 @@ class OfferPay extends Component {
   }
 
   addMessage(message) {
-    const {props: {addMessage}} = this;
+    const {props: {offer, addMessage}} = this;
     if (addMessage) {
-      addMessage(message);
+      addMessage(offer.guid, message);
     }
   }
   
@@ -90,7 +90,7 @@ class OfferPay extends Component {
   }
 
   payExpert() {
-    const { state: {reward, reward_error}, props: { offer, onBackPressed } } = this;
+    const { state: {reward, reward_error}, props: { offer, onBackPressed, address, key } } = this;
 
     const rewardWei = new BigNumber(reward).times(new BigNumber('1000000000000000000'));
 
@@ -104,8 +104,15 @@ class OfferPay extends Component {
         }
         resolve();
       })
-        .then(() => http.pay(offer.guid, rewardWei.toString()))
-        .then(result => this.addMessage(result))
+        .then(() => http.pay(offer.guid, key, address, rewardWei.toString()))
+        .then(() => {
+          const message = {
+            type: 'payment',
+            amount: rewardWei.toString()
+          };
+          this.addMessage(offer.guid, message);
+          return;
+        })
         .catch(error => {
           let errorMessage;
           if (!error || !error.message || error.message.length === 0) {
@@ -146,10 +153,10 @@ class OfferPay extends Component {
   validateFields() {
     const {state: {reward}} = this;
     const {props: {last}} = this;
-    const min = new BigNumber('0.0625');
+    const min = new BigNumber('0');
     const lastPay = new BigNumber(last);
-    if (reward && new BigNumber(reward).comparedTo(min) < 0 ) {
-      this.setState({reward_error: 'Reward below 0.0625 minimum.'});
+    if (reward && new BigNumber(reward).comparedTo(min) <= 0 ) {
+      this.setState({reward_error: 'Reward must be more than 0 NCT.'});
     } else if (reward && new BigNumber(reward).comparedTo(lastPay) <= 0 ) {
       this.setState({reward_error: `Reward must be higher than last payment of ${lastPay.toString()}.`});
     } else {
@@ -168,5 +175,6 @@ OfferPay.propTypes = {
   removeRequest: PropTypes.func,
   url: PropTypes.string,
   last: PropTypes.string,
+  key: PropTypes.object
 };
 export default OfferPay;

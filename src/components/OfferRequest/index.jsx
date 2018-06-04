@@ -105,9 +105,9 @@ class OfferRequest extends Component {
   }
 
   addMessage(message) {
-    const {props: {addMessage}} = this;
+    const {props: {offer, addMessage}} = this;
     if (addMessage) {
-      addMessage(message);
+      addMessage(offer.guid, message);
     }
   }
 
@@ -127,6 +127,7 @@ class OfferRequest extends Component {
 
   sendMessage() {
     const files = this.state.files.slice();
+    const {props: {key, address, offer} } = this;
 
     const http = this.http;
     if (files && files.length > 0) {
@@ -138,8 +139,18 @@ class OfferRequest extends Component {
         resolve();
       })
         .then(() => http.uploadFiles(files))
-        .then(artifact => http.sendRequest(artifact))
-        .then(result => this.addMessage(result))
+        .then(artifact => http.sendRequest(offer.guid, address, key, artifact)
+          .then(() => artifact)
+        )
+        .then(artifact => http.getArtifactsList(artifact))
+        .then(files => {
+          const message = {
+            type: 'request',
+            artifacts: [files]
+          };
+          this.addMessage(message);
+          return;
+        })
         .catch(error => {
           let errorMessage;
           if (!error || !error.message || error.message.length === 0) {
@@ -172,5 +183,6 @@ OfferRequest.propTypes = {
   wallet: PropTypes.object,
   address: PropTypes.string,
   onBackPressed: PropTypes.func,
+  key: PropTypes.object,
 };
 export default OfferRequest;

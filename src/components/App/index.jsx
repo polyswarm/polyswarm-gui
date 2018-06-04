@@ -31,6 +31,7 @@ class App extends Component {
     };
     this.cancel = false;
     this.state = {
+      key: null,
       address: null,
       wallet,
       active: -1,
@@ -41,11 +42,12 @@ class App extends Component {
       first,
       errorMessage: null,
       requestsInProgress: [],
-      modalOpen: true,
+      modalOpen: true
     };
 
     this.onAddBounty = this.onAddBounty.bind(this);
     this.onAddOffer = this.onAddOffer.bind(this);
+    this.onAddMessage = this.onAddMessage.bind(this);
     this.onBackPressed = this.onBackPressed.bind(this);
     this.onRemoveBounty = this.onRemoveBounty.bind(this);
     this.onSelectBounty = this.onSelectBounty.bind(this);
@@ -145,7 +147,7 @@ class App extends Component {
               <OfferInfo
                 {...this.getPropsForChild()}
                 // This will just kickoff a refresh of this offer
-                onAddMessage={this.onAddOffer}
+                onAddMessage={this.onAddMessage}
                 offer={bounties[active]}/>
             )}
             {errorMessage && errorMessage.length > 0 && (
@@ -175,6 +177,19 @@ class App extends Component {
       .then(() => {
         this.removeRequest(strings.requestGetBounty, result.guid);
       });
+  }
+
+  onAddMessage(guid, message) {
+    // deep copy so we it won't edit the actual state
+    const bounties = JSON.parse(JSON.stringify(this.state.bounties.slice()));
+    const offer = bounties
+      .filter((value) => value.type === 'offer')
+      .map((offer) => offer.guid === guid);
+    if (offer && offer.length == 1) {
+      // add message the the front 
+      offer.messages.slice(0, 0, message);
+      this.setState({bounties: bounties});
+    }
   }
 
   onAddOffer(result) {
@@ -217,7 +232,10 @@ class App extends Component {
     this.setState({address, modalOpen: false});
 
     this.http.setAccount(address, keyfile, password)
-      .then(() => this.http.listenForTransactions())
+      .then((key) => {
+        this.setState({key: key});
+        this.http.listenForTransactions(key);
+      })
       .then(() => this.getWallet())
       .catch(() => {});
   }
@@ -333,6 +351,7 @@ class App extends Component {
     const uuid = Uuid();
     this.addRequest(strings.requestAllData, uuid);
     http.listenForAssertions(this.updateOnAssertion);
+    http.listenForMessages(this.onAddMessage);
     const bounties = this.state.bounties.slice();
     const promises = bounties.map((bounty) => {
       let promise;
@@ -359,7 +378,16 @@ class App extends Component {
       values.forEach((value) => {
         const foundIndex = bounties.findIndex((bounty) => bounty.guid === value.guid);
         if (foundIndex >= 0) {
-          bounties[foundIndex] = value;
+          if (value.type === 'bounty') {
+            bounties[foundIndex] = value;
+          } {
+            const offer = bounties[foundIndex];
+            // Update the fields, but don't wipe it out because messages are separate
+            offer.address = value.address;
+            offer.closed = value.closed;
+            offer.author = value.ambassador;
+            offer.expert = value.expert;
+          }
         }
       });
       this.setState({bounties: bounties});
@@ -368,14 +396,16 @@ class App extends Component {
   }
 
   getPropsForChild() {
-    const {host: url} = config;
-    const { state: { active, bounties, wallet, requestsInProgress, address } } = this;
+    const {host: url, token} = config;
+    const { state: { active, bounties, wallet, requestsInProgress, address, key } } = this;
     return({
       url,
+      key,
       active,
+      wallet,
       address,
       bounties,
-      wallet,
+      token: token,
       requestsInProgress,
       onError: this.onPostError,
       addRequest: this.addRequest,

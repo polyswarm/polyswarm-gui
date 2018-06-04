@@ -38,16 +38,28 @@ class HttpApp {
             if (this.transactions) {
               this.transactions.close();
             }
-
-            this.address = address;
-            this.keyfile = keyfile;
-            this.password = password;
             resolve();
+          })
+      )
+      .then(
+        () => 
+          new Promise((resolve, reject) => {
+            const path = require('path');
+            if (!keyfile || !address || !web3Utils.isAddress(address) || !password) {
+              reject();
+            }
+            // We double up on the dirname to trim keystore, which importfromfile adds
+            const trimmed = path.dirname(path.dirname(keyfile.path));
+            const enc_key = keythereum.importFromFile(address, trimmed);
+            keythereum.recover(password, enc_key, key => {
+              resolve(key);
+            });
           })
       );
   }
 
   getBounty(bounty) {
+    const url = this.url;
     return new Promise((resolve, reject) => {
       if (validator.isUUID(bounty.guid, 4)) {
         resolve(bounty.guid);
@@ -55,7 +67,7 @@ class HttpApp {
         reject('Invalid GUID');
       }
     })
-      .then(guid => fetch(this.url + '/bounties/' + guid))
+      .then(guid => fetch(url + '/bounties/' + guid))
       .then(response => {
         if (response.ok) {
           return response;
@@ -81,18 +93,93 @@ class HttpApp {
   }
 
   getOffer(offer) {
+    const url = this.url;
     return new Promise((resolve, reject) => {
       if (validator.isUUID(offer.guid, 4)) {
         resolve(offer.guid);
       } else {
         reject('Invalid GUID');
       }
-    })
-      .then(() => new Promise(resolve => resolve(offer)))
+    }).then(guid => fetch(url + '/offers/' + guid))
+      .then(response => {
+        if (response.ok) {
+          return response;
+        }
+        return new Promise(resolve => {
+          resolve(response.json());
+        }).then(json => {
+          throw Error(json.message);
+        });
+      }).then(response => response.json())
+      .then(body => body.result)
+      .then(offer => this.getClosedForOffer(offer))
+      .then(offer => this.getAddressFor(offer))
       .catch(() => null);
   }
 
+  getClosedForOffer(offer) {
+    const url = this.url;
+    return new Promise((resolve, reject) => {
+      if (validator.isUUID(offer.guid, 4)) {
+        resolve(offer.guid);
+      } else {
+        reject('Invalid GUID');
+      }
+    }).then(() => fetch(url + '/offers/closed'))
+      .then(response => {
+        if (response.ok) {
+          return response;
+        }
+        return new Promise(resolve => {
+          resolve(response.json());
+        }).then(json => {
+          throw Error(json.message);
+        });
+      }).then(response => response.json())
+      .then(body => body.result)
+      .then(closed => {
+        offer.closed = false;
+        const index = closed.findIndex((value) => value.guid === offer.guid);
+        if ( index >= 0) {
+          offer.closed = true;
+          offer.address = closed[index].address;
+        }
+        return offer;
+      });
+  }
+
+  getAddressForOffer(offer) {
+    const url = this.url;
+    return new Promise((resolve, reject) => {
+      if (validator.isUUID(offer.guid, 4)) {
+        resolve(offer.guid);
+      } else {
+        reject('Invalid GUID');
+      }
+    }).then(() => fetch(url + '/offers/open'))
+      .then(response => {
+        if (response.ok) {
+          return response;
+        }
+        return new Promise(resolve => {
+          resolve(response.json());
+        }).then(json => {
+          throw Error(json.message);
+        });
+      }).then(response => response.json())
+      .then(body => body.result)
+      .then(open => {
+        offer.address = '';
+        index = open.findIndex((value) => value.guid === offer.guid);
+        if ( index >= 0) {
+          offer.address = open[index];
+        }
+        return offer;
+      });
+  }
+
   getArtifactsForBounty(bounty) {
+    const url = this.url;
     return new Promise((resolve, reject) => {
       const hash = multihashes.fromB58String(bounty.uri);
       try {
@@ -102,12 +189,12 @@ class HttpApp {
         reject(error);
       }
     })
-      .then(uri => fetch(this.url + '/artifacts/' + uri))
+      .then(uri => fetch(url + '/artifacts/' + uri))
       .then(response => {
         if (response.ok) {
           return response;
         } else {
-          throw new Error('Unable to access accounts');
+          throw new Error('Unable to access artifacts');
         }
       })
       .then(response => response.json())
@@ -120,7 +207,7 @@ class HttpApp {
       .then(filesnames => {
         return filesnames.map(name => {
           const trimmed = name.trim();
-          return { name: trimmed, good: 0, total: 0, assertions: [] };
+          return { name: trimmed, assertions: [] };
         });
       })
       .then(files => {
@@ -130,6 +217,7 @@ class HttpApp {
   }
 
   getAssertionsForBounty(bounty) {
+    const url = this.url;
     return new Promise((resolve, reject) => {
       if (validator.isUUID(bounty.guid, 4)) {
         resolve(bounty.guid);
@@ -137,7 +225,7 @@ class HttpApp {
         reject('Invalid GUID');
       }
     })
-      .then(guid => fetch(this.url + '/bounties/' + guid + '/assertions'))
+      .then(guid => fetch(url + '/bounties/' + guid + '/assertions'))
       .then(response => {
         if (response.ok) {
           return response;
@@ -167,7 +255,8 @@ class HttpApp {
   }
 
   getBountyIsActive(bounty) {
-    return fetch(this.url + '/bounties/active')
+    const url = this.url;
+    return fetch(url + '/bounties/active')
       .then(response => {
         if (response.ok) {
           return response;
@@ -232,42 +321,113 @@ class HttpApp {
       .catch(() => 0);
   }
 
-  listenForTransactions() {
+  listenForTransactions(key) {
     const ws = this.ws;
-    const keyfile = this.keyfile;
-    const address = this.address;
-    const password = this.password;
+    const websocket = new WebSocket(ws + '/transactions');
 
-    return new Promise((resolve, reject) => {
-      const path = require('path');
-      if (!keyfile || !address || !web3Utils.isAddress(address) || !password) {
-        reject();
+    websocket.onmessage = msg => {
+      const { id, data } = JSON.parse(msg.data);
+      const { chainId } = data;
+      const tx = new EthereumTx(data);
+      tx.sign(key);
+
+      websocket.send(
+        JSON.stringify({
+          id: id,
+          chainId: chainId,
+          data: tx.serialize().toString('hex')
+        })
+      );
+    };
+    this.transactions = websocket;
+  }
+
+  listenForMessages(offer, onMessageReceived) {
+    // [0-31] is close flag
+    // [32-63] nonce
+    // [64-95] ambassador address
+    // [96-127] expert address
+    // [128-159] msig address
+    // [160-191] balance in nectar for ambassador
+    // [192-223] balance in nectar for expert
+    // [224-255] token address
+    // [256-287] A globally-unique identifier for the Listing.
+    // [288-319] The Offer Amount.
+
+    /// @dev Optional State
+    // [320-351] Cryptographic hash of the Artifact.
+    // [352-383] The IPFS URI of the Artifact.
+    // [384-415] Engagement Deadline
+    // [416-447] Assertion Deadline
+    // [448-479] current commitment
+    // [480-511] bitmap of verdicts
+    // [512-543] meta data
+
+    // attach to websocket
+    // anytime we get a message, we pass it along to the app, which is tracking
+    // messages
+    const websocket = new WebSocket(offer.websocketUri);
+
+    websocket.onmessage = event => {
+      const data = JSON.parse(event.data);
+      state = data.state;
+      // Should I verify the signature? Yes. TODO
+      const artifact = String.fromCharCode.apply(String, state.slice(352, 384));
+      const verdicts = state.slice(480, 512);
+
+      const verdictLength = verdicts.split('').filter(letter => letter !== '\0').length > 0;
+      const artifactLength = artifact.split('').filter(letter => letter !== '\0').length > 0;
+      
+      if (verdictLength > 0 && artifactLength > 0) {
+
+        const url = this.url;
+        return new Promise((resolve, reject) => {
+          const hash = multihashes.fromB58String(artifact);
+          try {
+            multihashes.validate(hash);
+            resolve(bounty.uri);
+          } catch (error) {
+            reject(error);
+          }
+        })
+          .then(uri => fetch(url + '/artifacts/' + uri))
+          .then(response => {
+            if (response.ok) {
+              return response;
+            } else {
+              throw new Error('Unable to access artifacts');
+            }
+          })
+          .then(response => response.json())
+          .then(json => json.result)
+          .then(files => {
+            return {
+              type: 'assertion',
+              uri: artifact,
+              artifacts: files,
+              verdicts: [],
+              amount: '',
+              guid: offer.guid
+            };
+          }).then((message) => {
+            const v = verdicts.reduce((accumulator, current) => {
+              accumulator.push(current >> 7 && 1);
+              accumulator.push(current >> 6 && 1);
+              accumulator.push(current >> 5 && 1);
+              accumulator.push(current >> 4 && 1);
+              accumulator.push(current >> 3 && 1);
+              accumulator.push(current >> 2 && 1);
+              accumulator.push(current >> 1 && 1);
+              accumulator.push(current && 1);
+            }, []);
+            message.verdicts = v;
+            return message;
+          })
+          .then((message) => {
+            onMessageReceived(guid, message);
+          });
       }
-      // We double up on the dirname to trim keystore, which importfromfile adds
-      const trimmed = path.dirname(path.dirname(keyfile.path));
-      const enc_key = keythereum.importFromFile(address, trimmed);
-      keythereum.recover(password, enc_key, key => {
-        const websocket = new WebSocket(ws + '/transactions');
-
-        websocket.onmessage = msg => {
-          const { id, data } = JSON.parse(msg.data);
-          const { chainId } = data;
-          const tx = new EthereumTx(data);
-          tx.sign(key);
-
-          websocket.send(
-            JSON.stringify({
-              id: id,
-              chainId: chainId,
-              data: tx.serialize().toString('hex')
-            })
-          );
-        };
-        resolve(websocket);
-      });
-    }).then(websocket => {
-      this.transactions = websocket;
-    });
+    };
   }
 
   listenForAssertions(assertionAddedCallback) {

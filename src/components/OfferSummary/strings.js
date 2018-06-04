@@ -10,6 +10,7 @@ const strings = {
   safe: 'Safe',
   pay: 'Pay',
   request: 'Analyze',
-  closed: 'Closed:'
+  closed: 'Closed:',
+  contractAddress: 'Contract Address:'
 };
 export default strings;
