@@ -187,6 +187,7 @@ class App extends Component {
     if (offers && offers.length == 1) {
       // add message the the front 
       offers[0].messages.unshift(message);
+      offers[0].nextSequence = message.sequence + 1;
       this.setState({bounties: bounties});
     }
   }
@@ -203,7 +204,7 @@ class App extends Component {
           // no way to grab the balance in polyswarmd, yet.
           offer.initial = reward;
           offer.websocketUri = websocket;
-          offer.nextSequence = 0;
+          offer.nextSequence = 1;
           offer.messages = [];
           const bounties = this.state.bounties.slice();
           bounties.push(offer);

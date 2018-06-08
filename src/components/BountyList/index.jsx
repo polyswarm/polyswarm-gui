@@ -135,7 +135,8 @@ class BountyList extends Component {
     if (offer.messages) {
       messages = offer.messages.length;
       const payouts = offer.messages
-        .filter((message) => message.type==='payment');
+        .sort((a, b) => b.sequence - a.sequence)
+        .filter((message) => message.type === 'payment');
       if (payouts.length > 0) {
         lastPay = web3Utils.fromWei(payouts[0].amount) + strings.nct;
       }
@@ -144,9 +145,7 @@ class BountyList extends Component {
         .filter((message) => message.type==='request')
         .map((message) => message.artifacts)
         .reduce((all, artifacts) => all.concat(artifacts), [])
-        .sort((a, b) => {
-          return a.name > b.name;
-        })
+        .sort()
         .map((artifact) => artifact.name);
       if (names.length > 0) {
         artifacts = names.reduce((accumulator, artifact) => accumulator +', '+ artifact);

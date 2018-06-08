@@ -12,7 +12,7 @@ class HttpOfferPay {
     return '?account=' + account;
   }
 
-  pay(key, offer, amount) {
+  pay(key, offer, sequence, amount) {
     const url = this.url;
     const initialWel = web3Utils.toWei(offer.initial);
     return new Promise((resolve, reject) => {
@@ -32,7 +32,7 @@ class HttpOfferPay {
         if (amount && amount > 0) {
           const offerState = [];
           offerState.push(1); // is close
-          offerState.push(0); // sequence
+          offerState.push(sequence); // sequence
           offerState.push(0); // ambassador address
           offerState.push(0); // expert address
           offerState.push(0); //  msig address

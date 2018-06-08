@@ -15,6 +15,7 @@ class OfferMessageList extends Component {
   render() {
     const { props: { offer } } = this;
     const messages = offer.messages || [];
+    messages.sort((a, b) => b.sequence - a.sequence);
     return (
       <div className='OfferMessageList'>
         <ul>
@@ -48,7 +49,7 @@ class OfferMessageList extends Component {
       .map((artifact) => artifact.name)
       .reduce((accumulator, name) => `${accumulator}, ${name}`);
     return(
-      <Card key={message.guid}>
+      <Card key={message.sequence}>
         <CardHeader
           title={strings.request}
         />
@@ -71,7 +72,7 @@ class OfferMessageList extends Component {
       'Assertion-Benign': !worstVerdict
     });
     return(
-      <Card key={message.guid}>
+      <Card key={message.sequence}>
         <CardHeader
           additionalClasses={verdictClass}
           title={strings.assertion}
@@ -97,7 +98,7 @@ class OfferMessageList extends Component {
   renderPayment(message) {
     const amount = web3Utils.fromWei(message.amount);
     return(
-      <Card key={message.guid}>
+      <Card key={message.sequence}>
         <CardHeader
           title={strings.payment}
           subhead={`${amount}${strings.nectar}`}

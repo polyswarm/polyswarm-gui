@@ -121,6 +121,7 @@ class OfferRequest extends Component {
     const files = this.state.files.slice();
     const {props: {encryptionKey, offer, onAddMessage} } = this;
 
+    const sequence = offer.nextSequence;
     const http = this.http;
     if (files && files.length > 0) {
       const uuid = Uuid();
@@ -131,14 +132,15 @@ class OfferRequest extends Component {
         resolve();
       })
         .then(() => http.uploadFiles(files))
-        .then(artifact => http.sendRequest(encryptionKey, offer, artifact)
+        .then(artifact => http.sendRequest(encryptionKey, offer, sequence, artifact)
           .then(() => artifact)
         )
         .then(artifact => http.getArtifactsList(artifact))
         .then(files => {
           const message = {
             type: 'request',
-            artifacts: files
+            artifacts: files,
+            sequence: sequence
           };
           onAddMessage(offer.guid, message);
           return;

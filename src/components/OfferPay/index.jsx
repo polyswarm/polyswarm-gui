@@ -87,7 +87,7 @@ class OfferPay extends Component {
     const { props: { offer, onBackPressed, encryptionKey, onAddMessage } } = this;
 
     const rewardWei = web3Utils.toWei(reward);
-
+    const sequence = offer.nextSequence;
     const http = this.http;
     if (reward &&!reward_error) {
       const uuid = Uuid();
@@ -98,11 +98,12 @@ class OfferPay extends Component {
         }
         resolve();
       })
-        .then(() => http.pay(encryptionKey, offer, rewardWei))
+        .then(() => http.pay(encryptionKey, offer, sequence, rewardWei))
         .then(() => {
           const message = {
             type: 'payment',
-            amount: rewardWei
+            amount: rewardWei,
+            sequence: sequence
           };
           onAddMessage(offer.guid, message);
           return;

@@ -19,7 +19,7 @@ class HttpRequest {
     return helper.uploadFiles(files);
   }
 
-  sendRequest(key, offer, artifactUri) {
+  sendRequest(key, offer, sequence, artifactUri) {
     const url = this.url;
     return new Promise((resolve, reject) => {
       const hash = multihashes.fromB58String(artifactUri);
@@ -44,7 +44,7 @@ class HttpRequest {
     })).then(() => new Promise(resolve => {
       const offerState = [];
       offerState.push(0); // is close
-      offerState.push(0); // sequence
+      offerState.push(sequence); // sequence
       offerState.push(0); // ambassador address
       offerState.push(0); // expert address
       offerState.push(0); //  msig address

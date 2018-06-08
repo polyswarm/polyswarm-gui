@@ -37,7 +37,9 @@ class OfferInfo extends Component {
 
     let last = '0';
     if (offer.messages) {
-      const payments = offer.messages.filter(message => message.type === 'payment').sort((a, b) => a.amount < b.amount);
+      const payments = offer.messages
+        .sort((a, b) => b.sequence - a.sequence)
+        .filter(message => message.type === 'payment');
       last = payments.length > 0 ? payments[0].amount : '0';
     }
 
