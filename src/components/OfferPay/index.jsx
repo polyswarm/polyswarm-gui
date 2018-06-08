@@ -90,7 +90,7 @@ class OfferPay extends Component {
   }
 
   payExpert() {
-    const { state: {reward, reward_error}, props: { offer, onBackPressed, address, key } } = this;
+    const { state: {reward, reward_error}, props: { offer, onBackPressed, address, encryptionKey } } = this;
 
     const rewardWei = new BigNumber(reward).times(new BigNumber('1000000000000000000'));
 
@@ -104,7 +104,7 @@ class OfferPay extends Component {
         }
         resolve();
       })
-        .then(() => http.pay(offer.guid, key, address, rewardWei.toString()))
+        .then(() => http.pay(offer.guid, encryptionKey, address, rewardWei.toString()))
         .then(() => {
           const message = {
             type: 'payment',
@@ -175,6 +175,6 @@ OfferPay.propTypes = {
   removeRequest: PropTypes.func,
   url: PropTypes.string,
   last: PropTypes.string,
-  key: PropTypes.object
+  encryptionKey: PropTypes.object
 };
 export default OfferPay;

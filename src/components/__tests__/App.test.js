@@ -54,6 +54,12 @@ const mockListenForAssertions = jest.fn().mockImplementation(() => {
   });
 });
 
+const mockListenForMessages = jest.fn().mockImplementation(() => {
+  return new Promise(resolve => {
+    resolve();
+  });
+});
+
 jest.mock('../App/http', () => {
   // Works and lets you check for constructor calls:
   return jest.fn().mockImplementation(() => {
@@ -63,7 +69,8 @@ jest.mock('../App/http', () => {
       getUnlockedWallet: mockUnlockWallet,
       getEth: mockGetEth,
       getNct: mockGetNct,
-      listenForAssertions: mockListenForAssertions
+      listenForAssertions: mockListenForAssertions,
+      listenForMessages: mockListenForMessages
     };
   });
 });
@@ -83,7 +90,8 @@ beforeEach(() => {
       getUnlockedWallet: mockUnlockWallet,
       getEth: mockGetEth,
       getNct: mockGetNct,
-      listenForAssertions: mockListenForAssertions
+      listenForAssertions: mockListenForAssertions,
+      listenForMessages: mockListenForMessages
     };
   });
 });
@@ -1012,7 +1020,8 @@ it("doesn't call storeBounties when setState called with identical set of bounti
       getUnlockedWallet: mockUnlockWallet,
       getEth: mockGetEth,
       getNct: mockGetNct,
-      listenForAssertions: mockListenForAssertions
+      listenForAssertions: mockListenForAssertions,
+      listenForMessages: mockListenForMessages
     };
   });
   const storeBounties = jest.spyOn(App.prototype, 'storeBounties');
@@ -1055,7 +1064,8 @@ it('calls storeBounties when setState called with different set of bounties', do
       getUnlockedWallet: mockUnlockWallet,
       getEth: mockGetEth,
       getNct: mockGetNct,
-      listenForAssertions: mockListenForAssertions
+      listenForAssertions: mockListenForAssertions,
+      listenForMessages: mockListenForMessages
     };
   });
   const storeBounties = jest.spyOn(App.prototype, 'storeBounties');

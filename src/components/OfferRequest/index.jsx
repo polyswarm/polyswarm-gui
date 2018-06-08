@@ -127,7 +127,7 @@ class OfferRequest extends Component {
 
   sendMessage() {
     const files = this.state.files.slice();
-    const {props: {key, address, offer} } = this;
+    const {props: {encryptionKey, address, offer} } = this;
 
     const http = this.http;
     if (files && files.length > 0) {
@@ -139,7 +139,7 @@ class OfferRequest extends Component {
         resolve();
       })
         .then(() => http.uploadFiles(files))
-        .then(artifact => http.sendRequest(offer.guid, address, key, artifact)
+        .then(artifact => http.sendRequest(offer.guid, address, encryptionKey, artifact)
           .then(() => artifact)
         )
         .then(artifact => http.getArtifactsList(artifact))
@@ -183,6 +183,6 @@ OfferRequest.propTypes = {
   wallet: PropTypes.object,
   address: PropTypes.string,
   onBackPressed: PropTypes.func,
-  key: PropTypes.object,
+  encryptionKey: PropTypes.object,
 };
 export default OfferRequest;

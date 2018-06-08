@@ -67,12 +67,12 @@ class HttpRequest {
       const r = sig.signature.slice(0, 32);
       const s = sig.signature.slice(32, 64);
 
-      const body = {
+      const body = JSON.stringify({
         state,
         v,
         r,
         s
-      };
+      });
       resolve(body);
     })).then((body) => {
       const account = this.getUrlAccount(address);

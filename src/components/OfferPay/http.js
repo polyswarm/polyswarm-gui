@@ -1,7 +1,5 @@
 import validator from 'validator';
 import secp256k1 from 'secp256k1';
-import { SSL_OP_MICROSOFT_BIG_SSLV3_BUFFER } from 'constants';
-
 
 class HttpOfferPay {
   constructor(url) {
@@ -32,7 +30,7 @@ class HttpOfferPay {
       } else {
         reject();
       }
-    })
+    }))
     .then(() => new Promise((resolve, reject) => {
       if (amount && amount > 0) {
         const offerState = [];
@@ -62,12 +60,12 @@ class HttpOfferPay {
         const r = sig.signature.slice(0, 32);
         const s = sig.signature.slice(32, 64);
   
-        const body = {
+          const body = JSON.stringify({
           state: depositState,
           v,
           r,
           s
-        };
+          });
         resolve(body);
       } else {
         reject('No payment amount specified');

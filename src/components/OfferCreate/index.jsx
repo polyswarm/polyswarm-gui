@@ -23,7 +23,10 @@ class OfferCreate extends Component {
       expert: null,
       expert_error: null,
       nectar_error: null,
-      nectar: null
+      nectar: null,
+      websocket: null,
+      websocket_error: null,
+      creating: false
     };
 
     this.onClickHandler = this.onClickHandler.bind(this);
@@ -42,7 +45,7 @@ class OfferCreate extends Component {
   }
 
   render() {
-    const { state: { reward, reward_error, duration, duration_error, expert, expert_error } } = this;
+    const { state: { reward, reward_error, duration, duration_error, expert, expert_error, websocket, websocket_error, creating } } = this;
     const { props: {  wallet, address, requestsInProgress, onBackPressed } } = this;
 
     return (
@@ -79,7 +82,7 @@ class OfferCreate extends Component {
           </div>
           <div className='Offer-Create-Upload'>
             <Button
-              disabled={!reward || !duration || reward_error || duration_error || !expert || expert_error }
+              disabled={!creating && (!reward || !duration || reward_error || duration_error || !expert || expert_error || !websocket || websocket_error) }
               onClick={this.onClickHandler}>
               {strings.openOffer}
             </Button>
@@ -126,26 +129,32 @@ class OfferCreate extends Component {
 
   createOffer() {
     const { state: {expert, expert_error, reward, reward_error, duration,
-      duration_error, websocket, websocket_error}, props: { addOffer, address, key, token } } = this;
+      duration_error, websocket, websocket_error} } = this;
+    const { props: { addOffer, address, onOfferCreated, encryptionKey, token } } = this;
 
     const rewardWei = new BigNumber(reward).times(new BigNumber('1000000000000000000'));
 
     const http = this.http;
-    if (expert && reward && duration && websocket && !duration_error && !reward_error && !expert_error && !websocket_error && nectar && !nectar_error) {
+    if (expert && reward && duration && websocket && !duration_error && !reward_error && !expert_error && !websocket_error) {
+      this.setState({creating: true});
       const uuid = Uuid();
       this.addCreateOfferRequest(uuid);
       return new Promise(resolve => {
-        this.onOfferPosted();
+        if (onOfferCreated) {
+          onOfferCreated();
+        }
         resolve();
       })
         .then(() => http.createOffer(address, expert, Number(duration), websocket))
-        .then((result) => http.openOffer(result, token, key, address, rewardWei.toString()))
         .then(result => {
           if (addOffer) {
             addOffer(result);
           }
+          return result;
         })
+        .then((result) => http.openOffer(encryptionKey, token, result, rewardWei))
         .catch(error => {
+          this.setState({creating: false});
           let errorMessage;
           if (!error || !error.message || error.message.length === 0) {
             errorMessage = strings.error;
@@ -217,11 +226,12 @@ OfferCreate.propTypes = {
   wallet: PropTypes.object,
   address: PropTypes.string,
   onError: PropTypes.func,
+  onOfferCreated: PropTypes.func,
   addOffer: PropTypes.func,
   addRequest: PropTypes.func,
   removeRequest: PropTypes.func,
   url: PropTypes.string,
   onRequestWalletChange: PropTypes.func,
-  key: PropTypes.object,
+  encryptionKey: PropTypes.object,
 };
 export default OfferCreate;

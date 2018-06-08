@@ -27,7 +27,7 @@ class App extends Component {
       homeEth: 0,
       sideEth: 0,
       homeNct: 0,
-      sideNct: 0,
+      sideNct: 0
     };
     this.cancel = false;
     this.state = {
@@ -127,7 +127,7 @@ class App extends Component {
               <OfferCreate
                 {...this.getPropsForChild()}
                 addOffer={this.onAddOffer}
-                onBountyPosted={this.onBackPressed}/>
+                onOfferCreated={this.onBackPressed}/>
             )}
             { relay && (
               <Relay {...this.getPropsForChild()}/>
@@ -164,7 +164,7 @@ class App extends Component {
     const http = this.http;
 
     this.addRequest(strings.requestGetBounty, result.guid);
-    return http.getBounty(result)
+    return http.getBounty('home', result)
       .then(bounty => {
         if (bounty != null) {
           bounty.updated = true;
@@ -196,7 +196,11 @@ class App extends Component {
     const http = this.http;
 
     this.addRequest(strings.requestGetOffer, result.guid);
-    return http.getOffer(result)
+    return http.getOffer('home', result)
+      // .then(offer => {
+      //   http.listenForMessages(offer, this.onAddMessage);
+      //   return offer;
+      // })
       .then(offer => {
         if (offer != null) {
           offer.updated = true;
@@ -351,14 +355,19 @@ class App extends Component {
     const uuid = Uuid();
     this.addRequest(strings.requestAllData, uuid);
     http.listenForAssertions(this.updateOnAssertion);
-    http.listenForMessages(this.onAddMessage);
+    
     const bounties = this.state.bounties.slice();
     const promises = bounties.map((bounty) => {
+      const chain = bounty.chain ? bounty.chain : 'home';
       let promise;
       if (bounty.type === 'offer') {
-        promise = http.getOffer(bounty);
+        promise = http.getOffer(chain, bounty)
+          .then(offer => {
+            http.listenForMessages(offer, this.onAddMessage);
+            return offer;
+          });
       } else {
-        promise = http.getBounty(bounty);
+        promise = http.getBounty(chain, bounty);
       }
       return promise
         .then(b => {
@@ -380,7 +389,7 @@ class App extends Component {
         if (foundIndex >= 0) {
           if (value.type === 'bounty') {
             bounties[foundIndex] = value;
-          } {
+          } else {
             const offer = bounties[foundIndex];
             // Update the fields, but don't wipe it out because messages are separate
             offer.address = value.address;
@@ -400,7 +409,7 @@ class App extends Component {
     const { state: { active, bounties, wallet, requestsInProgress, address, key } } = this;
     return({
       url,
-      key,
+      encryptionKey: key,
       active,
       wallet,
       address,
@@ -420,7 +429,7 @@ class App extends Component {
 
   getWallet() {
     const http = this.http;
-    const chains = ['home', 'side'];
+    const chains = ['home'];//, 'side'];
     const eth = chains.map(chain => http.getEth(chain)
       .then(balance =>
         new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000))
@@ -439,9 +448,9 @@ class App extends Component {
     return Promise.all(promises).then(values => {
       return({
         homeEth: values[0],
-        sideEth: values[1],
-        homeNct: values[2],
-        sideNct: values[3]
+        sideEth: 0,//values[1],
+        homeNct: values[1],//2],
+        sideNct: 0//values[3]
       });
     })
       .then((wallet) => new Promise((resolve, reject) => {

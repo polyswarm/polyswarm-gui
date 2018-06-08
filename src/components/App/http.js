@@ -4,7 +4,6 @@ import web3Utils from 'web3-utils';
 import multihashes from 'multihashes';
 import EthereumTx from 'ethereumjs-tx';
 import keythereum from 'keythereum';
-import WebSocket from 'isomorphic-ws';
 
 class HttpApp {
   constructor(url, ws) {
@@ -13,6 +12,7 @@ class HttpApp {
   }
 
   setAccount(address, keyfile, password) {
+    this.address = address;
     return new Promise((resolve, reject) => {
       require('fs').stat(keyfile.path, err => {
         if (err) {
@@ -58,7 +58,7 @@ class HttpApp {
       );
   }
 
-  getBounty(bounty) {
+  getBounty(chain, bounty) {
     const url = this.url;
     return new Promise((resolve, reject) => {
       if (validator.isUUID(bounty.guid, 4)) {
@@ -67,7 +67,7 @@ class HttpApp {
         reject('Invalid GUID');
       }
     })
-      .then(guid => fetch(url + '/bounties/' + guid))
+      .then(guid => fetch(url + '/bounties/' + guid + '?chain=' + chain))
       .then(response => {
         if (response.ok) {
           return response;
@@ -78,7 +78,7 @@ class HttpApp {
 
       .then(response => response.json())
       .then(json => json.result)
-      .then(bounty => this.getBountyIsActive(bounty))
+      .then(bounty => this.getBountyIsActive(chain, bounty))
       .then(bounty => {
         const amount = new BigNumber(bounty.amount)
           .dividedBy(new BigNumber('1000000000000000000'))
@@ -87,20 +87,21 @@ class HttpApp {
         bounty.type = 'bounty';
         return bounty;
       })
-      .then(bounty => this.getAssertionsForBounty(bounty))
-      .then(bountyAssertions => this.getArtifactsForBounty(bountyAssertions))
+      .then(bounty => this.getAssertionsForBounty(chain, bounty))
+      .then(bountyAssertions => this.getArtifactsForBounty(chain, bountyAssertions))
       .catch(() => null);
   }
 
-  getOffer(offer) {
+  getOffer(chain, offer) {
     const url = this.url;
+    const guid = offer.guid;
     return new Promise((resolve, reject) => {
-      if (validator.isUUID(offer.guid, 4)) {
-        resolve(offer.guid);
+      if (validator.isUUID(guid, 4)) {
+        resolve(guid);
       } else {
         reject('Invalid GUID');
       }
-    }).then(guid => fetch(url + '/offers/' + guid))
+    }).then(guid => fetch(url + '/offers/' + guid+ '?chain=' + chain))
       .then(response => {
         if (response.ok) {
           return response;
@@ -112,20 +113,22 @@ class HttpApp {
         });
       }).then(response => response.json())
       .then(body => body.result)
-      .then(offer => this.getClosedForOffer(offer))
-      .then(offer => this.getAddressFor(offer))
+      .then(result => result.offer_channel)
+      .then(offer => {
+        offer.guid = guid;
+        return offer;
+      })
+      .then(offer => this.getClosedForOffer(chain, offer))
+      .then(offer => {
+        offer.type = 'offer';
+        return offer;
+      })
       .catch(() => null);
   }
 
-  getClosedForOffer(offer) {
+  getClosedForOffer(chain, offer) {
     const url = this.url;
-    return new Promise((resolve, reject) => {
-      if (validator.isUUID(offer.guid, 4)) {
-        resolve(offer.guid);
-      } else {
-        reject('Invalid GUID');
-      }
-    }).then(() => fetch(url + '/offers/closed'))
+    return fetch(url + '/offers/closed' + '?chain=' + chain)
       .then(response => {
         if (response.ok) {
           return response;
@@ -148,37 +151,7 @@ class HttpApp {
       });
   }
 
-  getAddressForOffer(offer) {
-    const url = this.url;
-    return new Promise((resolve, reject) => {
-      if (validator.isUUID(offer.guid, 4)) {
-        resolve(offer.guid);
-      } else {
-        reject('Invalid GUID');
-      }
-    }).then(() => fetch(url + '/offers/open'))
-      .then(response => {
-        if (response.ok) {
-          return response;
-        }
-        return new Promise(resolve => {
-          resolve(response.json());
-        }).then(json => {
-          throw Error(json.message);
-        });
-      }).then(response => response.json())
-      .then(body => body.result)
-      .then(open => {
-        offer.address = '';
-        index = open.findIndex((value) => value.guid === offer.guid);
-        if ( index >= 0) {
-          offer.address = open[index];
-        }
-        return offer;
-      });
-  }
-
-  getArtifactsForBounty(bounty) {
+  getArtifactsForBounty(chain, bounty) {
     const url = this.url;
     return new Promise((resolve, reject) => {
       const hash = multihashes.fromB58String(bounty.uri);
@@ -189,7 +162,7 @@ class HttpApp {
         reject(error);
       }
     })
-      .then(uri => fetch(url + '/artifacts/' + uri))
+      .then(uri => fetch(url + '/artifacts/' + uri + '?chain=' + chain))
       .then(response => {
         if (response.ok) {
           return response;
@@ -216,7 +189,7 @@ class HttpApp {
       });
   }
 
-  getAssertionsForBounty(bounty) {
+  getAssertionsForBounty(chain, bounty) {
     const url = this.url;
     return new Promise((resolve, reject) => {
       if (validator.isUUID(bounty.guid, 4)) {
@@ -225,7 +198,7 @@ class HttpApp {
         reject('Invalid GUID');
       }
     })
-      .then(guid => fetch(url + '/bounties/' + guid + '/assertions'))
+      .then(guid => fetch(url + '/bounties/' + guid + '/assertions'+ '?chain=' + chain))
       .then(response => {
         if (response.ok) {
           return response;
@@ -254,9 +227,9 @@ class HttpApp {
       });
   }
 
-  getBountyIsActive(bounty) {
+  getBountyIsActive(chain, bounty) {
     const url = this.url;
-    return fetch(url + '/bounties/active')
+    return fetch(url + '/bounties/active'+ '?chain=' + chain)
       .then(response => {
         if (response.ok) {
           return response;
