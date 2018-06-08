@@ -182,12 +182,11 @@ class App extends Component {
   onAddMessage(guid, message) {
     // deep copy so we it won't edit the actual state
     const bounties = JSON.parse(JSON.stringify(this.state.bounties.slice()));
-    const offer = bounties
-      .filter((value) => value.type === 'offer')
-      .map((offer) => offer.guid === guid);
-    if (offer && offer.length == 1) {
+    const offers = bounties
+      .filter((value) => value.type === 'offer' && value.guid === guid);
+    if (offers && offers.length == 1) {
       // add message the the front 
-      offer.messages.slice(0, 0, message);
+      offers[0].messages.unshift(message);
       this.setState({bounties: bounties});
     }
   }
@@ -204,6 +203,8 @@ class App extends Component {
           // no way to grab the balance in polyswarmd, yet.
           offer.initial = reward;
           offer.websocketUri = websocket;
+          offer.nextSequence = 0;
+          offer.messages = [];
           const bounties = this.state.bounties.slice();
           bounties.push(offer);
           this.setState({bounties: bounties}, resolve);

@@ -132,7 +132,7 @@ class OfferCreate extends Component {
       duration_error, websocket, websocket_error} } = this;
     const { props: { addOffer, address, onOfferCreated, encryptionKey, token } } = this;
 
-    const rewardWei = new BigNumber(reward).times(new BigNumber('1000000000000000000'));
+    const rewardWei = web3Utils.toWei(reward);
 
     const http = this.http;
     if (expert && reward && duration && websocket && !duration_error && !reward_error && !expert_error && !websocket_error) {

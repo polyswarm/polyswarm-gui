@@ -40,9 +40,9 @@ class OfferSummary extends Component {
       last = payments.length > 0 ? payments[0].amount : '0';
     }
 
-    const initialWei = web3Utils.toWei(offer.initial).toString();
-    const balanceWei = new BigNumber(initialWei).minus(new BigNumber(last));
-    const balance = balanceWei.div(new BigNumber(web3Utils.toWei('1'))).toString();
+    const initialWei = web3Utils.toWei(offer.initial);
+    const balanceWei = new BigNumber(initialWei).minus(new BigNumber(last)).toFixed();
+    const balance = web3Utils.fromWei(balanceWei);
 
     messages.filter((message) => message.type ==='assertion')
       .forEach((message) => {

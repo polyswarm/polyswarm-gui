@@ -23,7 +23,7 @@ class OfferInfo extends Component {
 
   render() {
     const { props: { offer, address, addRequest, removeRequest, url, wallet,
-      onBackPressed, requestsInProgress, onError, key },
+      onBackPressed, requestsInProgress, onError, encryptionKey, onAddMessage },
     state: { request, pay } } = this;
 
     // only show actions if signing wallet is same as wallet used to create this
@@ -53,12 +53,13 @@ class OfferInfo extends Component {
             onBackPressed={this.onBack}
             onError={onError}
             onFilesSent={this.onBack}
-            addMessage={this.onAddMessage}
-            key={key}
+            onAddMessage={onAddMessage}
+            encryptionKey={encryptionKey}
             url={url}/>
         )}
         {pay && (
           <OfferPay
+            onAddMessage={onAddMessage}
             offer={offer}
             last={last}
             address={address}
@@ -68,7 +69,7 @@ class OfferInfo extends Component {
             requestsInProgress={requestsInProgress}
             onError={onError}
             onBackPressed={this.onBack}
-            key={key}
+            encryptionKey={encryptionKey}
             url={url}/>
         )}
         {!request && !pay && (
@@ -90,14 +91,6 @@ class OfferInfo extends Component {
         )}
       </div>
     );
-  }
-
-  addMessage() {
-    const {props: {onAddMessage, offer}} = this;
-    if (onAddMessage) {
-      // Tells app that this offer has a new message to retrieve.
-      onAddMessage(offer);
-    }
   }
 
   onBack() {
@@ -123,5 +116,6 @@ OfferInfo.propTypes = {
   url: PropTypes.string,
   onBackPressed: PropTypes.func,
   requestsInProgress: PropTypes.array,
+  encryptionKey: PropTypes.object
 };
 export default OfferInfo;

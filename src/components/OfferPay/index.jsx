@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Uuid from 'uuid/v4';
 import BigNumber from 'bignumber.js';
+import web3Utils from 'web3-utils';
 // Offer imports
 import AnimatedInput from '../AnimatedInput';
 import Button from '../Button';
@@ -20,11 +21,10 @@ class OfferPay extends Component {
       duration: null,
       duration_error: null,
       expert: null,
-      expert_error: null,
+      expert_error: null
     };
 
     this.payExpert = this.payExpert.bind(this);
-    this.addMessage = this.addMessage.bind(this);
     this.onClickHandler = this.onClickHandler.bind(this);
     this.onRewardChanged = this.onRewardChanged.bind(this);
     this.addPayRequest = this.addPayRequest.bind(this);
@@ -72,13 +72,6 @@ class OfferPay extends Component {
     );
   }
 
-  addMessage(message) {
-    const {props: {offer, addMessage}} = this;
-    if (addMessage) {
-      addMessage(offer.guid, message);
-    }
-  }
-  
   onClickHandler() {
     this.payExpert();
   }
@@ -90,9 +83,10 @@ class OfferPay extends Component {
   }
 
   payExpert() {
-    const { state: {reward, reward_error}, props: { offer, onBackPressed, address, encryptionKey } } = this;
+    const { state: {reward, reward_error } } = this;
+    const { props: { offer, onBackPressed, encryptionKey, onAddMessage } } = this;
 
-    const rewardWei = new BigNumber(reward).times(new BigNumber('1000000000000000000'));
+    const rewardWei = web3Utils.toWei(reward);
 
     const http = this.http;
     if (reward &&!reward_error) {
@@ -104,13 +98,13 @@ class OfferPay extends Component {
         }
         resolve();
       })
-        .then(() => http.pay(offer.guid, encryptionKey, address, rewardWei.toString()))
+        .then(() => http.pay(encryptionKey, offer, rewardWei))
         .then(() => {
           const message = {
             type: 'payment',
-            amount: rewardWei.toString()
+            amount: rewardWei
           };
-          this.addMessage(offer.guid, message);
+          onAddMessage(offer.guid, message);
           return;
         })
         .catch(error => {
@@ -154,11 +148,12 @@ class OfferPay extends Component {
     const {state: {reward}} = this;
     const {props: {last}} = this;
     const min = new BigNumber('0');
+    const rewardWei = web3Utils.toWei(reward);
     const lastPay = new BigNumber(last);
-    if (reward && new BigNumber(reward).comparedTo(min) <= 0 ) {
+    if (reward && new BigNumber(rewardWei).comparedTo(min) <= 0 ) {
       this.setState({reward_error: 'Reward must be more than 0 NCT.'});
-    } else if (reward && new BigNumber(reward).comparedTo(lastPay) <= 0 ) {
-      this.setState({reward_error: `Reward must be higher than last payment of ${lastPay.toString()}.`});
+    } else if (reward && new BigNumber(rewardWei).comparedTo(lastPay) <= 0 ) {
+      this.setState({reward_error: `Reward must be higher than last payment of ${web3Utils.fromWei(last)}.`});
     } else {
       this.setState({reward_error: null});
     }

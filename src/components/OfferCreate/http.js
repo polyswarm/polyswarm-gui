@@ -1,6 +1,5 @@
 import web3Utils from 'web3-utils';
 import validator from 'validator';
-import BigNumber from 'bignumber.js';
 import etherutils from 'ethereumjs-util';
 
 class HttpOfferCreate {

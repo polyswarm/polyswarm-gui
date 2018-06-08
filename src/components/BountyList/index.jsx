@@ -1,6 +1,7 @@
 // Vendor Imports
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import web3Utils from 'web3-utils';
 // Project Imports
 import Card from '../Card';
 import CardContent from '../CardContent';
@@ -136,7 +137,7 @@ class BountyList extends Component {
       const payouts = offer.messages
         .filter((message) => message.type==='payment');
       if (payouts.length > 0) {
-        lastPay = payouts[0].amount + strings.nct;
+        lastPay = web3Utils.fromWei(payouts[0].amount) + strings.nct;
       }
 
       const names = offer.messages

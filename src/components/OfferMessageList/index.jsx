@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import web3Utils from 'web3-utils';
 // Bounty imports
 import Card from '../Card';
 import CardContent from '../CardContent';
@@ -92,11 +93,12 @@ class OfferMessageList extends Component {
   }
 
   renderPayment(message) {
+    const amount = web3Utils.fromWei(message.amount);
     return(
       <Card key={message.guid}>
         <CardHeader
           title={strings.payment}
-          subhead={`${message.amount}${strings.nectar}`}
+          subhead={`${amount}${strings.nectar}`}
         />
       </Card>
     );
