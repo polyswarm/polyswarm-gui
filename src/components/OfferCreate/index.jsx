@@ -148,7 +148,7 @@ class OfferCreate extends Component {
         .then(() => http.createOffer(address, expert, Number(duration), websocket))
         .then(result => {
           if (addOffer) {
-            addOffer(result);
+            addOffer(result, reward);
           }
           return result;
         })

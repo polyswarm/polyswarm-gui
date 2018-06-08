@@ -129,7 +129,7 @@ class BountyList extends Component {
     }
 
     let messages = 0;
-    let lastPay;
+    let lastPay = '0' + strings.nct;
     let artifacts = [];
     if (offer.messages) {
       messages = offer.messages.length;
@@ -137,8 +137,6 @@ class BountyList extends Component {
         .filter((message) => message.type==='payment');
       if (payouts.length > 0) {
         lastPay = payouts[0].amount + strings.nct;
-      } else {
-        lastPay = strings.never;
       }
 
       const names = offer.messages
@@ -166,7 +164,7 @@ class BountyList extends Component {
         <CardContent>
           <ul>
             <StatRow title={strings.author}
-              content={offer.author}/>
+              content={offer.ambassador}/>
             <StatRow title={strings.expert}
               content={offer.expert}/>
             <StatRow title={strings.lastPay}
