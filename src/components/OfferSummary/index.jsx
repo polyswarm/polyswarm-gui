@@ -1,6 +1,8 @@
 // Vendor imports
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import web3Utils from 'web3-utils';
+import BigNumber from 'bignumber.js';
 // Bounty imports
 import StatRow from '../StatRow';
 // Component imports
@@ -31,7 +33,17 @@ class OfferSummary extends Component {
           return false;
         }
       });
-    
+
+    let last = '0';
+    if (offer.messages) {
+      const payments = offer.messages.filter(message => message.type === 'payment').sort((a, b) => a.amount < b.amount);
+      last = payments.length > 0 ? payments[0].amount : '0';
+    }
+
+    const initialWei = web3Utils.toWei(offer.initial).toString();
+    const balanceWei = new BigNumber(initialWei).minus(new BigNumber(last));
+    const balance = balanceWei.div(new BigNumber(web3Utils.toWei('1'))).toString();
+
     messages.filter((message) => message.type ==='assertion')
       .forEach((message) => {
         message.artifacts.forEach((artifact, index) => {
@@ -46,17 +58,17 @@ class OfferSummary extends Component {
     return (
       <div className='OfferSummary'>
         <StatRow vertical
-          title={strings.contractAddr}
-          content={offer.address}/>
+          title={strings.contractAddress}
+          content={offer.msig_address}/>
         <StatRow vertical
           title={strings.poster}
-          content={offer.author}/>
+          content={offer.ambassador}/>
         <StatRow vertical
           title={strings.expert}
           content={offer.expert}/>
         <StatRow vertical
           title={strings.balance}
-          content={`${offer.balance || 0}${strings.nectar}`}/>
+          content={`${balance || 0}${strings.nectar}`}/>
         <StatRow vertical
           title={strings.closed}
           content={offer.closed ? strings.yes : strings.no}/>
