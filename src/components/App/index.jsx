@@ -192,25 +192,26 @@ class App extends Component {
     }
   }
 
-  onAddOffer(result, reward) {
+  onAddOffer(result, websocket, reward) {
     const http = this.http;
 
     this.addRequest(strings.requestGetOffer, result.guid);
     return http.getOffer('home', result)
-      // .then(offer => {
-      //   http.listenForMessages(offer, this.onAddMessage);
-      //   return offer;
-      // })
-      .then(offer => {
+      .then(offer => new Promise(resolve => {
         if (offer != null) {
           offer.updated = true;
           // I would prefer not to have inital be specified here, but there is
           // no way to grab the balance in polyswarmd, yet.
           offer.initial = reward;
+          offer.websocketUri = websocket;
           const bounties = this.state.bounties.slice();
           bounties.push(offer);
-          this.setState({bounties: bounties});
+          this.setState({bounties: bounties}, resolve);
         }
+      }))
+      .then(offer => {
+        http.listenForMessages(offer, this.onAddMessage);
+        return offer;
       })
       .catch(() => {})
       .then(() => {
@@ -403,8 +404,9 @@ class App extends Component {
         }
       });
       this.setState({bounties: bounties});
-      this.removeRequest(strings.requestAllData, uuid);
-    });
+    })
+      .catch(() => {})
+      .then(() => this.removeRequest(strings.requestAllData, uuid));
   }
 
   getPropsForChild() {
