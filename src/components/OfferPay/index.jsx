@@ -161,6 +161,7 @@ class OfferPay extends Component {
 }
 
 OfferPay.propTypes = {
+  onAddMessage: PropTypes.func,
   wallet: PropTypes.object,
   address: PropTypes.string,
   onError: PropTypes.func,

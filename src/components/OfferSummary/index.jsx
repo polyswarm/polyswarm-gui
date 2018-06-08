@@ -21,7 +21,10 @@ class OfferSummary extends Component {
         return a.name > b.name;
       })
       .map(artifact => {
-        artifact.verdict = false;
+        const a = {};
+        a.name = artifact.name;
+        a.hash = artifact.hash;
+        a.verdict = false;
         return artifact;
       })
       .filter((artifact) => {

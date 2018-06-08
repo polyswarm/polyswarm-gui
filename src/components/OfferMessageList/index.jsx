@@ -44,7 +44,9 @@ class OfferMessageList extends Component {
 
   renderRequest(message) {
     const artifacts = message.artifacts;
-    const artifactList = artifacts.map((artifact) => artifact.name).reduce((accumulator, name) => `${accumulator}, ${name}`);
+    const artifactList = artifacts
+      .map((artifact) => artifact.name)
+      .reduce((accumulator, name) => `${accumulator}, ${name}`);
     return(
       <Card key={message.guid}>
         <CardHeader

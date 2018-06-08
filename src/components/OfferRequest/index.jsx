@@ -23,7 +23,6 @@ class OfferRequest extends Component {
     this.onFileRemoved = this.onFileRemoved.bind(this);
     this.onFilesSent = this.onFilesSent.bind(this);
     this.onMultipleFilesSelected = this.onMultipleFilesSelected.bind(this);
-    this.addMessage = this.addMessage.bind(this);
     this.addSendMessageRequest = this.addSendMessageRequest.bind(this);
     this.removeSendMessageRequest = this.removeSendMessageRequest.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
@@ -104,13 +103,6 @@ class OfferRequest extends Component {
     this.setState({ files: combined });
   }
 
-  addMessage(message) {
-    const {props: {offer, addMessage}} = this;
-    if (addMessage) {
-      addMessage(offer.guid, message);
-    }
-  }
-
   addSendMessageRequest(id) {
     const { addRequest } = this.props;
     if (addRequest) {
@@ -127,7 +119,7 @@ class OfferRequest extends Component {
 
   sendMessage() {
     const files = this.state.files.slice();
-    const {props: {encryptionKey, address, offer} } = this;
+    const {props: {encryptionKey, offer, onAddMessage} } = this;
 
     const http = this.http;
     if (files && files.length > 0) {
@@ -139,16 +131,16 @@ class OfferRequest extends Component {
         resolve();
       })
         .then(() => http.uploadFiles(files))
-        .then(artifact => http.sendRequest(offer.guid, address, encryptionKey, artifact)
+        .then(artifact => http.sendRequest(encryptionKey, offer, artifact)
           .then(() => artifact)
         )
         .then(artifact => http.getArtifactsList(artifact))
         .then(files => {
           const message = {
             type: 'request',
-            artifacts: [files]
+            artifacts: files
           };
-          this.addMessage(message);
+          onAddMessage(offer.guid, message);
           return;
         })
         .catch(error => {
@@ -172,7 +164,7 @@ class OfferRequest extends Component {
 }
 
 OfferRequest.propTypes = {
-  addMessage: PropTypes.func,
+  onAddMessage: PropTypes.func,
   addRequest: PropTypes.func,
   onError: PropTypes.func,
   onRequestWalletChange: PropTypes.func,
@@ -183,6 +175,6 @@ OfferRequest.propTypes = {
   wallet: PropTypes.object,
   address: PropTypes.string,
   onBackPressed: PropTypes.func,
-  encryptionKey: PropTypes.object,
+  encryptionKey: PropTypes.object
 };
 export default OfferRequest;

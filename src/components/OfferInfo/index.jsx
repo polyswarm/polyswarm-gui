@@ -116,6 +116,5 @@ OfferInfo.propTypes = {
   url: PropTypes.string,
   onBackPressed: PropTypes.func,
   requestsInProgress: PropTypes.array,
-  encryptionKey: PropTypes.object
 };
 export default OfferInfo;
