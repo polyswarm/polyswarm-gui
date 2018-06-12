@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Uuid from 'uuid/v4';
 import BigNumber from 'bignumber.js';
 import web3Utils from 'web3-utils';
+import ip from 'ip';
 // Offer imports
 import AnimatedInput from '../AnimatedInput';
 import Button from '../Button';
@@ -24,8 +25,8 @@ class OfferCreate extends Component {
       expert_error: null,
       nectar_error: null,
       nectar: null,
-      websocket: null,
-      websocket_error: null,
+      port: null,
+      port_error: null,
       creating: false
     };
 
@@ -45,7 +46,7 @@ class OfferCreate extends Component {
   }
 
   render() {
-    const { state: { reward, reward_error, duration, duration_error, expert, expert_error, websocket, websocket_error, creating } } = this;
+    const { state: { reward, reward_error, duration, duration_error, expert, expert_error, port, port_error, creating } } = this;
     const { props: {  wallet, address, requestsInProgress, onBackPressed } } = this;
 
     return (
@@ -74,15 +75,15 @@ class OfferCreate extends Component {
               error={duration_error}
               placeholder={strings.duration}
               input_id='duration'/>
-            <AnimatedInput type='text'
+            <AnimatedInput type='number'
               onChange={this.onWebsocketChanged}
-              error={websocket_error}
-              placeholder={strings.websocket}
-              input_id='websocket'/>
+              error={port_error}
+              placeholder={strings.port}
+              input_id='port'/>
           </div>
           <div className='Offer-Create-Upload'>
             <Button
-              disabled={!creating && (!reward || !duration || reward_error || duration_error || !expert || expert_error || !websocket || websocket_error) }
+              disabled={!creating && (!reward || !duration || reward_error || duration_error || !expert || expert_error || !port || port_error) }
               onClick={this.onClickHandler}>
               {strings.openOffer}
             </Button>
@@ -121,21 +122,22 @@ class OfferCreate extends Component {
     });
   }
   
-  onWebsocketChanged(websocket) {
-    this.setState({websocket: websocket}, () => {
+  onWebsocketChanged(port) {
+    this.setState({port: port}, () => {
       this.validateFields();
     });
   }
 
   createOffer() {
     const { state: {expert, expert_error, reward, reward_error, duration,
-      duration_error, websocket, websocket_error} } = this;
+      duration_error, port, port_error} } = this;
     const { props: { addOffer, address, onOfferCreated, encryptionKey, token } } = this;
 
     const rewardWei = web3Utils.toWei(reward);
 
     const http = this.http;
-    if (expert && reward && duration && websocket && !duration_error && !reward_error && !expert_error && !websocket_error) {
+    if (expert && reward && duration && port && !duration_error && !reward_error && !expert_error && !port_error) {
+      const websocket = 'ws://'+ ip.address() + ':' + port;
       this.setState({creating: true});
       const uuid = Uuid();
       this.addCreateOfferRequest(uuid);
@@ -147,6 +149,7 @@ class OfferCreate extends Component {
       })
         .then(() => http.createOffer(address, expert, Number(duration), websocket))
         .then(result => {
+          result.port = port;
           if (addOffer) {
             addOffer(result, websocket, reward);
           }
@@ -192,7 +195,7 @@ class OfferCreate extends Component {
   }
 
   validateFields() {
-    const {state: {duration, reward,  expert, websocket}} = this;
+    const {state: {duration, reward,  expert, port}} = this;
     if (duration && duration < 10) {
       this.setState({duration_error: 'Duration below 10.'});
     } else if (duration && !Number.isInteger(Number(duration))) {
@@ -208,10 +211,12 @@ class OfferCreate extends Component {
       this.setState({reward_error: null});
     }
 
-    if (websocket && !websocket.startsWith('ws://')) {
-      this.setState({websocket_error: 'Value must be a websocket uri'});
+    if (port && port < 1024) {
+      this.setState({port_error: 'Port must be above 1024.'});
+    } else if (port && port > 65535) {
+      this.setState({port_error: 'Port must be below 65535'});
     } else {
-      this.setState({websocket_error: null});
+      this.setState({port_error: null});
     }
 
     if (expert && !web3Utils.isAddress(expert)) {

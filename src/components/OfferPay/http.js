@@ -60,8 +60,8 @@ class HttpOfferPay {
           let v = sig.v;
   
           const body = JSON.stringify({
-            toSocketUri: offer.websocketUri,
-            fromSocketUri: offer.websocketUri,
+            toSocketUri: offer.expertWebsocketUri,
+            fromSocketUri: offer.ambassadorWebsocketUri,
             state,
             v,
             r,

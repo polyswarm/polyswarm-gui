@@ -8,6 +8,6 @@ const strings = {
   expert: "Expert's Ethereum Address",
   openOffer: 'Open Offer Channel',
   title: 'Enter Expert, max reward and duration.',
-  websocket: 'Websocket URI'
+  port: 'Websocket Port'
 };
 export default strings;

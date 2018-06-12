@@ -3,7 +3,9 @@ import validator from 'validator';
 import web3Utils from 'web3-utils';
 import multihashes from 'multihashes';
 import EthereumTx from 'ethereumjs-tx';
+import etherutils from 'ethereumjs-util';
 import keythereum from 'keythereum';
+import WebSocket from 'ws';
 
 class HttpApp {
   constructor(url, ws) {
@@ -339,68 +341,116 @@ class HttpApp {
     // attach to websocket
     // anytime we get a message, we pass it along to the app, which is tracking
     // messages
-    const websocket = new WebSocket(offer.websocketUri);
+    const options = {port: Number(offer.port)};
+    const expert = offer.expert;
+    const websocket = new WebSocket.Server(options);
+    websocket.onerror = error => {
+      console.error(error);
+    };
+    websocket.on('connection', (ws) => {
+      ws.onmessage = event => {
 
-    websocket.onmessage = event => {
-      const data = JSON.parse(event.data);
-      state = data.state;
-      // Should I verify the signature? Yes. TODO
-      const artifact = String.fromCharCode.apply(String, state.slice(352, 384));
-      const verdicts = state.slice(480, 512);
+        const data = JSON.parse(event.data);
+        console.info(data);
 
-      const verdictLength = verdicts.split('').filter(letter => letter !== '\0').length > 0;
-      const artifactLength = artifact.split('').filter(letter => letter !== '\0').length > 0;
-      
-      if (verdictLength > 0 && artifactLength > 0) {
+        const {fromSocketUri: websocket, state, v, r, s} = data;
 
-        const url = this.url;
-        return new Promise((resolve, reject) => {
-          const hash = multihashes.fromB58String(artifact);
-          try {
-            multihashes.validate(hash);
-            resolve(bounty.uri);
-          } catch (error) {
-            reject(error);
-          }
-        })
-          .then(uri => fetch(url + '/artifacts/' + uri))
-          .then(response => {
-            if (response.ok) {
-              return response;
-            } else {
-              throw new Error('Unable to access artifacts');
+        let hash = '0x' + etherutils.keccak(etherutils.toBuffer(state)).toString('hex');
+        hash = etherutils.hashPersonalMessage(etherutils.toBuffer(hash));
+
+        let address = '0x' + etherutils.pubToAddress(etherutils.ecrecover(hash, v, r, s)).toString('hex');
+        address = web3Utils.toChecksumAddress(address);
+
+        if (address !== expert) {
+          console.error('Expert does not match signer.');
+          return;
+        }
+
+        const bufferState = etherutils.toBuffer(state);
+
+        // must be long enough to hold URI, verdicts and metadata.
+        if (bufferState.length < 558) {
+          return;
+        }
+        const sequence = bufferState.slice(32, 64).reduce((accumulator, current) => {
+          return (accumulator << 32) + current;
+        });
+        const artifact = String.fromCharCode.apply(String, bufferState.slice(352, 398));
+        //14 higher for extra length in URI.
+        const verdicts = bufferState.slice(494, 526);
+
+        const metadata = String.fromCharCode.apply(String, bufferState.slice(526, 558));
+        metadata.replace('\0','');
+
+        const artifactLength = artifact.split('').filter(letter => letter !== '\0').length > 0;
+
+        if (artifactLength) {
+          const url = this.url;
+          return new Promise((resolve, reject) => {
+            const hash = multihashes.fromB58String(artifact);
+            try {
+              multihashes.validate(hash);
+              resolve(artifact);
+            } catch (error) {
+              reject(error);
             }
           })
-          .then(response => response.json())
-          .then(json => json.result)
-          .then(files => {
-            return {
-              type: 'assertion',
-              uri: artifact,
-              artifacts: files,
-              verdicts: [],
-              amount: '',
-              guid: offer.guid
-            };
-          }).then((message) => {
-            const v = verdicts.reduce((accumulator, current) => {
-              accumulator.push(current >> 7 && 1);
-              accumulator.push(current >> 6 && 1);
-              accumulator.push(current >> 5 && 1);
-              accumulator.push(current >> 4 && 1);
-              accumulator.push(current >> 3 && 1);
-              accumulator.push(current >> 2 && 1);
-              accumulator.push(current >> 1 && 1);
-              accumulator.push(current && 1);
-            }, []);
-            message.verdicts = v;
-            return message;
-          })
-          .then((message) => {
-            onMessageReceived(guid, message);
-          });
-      }
-    };
+            .then(uri => fetch(url + '/artifacts/' + uri))
+            .then(response => {
+              if (response.ok) {
+                return response;
+              } else {
+                throw new Error('Unable to access artifacts');
+              }
+            })
+            .then(response => response.json())
+            .then(json => json.result)
+            .then(files => {
+              return {
+                type: 'assertion',
+                uri: artifact,
+                artifacts: files,
+                verdicts: [],
+                amount: '',
+                sequence: sequence,
+                guid: offer.guid,
+                metadata: metadata
+              };
+            }).then((message) => {
+              let v = verdicts.reduce((accumulator, current) => {
+                accumulator.push((current >> 7 & 1) === 1);
+                accumulator.push((current >> 6 & 1) === 1);
+                accumulator.push((current >> 5 & 1) === 1);
+                accumulator.push((current >> 4 & 1) === 1);
+                accumulator.push((current >> 3 & 1) === 1);
+                accumulator.push((current >> 2 & 1) === 1);
+                accumulator.push((current >> 1 & 1) === 1);
+                accumulator.push((current & 1) === 1);
+                return accumulator;
+              }, []);
+              if (message.artifacts.length > 0) {
+                v = v.slice(256 - message.artifacts.length);
+              } else {
+                v = [];
+              }
+              message.verdicts = v;
+              return message;
+            })
+            .then((message) => {
+              message.websocket = websocket;
+              onMessageReceived(offer.guid, message);
+            });
+        } else {
+          const message = {
+            type: 'websocket',
+            guid: offer.guid,
+            websocket: websocket,
+            sequence: sequence,
+          };
+          onMessageReceived(offer.guid, message);
+        }
+      };
+    });
   }
 
   listenForAssertions(assertionAddedCallback) {

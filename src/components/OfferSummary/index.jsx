@@ -52,7 +52,7 @@ class OfferSummary extends Component {
         message.artifacts.forEach((artifact, index) => {
           const verdict = message.verdicts[index];
           const i = artifacts.findIndex((value) => value.hash === artifact.hash);
-          if (i) {
+          if (i >= 0) {
             const current = artifacts[i].verdict || false;
             artifacts[i].verdict = current || verdict;
           }

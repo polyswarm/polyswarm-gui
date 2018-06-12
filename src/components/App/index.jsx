@@ -185,15 +185,24 @@ class App extends Component {
     const offers = bounties
       .filter((value) => value.type === 'offer' && value.guid === guid);
     if (offers && offers.length == 1) {
-      // add message the the front 
-      offers[0].messages.unshift(message);
-      offers[0].nextSequence = message.sequence + 1;
+      // Allow expert to replace the URI he listens to.
+      const websocket = message.websocket;
+      if ( websocket && typeof websocket !== 'undefined' ) {
+        offers[0].expertWebsocketUri = websocket;
+      }
+
+      if (message.type !== 'websocket') {
+        // add message the the front
+        offers[0].messages.unshift(message);
+        offers[0].nextSequence = message.sequence + 1;
+      }
       this.setState({bounties: bounties});
     }
   }
 
   onAddOffer(result, websocket, reward) {
     const http = this.http;
+    const port = result.port;
 
     this.addRequest(strings.requestGetOffer, result.guid);
     return http.getOffer('home', result)
@@ -203,13 +212,16 @@ class App extends Component {
           // I would prefer not to have inital be specified here, but there is
           // no way to grab the balance in polyswarmd, yet.
           offer.initial = reward;
-          offer.websocketUri = websocket;
+          offer.ambassadorWebsocketUri = websocket;
+          offer.expertWebsocketUri = websocket;
+          offer.port = port;
           offer.nextSequence = 1;
           offer.messages = [];
           const bounties = this.state.bounties.slice();
           bounties.push(offer);
           this.setState({bounties: bounties}, resolve);
         }
+        return offer;
       }))
       .then(offer => {
         http.listenForMessages(offer, this.onAddMessage);
@@ -367,11 +379,7 @@ class App extends Component {
       const chain = bounty.chain ? bounty.chain : 'home';
       let promise;
       if (bounty.type === 'offer') {
-        promise = http.getOffer(chain, bounty)
-          .then(offer => {
-            http.listenForMessages(offer, this.onAddMessage);
-            return offer;
-          });
+        promise = http.getOffer(chain, bounty);
       } else {
         promise = http.getBounty(chain, bounty);
       }
@@ -402,6 +410,7 @@ class App extends Component {
             offer.closed = value.closed;
             offer.author = value.ambassador;
             offer.expert = value.expert;
+            http.listenForMessages(offer, this.onAddMessage);
           }
         }
       });

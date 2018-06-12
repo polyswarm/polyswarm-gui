@@ -149,11 +149,10 @@ class OfferPay extends Component {
     const {state: {reward}} = this;
     const {props: {last}} = this;
     const min = new BigNumber('0');
-    const rewardWei = web3Utils.toWei(reward);
     const lastPay = new BigNumber(last);
-    if (reward && new BigNumber(rewardWei).comparedTo(min) <= 0 ) {
+    if (reward && new BigNumber(web3Utils.toWei(reward)).comparedTo(min) <= 0 ) {
       this.setState({reward_error: 'Reward must be more than 0 NCT.'});
-    } else if (reward && new BigNumber(rewardWei).comparedTo(lastPay) <= 0 ) {
+    } else if (reward && new BigNumber(web3Utils.toWei(reward)).comparedTo(lastPay) <= 0 ) {
       this.setState({reward_error: `Reward must be higher than last payment of ${web3Utils.fromWei(last)}.`});
     } else {
       this.setState({reward_error: null});
