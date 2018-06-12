@@ -308,14 +308,16 @@ it('shows BountyInfo when at least one bounty & active selects it', () => {
 
 it('shows OfferInfo when at least one offer & active selects it', () => {
   const wrapper = mount(<App />);
-  const bounties = [{
-    guid: 'asdf',
-    type: 'offer',
-    ambassador: 'asdf',
-    msig_address: 'msig',
-    expert: 'expert',
-    initial: '100'
-  }];
+  const bounties = [
+    {
+      guid: 'asdf',
+      type: 'offer',
+      ambassador: 'asdf',
+      msig_address: 'msig',
+      expert: 'expert',
+      initial: '100'
+    }
+  ];
   const active = 0;
   wrapper.setState({
     first: false,

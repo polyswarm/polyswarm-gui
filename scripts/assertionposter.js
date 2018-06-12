@@ -1,6 +1,5 @@
 const etherutils = require('ethereumjs-util');
 const web3Utils = require('web3-utils');
-const BigNumber = require('bignumber.js');
 const WebSocket = require('ws');
 const ip = require('ip');
 const keythereum = require('keythereum');

@@ -139,4 +139,4 @@ it('displays a request as a list of files', () => {
       .text()
   ).toEqual('Malicious, Benign');
 });
-[]
+[];
