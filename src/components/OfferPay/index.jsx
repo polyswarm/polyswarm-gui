@@ -89,7 +89,7 @@ class OfferPay extends Component {
     const rewardWei = web3Utils.toWei(reward);
     const sequence = offer.nextSequence;
     const http = this.http;
-    if (reward &&!reward_error) {
+    if (reward && !reward_error) {
       const uuid = Uuid();
       this.addPayRequest(uuid);
       return new Promise(resolve => {
