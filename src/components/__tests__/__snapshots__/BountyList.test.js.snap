@@ -40,7 +40,7 @@ exports[`renders without crashing 1`] = `
         <button
           class="Button header"
         >
-          + Offer
+          Relay
         </button>
         <div
           class="Dropdown"
@@ -57,9 +57,6 @@ exports[`renders without crashing 1`] = `
           <div
             class="Dropdown-Choices"
           >
-            <p>
-              Relay
-            </p>
             <p>
               Change Wallet
             </p>

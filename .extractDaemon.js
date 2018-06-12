@@ -51,9 +51,6 @@ breakoutWindows = (buildPath, callback) => {
       rimrafSync(temp);
 
 
-      const dest = path.resolve(polyswarmd, 'polyswarmd.cfg');
-      const cfg = path.resolve(backend, 'polyswarmd.cfg');
-      fs.copyFileSync(cfg, dest);
       if (buildPath.match(/[\\/]tmp/)) {
         rimrafSync(backend)
       }
@@ -85,9 +82,6 @@ breakoutLinux = (buildPath, callback) => {
     C: polyswarmd
   });
 
-  const dest = path.resolve(polyswarmd, 'polyswarmd.cfg');
-  const cfg = path.resolve(backend, 'polyswarmd.cfg');
-  fs.copyFileSync(cfg, dest);
   if (buildPath.match(/[\\/]tmp/)) {
     rimrafSync(backend)
   }
