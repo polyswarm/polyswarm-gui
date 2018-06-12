@@ -3,7 +3,9 @@ import validator from 'validator';
 import web3Utils from 'web3-utils';
 import multihashes from 'multihashes';
 import EthereumTx from 'ethereumjs-tx';
+import etherutils from 'ethereumjs-util';
 import keythereum from 'keythereum';
+import WebSocket from 'ws';
 
 class HttpApp {
   constructor(url, ws) {
@@ -12,6 +14,7 @@ class HttpApp {
   }
 
   setAccount(address, keyfile, password) {
+    this.address = address;
     return new Promise((resolve, reject) => {
       require('fs').stat(keyfile.path, err => {
         if (err) {
@@ -37,16 +40,28 @@ class HttpApp {
             if (this.transactions) {
               this.transactions.close();
             }
-
-            this.address = address;
-            this.keyfile = keyfile;
-            this.password = password;
             resolve();
+          })
+      )
+      .then(
+        () => 
+          new Promise((resolve, reject) => {
+            const path = require('path');
+            if (!keyfile || !address || !web3Utils.isAddress(address) || !password) {
+              reject();
+            }
+            // We double up on the dirname to trim keystore, which importfromfile adds
+            const trimmed = path.dirname(path.dirname(keyfile.path));
+            const enc_key = keythereum.importFromFile(address, trimmed);
+            keythereum.recover(password, enc_key, key => {
+              resolve(key);
+            });
           })
       );
   }
 
-  getBounty(bounty) {
+  getBounty(chain, bounty) {
+    const url = this.url;
     return new Promise((resolve, reject) => {
       if (validator.isUUID(bounty.guid, 4)) {
         resolve(bounty.guid);
@@ -54,7 +69,7 @@ class HttpApp {
         reject('Invalid GUID');
       }
     })
-      .then(guid => fetch(this.url + '/bounties/' + guid))
+      .then(guid => fetch(url + '/bounties/' + guid + '?chain=' + chain))
       .then(response => {
         if (response.ok) {
           return response;
@@ -65,7 +80,7 @@ class HttpApp {
 
       .then(response => response.json())
       .then(json => json.result)
-      .then(bounty => this.getBountyIsActive(bounty))
+      .then(bounty => this.getBountyIsActive(chain, bounty))
       .then(bounty => {
         const amount = new BigNumber(bounty.amount)
           .dividedBy(new BigNumber('1000000000000000000'))
@@ -74,24 +89,72 @@ class HttpApp {
         bounty.type = 'bounty';
         return bounty;
       })
-      .then(bounty => this.getAssertionsForBounty(bounty))
-      .then(bountyAssertions => this.getArtifactsForBounty(bountyAssertions))
+      .then(bounty => this.getAssertionsForBounty(chain, bounty))
+      .then(bountyAssertions => this.getArtifactsForBounty(chain, bountyAssertions))
       .catch(() => null);
   }
 
-  getOffer(offer) {
+  getOffer(chain, offer) {
+    const url = this.url;
+    const guid = offer.guid;
     return new Promise((resolve, reject) => {
-      if (validator.isUUID(offer.guid, 4)) {
-        resolve(offer.guid);
+      if (validator.isUUID(guid, 4)) {
+        resolve(guid);
       } else {
         reject('Invalid GUID');
       }
-    })
-      .then(() => new Promise(resolve => resolve(offer)))
+    }).then(guid => fetch(url + '/offers/' + guid+ '?chain=' + chain))
+      .then(response => {
+        if (response.ok) {
+          return response;
+        }
+        return new Promise(resolve => {
+          resolve(response.json());
+        }).then(json => {
+          throw Error(json.message);
+        });
+      }).then(response => response.json())
+      .then(body => body.result)
+      .then(result => result.offer_channel)
+      .then(offer => {
+        offer.guid = guid;
+        return offer;
+      })
+      .then(offer => this.getClosedForOffer(chain, offer))
+      .then(offer => {
+        offer.type = 'offer';
+        return offer;
+      })
       .catch(() => null);
   }
 
-  getArtifactsForBounty(bounty) {
+  getClosedForOffer(chain, offer) {
+    const url = this.url;
+    return fetch(url + '/offers/closed' + '?chain=' + chain)
+      .then(response => {
+        if (response.ok) {
+          return response;
+        }
+        return new Promise(resolve => {
+          resolve(response.json());
+        }).then(json => {
+          throw Error(json.message);
+        });
+      }).then(response => response.json())
+      .then(body => body.result)
+      .then(closed => {
+        offer.closed = false;
+        const index = closed.findIndex((value) => value.guid === offer.guid);
+        if ( index >= 0) {
+          offer.closed = true;
+          offer.address = closed[index].address;
+        }
+        return offer;
+      });
+  }
+
+  getArtifactsForBounty(chain, bounty) {
+    const url = this.url;
     return new Promise((resolve, reject) => {
       const hash = multihashes.fromB58String(bounty.uri);
       try {
@@ -101,12 +164,12 @@ class HttpApp {
         reject(error);
       }
     })
-      .then(uri => fetch(this.url + '/artifacts/' + uri))
+      .then(uri => fetch(url + '/artifacts/' + uri + '?chain=' + chain))
       .then(response => {
         if (response.ok) {
           return response;
         } else {
-          throw new Error('Unable to access accounts');
+          throw new Error('Unable to access artifacts');
         }
       })
       .then(response => response.json())
@@ -119,7 +182,7 @@ class HttpApp {
       .then(filesnames => {
         return filesnames.map(name => {
           const trimmed = name.trim();
-          return { name: trimmed, good: 0, total: 0, assertions: [] };
+          return { name: trimmed, assertions: [] };
         });
       })
       .then(files => {
@@ -128,7 +191,8 @@ class HttpApp {
       });
   }
 
-  getAssertionsForBounty(bounty) {
+  getAssertionsForBounty(chain, bounty) {
+    const url = this.url;
     return new Promise((resolve, reject) => {
       if (validator.isUUID(bounty.guid, 4)) {
         resolve(bounty.guid);
@@ -136,7 +200,7 @@ class HttpApp {
         reject('Invalid GUID');
       }
     })
-      .then(guid => fetch(this.url + '/bounties/' + guid + '/assertions'))
+      .then(guid => fetch(url + '/bounties/' + guid + '/assertions'+ '?chain=' + chain))
       .then(response => {
         if (response.ok) {
           return response;
@@ -165,8 +229,9 @@ class HttpApp {
       });
   }
 
-  getBountyIsActive(bounty) {
-    return fetch(this.url + '/bounties/active')
+  getBountyIsActive(chain, bounty) {
+    const url = this.url;
+    return fetch(url + '/bounties/active'+ '?chain=' + chain)
       .then(response => {
         if (response.ok) {
           return response;
@@ -231,41 +296,160 @@ class HttpApp {
       .catch(() => 0);
   }
 
-  listenForTransactions() {
+  listenForTransactions(key) {
     const ws = this.ws;
-    const keyfile = this.keyfile;
-    const address = this.address;
-    const password = this.password;
+    const websocket = new WebSocket(ws + '/transactions');
 
-    return new Promise((resolve, reject) => {
-      const path = require('path');
-      if (!keyfile || !address || !web3Utils.isAddress(address) || !password) {
-        reject();
-      }
-      // We double up on the dirname to trim keystore, which importfromfile adds
-      const trimmed = path.dirname(path.dirname(keyfile.path));
-      const enc_key = keythereum.importFromFile(address, trimmed);
-      keythereum.recover(password, enc_key, key => {
-        const websocket = new WebSocket(ws + '/transactions');
+    websocket.onmessage = msg => {
+      const { id, data } = JSON.parse(msg.data);
+      const { chainId } = data;
+      const tx = new EthereumTx(data);
+      tx.sign(key);
 
-        websocket.onmessage = msg => {
-          const { id, data } = JSON.parse(msg.data);
-          const { chainId } = data;
-          const tx = new EthereumTx(data);
-          tx.sign(key);
+      websocket.send(
+        JSON.stringify({
+          id: id,
+          chainId: chainId,
+          data: tx.serialize().toString('hex')
+        })
+      );
+    };
+    this.transactions = websocket;
+  }
 
-          websocket.send(
-            JSON.stringify({
-              id: id,
-              chainId: chainId,
-              data: tx.serialize().toString('hex')
+  listenForMessages(offer, onMessageReceived) {
+    // [0-31] is close flag
+    // [32-63] nonce
+    // [64-95] ambassador address
+    // [96-127] expert address
+    // [128-159] msig address
+    // [160-191] balance in nectar for ambassador
+    // [192-223] balance in nectar for expert
+    // [224-255] token address
+    // [256-287] A globally-unique identifier for the Listing.
+    // [288-319] The Offer Amount.
+
+    /// @dev Optional State
+    // [320-351] Cryptographic hash of the Artifact.
+    // [352-383] The IPFS URI of the Artifact.
+    // [384-415] Engagement Deadline
+    // [416-447] Assertion Deadline
+    // [448-479] current commitment
+    // [480-511] bitmap of verdicts
+    // [512-543] meta data
+
+    // attach to websocket
+    // anytime we get a message, we pass it along to the app, which is tracking
+    // messages
+    const options = {port: Number(offer.port)};
+    const expert = offer.expert;
+    const websocket = new WebSocket.Server(options);
+    websocket.onerror = error => {
+      console.error(error);
+    };
+    websocket.on('connection', (ws) => {
+      ws.onmessage = event => {
+
+        const data = JSON.parse(event.data);
+        console.info(data);
+
+        const {fromSocketUri: websocket, state, v, r, s} = data;
+
+        let hash = '0x' + etherutils.keccak(etherutils.toBuffer(state)).toString('hex');
+        hash = etherutils.hashPersonalMessage(etherutils.toBuffer(hash));
+
+        let address = '0x' + etherutils.pubToAddress(etherutils.ecrecover(hash, v, r, s)).toString('hex');
+        address = web3Utils.toChecksumAddress(address);
+
+        if (address !== expert) {
+          console.error('Expert does not match signer.');
+          return;
+        }
+
+        const bufferState = etherutils.toBuffer(state);
+
+        // must be long enough to hold URI, verdicts and metadata.
+        if (bufferState.length < 558) {
+          return;
+        }
+        const sequence = bufferState.slice(32, 64).reduce((accumulator, current) => {
+          return (accumulator << 32) + current;
+        });
+        const artifact = String.fromCharCode.apply(String, bufferState.slice(352, 398));
+        //14 higher for extra length in URI.
+        const verdicts = bufferState.slice(494, 526);
+
+        const metadata = String.fromCharCode.apply(String, bufferState.slice(526, 558));
+        metadata.replace('\0','');
+
+        const artifactLength = artifact.split('').filter(letter => letter !== '\0').length > 0;
+
+        if (artifactLength) {
+          const url = this.url;
+          return new Promise((resolve, reject) => {
+            const hash = multihashes.fromB58String(artifact);
+            try {
+              multihashes.validate(hash);
+              resolve(artifact);
+            } catch (error) {
+              reject(error);
+            }
+          })
+            .then(uri => fetch(url + '/artifacts/' + uri))
+            .then(response => {
+              if (response.ok) {
+                return response;
+              } else {
+                throw new Error('Unable to access artifacts');
+              }
             })
-          );
-        };
-        resolve(websocket);
-      });
-    }).then(websocket => {
-      this.transactions = websocket;
+            .then(response => response.json())
+            .then(json => json.result)
+            .then(files => {
+              return {
+                type: 'assertion',
+                uri: artifact,
+                artifacts: files,
+                verdicts: [],
+                amount: '',
+                sequence: sequence,
+                guid: offer.guid,
+                metadata: metadata
+              };
+            }).then((message) => {
+              let v = verdicts.reduce((accumulator, current) => {
+                accumulator.push((current >> 7 & 1) === 1);
+                accumulator.push((current >> 6 & 1) === 1);
+                accumulator.push((current >> 5 & 1) === 1);
+                accumulator.push((current >> 4 & 1) === 1);
+                accumulator.push((current >> 3 & 1) === 1);
+                accumulator.push((current >> 2 & 1) === 1);
+                accumulator.push((current >> 1 & 1) === 1);
+                accumulator.push((current & 1) === 1);
+                return accumulator;
+              }, []);
+              if (message.artifacts.length > 0) {
+                v = v.slice(256 - message.artifacts.length);
+              } else {
+                v = [];
+              }
+              message.verdicts = v;
+              return message;
+            })
+            .then((message) => {
+              message.websocket = websocket;
+              onMessageReceived(offer.guid, message);
+            });
+        } else {
+          const message = {
+            type: 'websocket',
+            guid: offer.guid,
+            websocket: websocket,
+            sequence: sequence,
+          };
+          onMessageReceived(offer.guid, message);
+        }
+      };
     });
   }
 

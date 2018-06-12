@@ -54,7 +54,7 @@ beforeEach(() => {
 
 it('renders without crashing', () => {
   const wrapper = render(
-    <OfferPay offer={offer} address={address} wallet={wallet} last={'.5'} />
+    <OfferPay offer={offer} address={address} wallet={wallet} last={'500000000000000000'} />
   );
   expect(renderToJson(wrapper)).toMatchSnapshot();
 });
@@ -62,7 +62,7 @@ it('renders without crashing', () => {
 it('sets reward when input entered into field', () => {
   const setState = jest.spyOn(OfferPay.prototype, 'setState');
   const wrapper = mount(
-    <OfferPay offer={offer} address={address} wallet={wallet} last={'.5'} />
+    <OfferPay offer={offer} address={address} wallet={wallet} last={'500000000000000000'} />
   );
   setState.mockClear();
 
@@ -71,24 +71,24 @@ it('sets reward when input entered into field', () => {
   expect(setState.mock.calls[0][0]).toEqual({ reward: '1' });
 });
 
-it('displays an error when nectar is below 0.0625', () => {
+it('displays an error when nectar is below 0', () => {
   const setState = jest.spyOn(OfferPay.prototype, 'setState');
   const wrapper = mount(
-    <OfferPay offer={offer} address={address} wallet={wallet} last={'.5'} />
+    <OfferPay offer={offer} address={address} wallet={wallet} last={'500000000000000000'} />
   );
   setState.mockClear();
 
-  wrapper.find('input').simulate('change', { target: { value: '0.01' } });
+  wrapper.find('input').simulate('change', { target: { value: '-0.01' } });
 
   expect(setState.mock.calls[1][0]).toEqual({
-    reward_error: 'Reward below 0.0625 minimum.'
+    reward_error: 'Reward must be more than 0 NCT.'
   });
 });
 
 it('displays an error when nectar is below the latest payment', () => {
   const setState = jest.spyOn(OfferPay.prototype, 'setState');
   const wrapper = mount(
-    <OfferPay offer={offer} address={address} wallet={wallet} last={'.5'} />
+    <OfferPay offer={offer} address={address} wallet={wallet} last={'500000000000000000'} />
   );
   setState.mockClear();
 
@@ -102,7 +102,7 @@ it('displays an error when nectar is below the latest payment', () => {
 it('calls payExpert when button is clicked', () => {
   const payExpert = jest.spyOn(OfferPay.prototype, 'payExpert');
   const wrapper = mount(
-    <OfferPay offer={offer} address={address} wallet={wallet} last={'.5'} />
+    <OfferPay offer={offer} address={address} wallet={wallet} last={'500000000000000000'} />
   );
   wrapper.setState({ reward: '5' });
 
@@ -116,10 +116,10 @@ it('calls payExpert when button is clicked', () => {
 
 it('calls http.pay when payExpert is called', done => {
   const wrapper = mount(
-    <OfferPay offer={offer} address={address} wallet={wallet} last={'.5'} />
+    <OfferPay offer={offer} address={address} wallet={wallet} last={'500000000000000000'} />
   );
   const instance = wrapper.instance();
-  wrapper.setState({ reward: '5' });
+  wrapper.setState({ reward: '5', reward_error: null });
 
   instance.payExpert().then(() => {
     try {
@@ -135,15 +135,15 @@ it('calls addMessage when http.pay success', done => {
   const addMessage = jest.fn();
   const wrapper = mount(
     <OfferPay
-      addMessage={addMessage}
+      onAddMessage={addMessage}
       offer={offer}
       address={address}
       wallet={wallet}
-      last={'.5'}
+      last={'500000000000000000'}
     />
   );
   const instance = wrapper.instance();
-  wrapper.setState({ reward: 5 });
+  wrapper.setState({ reward: '5' });
 
   instance.payExpert().then(() => {
     try {
@@ -176,11 +176,11 @@ it('calls onError when http.pay fails', done => {
       offer={offer}
       address={address}
       wallet={wallet}
-      last={'.5'}
+      last={'500000000000000000'}
     />
   );
   const instance = wrapper.instance();
-  wrapper.setState({ reward: 5 });
+  wrapper.setState({ reward: '5' });
 
   instance.payExpert().then(() => {
     try {

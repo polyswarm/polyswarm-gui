@@ -1,6 +1,8 @@
 // Vendor imports
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import web3Utils from 'web3-utils';
+import BigNumber from 'bignumber.js';
 // Bounty imports
 import StatRow from '../StatRow';
 // Component imports
@@ -19,7 +21,10 @@ class OfferSummary extends Component {
         return a.name > b.name;
       })
       .map(artifact => {
-        artifact.verdict = false;
+        const a = {};
+        a.name = artifact.name;
+        a.hash = artifact.hash;
+        a.verdict = false;
         return artifact;
       })
       .filter((artifact) => {
@@ -31,13 +36,23 @@ class OfferSummary extends Component {
           return false;
         }
       });
-    
+
+    let last = '0';
+    if (offer.messages) {
+      const payments = offer.messages.filter(message => message.type === 'payment').sort((a, b) => a.amount < b.amount);
+      last = payments.length > 0 ? payments[0].amount : '0';
+    }
+
+    const initialWei = web3Utils.toWei(offer.initial);
+    const balanceWei = new BigNumber(initialWei).minus(new BigNumber(last)).toFixed();
+    const balance = web3Utils.fromWei(balanceWei);
+
     messages.filter((message) => message.type ==='assertion')
       .forEach((message) => {
         message.artifacts.forEach((artifact, index) => {
           const verdict = message.verdicts[index];
           const i = artifacts.findIndex((value) => value.hash === artifact.hash);
-          if (i) {
+          if (i >= 0) {
             const current = artifacts[i].verdict || false;
             artifacts[i].verdict = current || verdict;
           }
@@ -46,14 +61,17 @@ class OfferSummary extends Component {
     return (
       <div className='OfferSummary'>
         <StatRow vertical
+          title={strings.contractAddress}
+          content={offer.msig_address}/>
+        <StatRow vertical
           title={strings.poster}
-          content={offer.author}/>
+          content={offer.ambassador}/>
         <StatRow vertical
           title={strings.expert}
           content={offer.expert}/>
         <StatRow vertical
           title={strings.balance}
-          content={`${offer.balance || 0}${strings.nectar}`}/>
+          content={`${balance || 0}${strings.nectar}`}/>
         <StatRow vertical
           title={strings.closed}
           content={offer.closed ? strings.yes : strings.no}/>

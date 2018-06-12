@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Uuid from 'uuid/v4';
 import BigNumber from 'bignumber.js';
+import web3Utils from 'web3-utils';
 // Offer imports
 import AnimatedInput from '../AnimatedInput';
 import Button from '../Button';
@@ -20,11 +21,10 @@ class OfferPay extends Component {
       duration: null,
       duration_error: null,
       expert: null,
-      expert_error: null,
+      expert_error: null
     };
 
     this.payExpert = this.payExpert.bind(this);
-    this.addMessage = this.addMessage.bind(this);
     this.onClickHandler = this.onClickHandler.bind(this);
     this.onRewardChanged = this.onRewardChanged.bind(this);
     this.addPayRequest = this.addPayRequest.bind(this);
@@ -72,13 +72,6 @@ class OfferPay extends Component {
     );
   }
 
-  addMessage(message) {
-    const {props: {addMessage}} = this;
-    if (addMessage) {
-      addMessage(message);
-    }
-  }
-  
   onClickHandler() {
     this.payExpert();
   }
@@ -90,12 +83,13 @@ class OfferPay extends Component {
   }
 
   payExpert() {
-    const { state: {reward, reward_error}, props: { offer, onBackPressed } } = this;
+    const { state: {reward, reward_error } } = this;
+    const { props: { offer, onBackPressed, encryptionKey, onAddMessage } } = this;
 
-    const rewardWei = new BigNumber(reward).times(new BigNumber('1000000000000000000'));
-
+    const rewardWei = web3Utils.toWei(reward);
+    const sequence = offer.nextSequence;
     const http = this.http;
-    if (reward &&!reward_error) {
+    if (reward && !reward_error) {
       const uuid = Uuid();
       this.addPayRequest(uuid);
       return new Promise(resolve => {
@@ -104,8 +98,16 @@ class OfferPay extends Component {
         }
         resolve();
       })
-        .then(() => http.pay(offer.guid, rewardWei.toString()))
-        .then(result => this.addMessage(result))
+        .then(() => http.pay(encryptionKey, offer, sequence, rewardWei))
+        .then(() => {
+          const message = {
+            type: 'payment',
+            amount: rewardWei,
+            sequence: sequence
+          };
+          onAddMessage(offer.guid, message);
+          return;
+        })
         .catch(error => {
           let errorMessage;
           if (!error || !error.message || error.message.length === 0) {
@@ -146,12 +148,12 @@ class OfferPay extends Component {
   validateFields() {
     const {state: {reward}} = this;
     const {props: {last}} = this;
-    const min = new BigNumber('0.0625');
+    const min = new BigNumber('0');
     const lastPay = new BigNumber(last);
-    if (reward && new BigNumber(reward).comparedTo(min) < 0 ) {
-      this.setState({reward_error: 'Reward below 0.0625 minimum.'});
-    } else if (reward && new BigNumber(reward).comparedTo(lastPay) <= 0 ) {
-      this.setState({reward_error: `Reward must be higher than last payment of ${lastPay.toString()}.`});
+    if (reward && new BigNumber(web3Utils.toWei(reward)).comparedTo(min) <= 0 ) {
+      this.setState({reward_error: 'Reward must be more than 0 NCT.'});
+    } else if (reward && new BigNumber(web3Utils.toWei(reward)).comparedTo(lastPay) <= 0 ) {
+      this.setState({reward_error: `Reward must be higher than last payment of ${web3Utils.fromWei(last)}.`});
     } else {
       this.setState({reward_error: null});
     }
@@ -159,6 +161,7 @@ class OfferPay extends Component {
 }
 
 OfferPay.propTypes = {
+  onAddMessage: PropTypes.func,
   wallet: PropTypes.object,
   address: PropTypes.string,
   onError: PropTypes.func,
@@ -168,5 +171,6 @@ OfferPay.propTypes = {
   removeRequest: PropTypes.func,
   url: PropTypes.string,
   last: PropTypes.string,
+  encryptionKey: PropTypes.object
 };
 export default OfferPay;
