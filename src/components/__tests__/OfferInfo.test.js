@@ -4,38 +4,43 @@ import { renderToJson } from 'enzyme-to-json';
 import OfferInfo from '../OfferInfo';
 
 const offer = {
-  author: 'author',
+  ambassador: 'ambassador',
   expert: 'expert',
-  remaining: '100',
+  initial: '100',
+  balance: '100',
   closed: false,
   messages: [
     {
       guid: 'asdf',
       type: 'assertion',
       artifacts: [{ name: 'Malicious', hash: 'asdf' }],
-      verdicts: [true]
+      verdicts: [true],
+      sequence: 3
     },
     {
       guid: 'fdsa',
       type: 'assertion',
       artifacts: [{ name: 'Benign', hash: 'fdsa' }],
-      verdicts: [false]
+      verdicts: [false],
+      sequence: 2
     },
     {
       guid: 'blah',
       type: 'request',
-      artifacts: [{ name: 'Benign', hash: 'fdsa' }]
+      artifacts: [{ name: 'Benign', hash: 'fdsa' }],
+      sequence: 1
     },
     {
       guid: 'halb',
       type: 'request',
-      artifacts: [{ name: 'Malicious', hash: 'asdf' }]
+      artifacts: [{ name: 'Malicious', hash: 'asdf' }],
+      sequence: 0
     }
   ]
 };
 
 const wallet = { homeNct: '1', sideNct: '1', homeEth: '1', sideEth: '1' };
-const address = 'author';
+const address = 'ambassador';
 
 it('renders without crashing', () => {
   const wrapper = render(
@@ -68,21 +73,4 @@ it('shows OfferRequest on request click', () => {
     .simulate('click');
 
   expect(wrapper.find('.OfferRequest')).toHaveLength(1);
-});
-
-it('calls prop onAddMessage when addMessage is called', () => {
-  const onAddMessage = jest.fn();
-  const wrapper = mount(
-    <OfferInfo
-      wallet={wallet}
-      address={address}
-      offer={offer}
-      onAddMessage={onAddMessage}
-    />
-  );
-  const instance = wrapper.instance();
-
-  instance.addMessage({});
-
-  expect(onAddMessage).toHaveBeenCalledTimes(1);
 });

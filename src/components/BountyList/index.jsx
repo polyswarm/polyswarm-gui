@@ -1,6 +1,7 @@
 // Vendor Imports
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import web3Utils from 'web3-utils';
 // Project Imports
 import Card from '../Card';
 import CardContent from '../CardContent';
@@ -19,11 +20,11 @@ class BountyList extends Component {
 
   render() {
     const {props: {bounties, requestsInProgress, wallet, address,
-      onCreateBounty, /*onCreateOffer,*/ onOpenRelay, onRequestWalletChange }} = this;
+      onCreateBounty, onCreateOffer, onOpenRelay, onRequestWalletChange }} = this;
 
     const headerActions = [
       {title: strings.newBounty, onClick: onCreateBounty},
-      // {title: strings.newOffer, onClick: onCreateOffer},
+      {title: strings.newOffer, onClick: onCreateOffer},
       {title: strings.relay, onClick: onOpenRelay},
       {title: strings.changeWallet, onClick: onRequestWalletChange},
     ];
@@ -129,25 +130,22 @@ class BountyList extends Component {
     }
 
     let messages = 0;
-    let lastPay;
+    let lastPay = '0' + strings.nct;
     let artifacts = [];
     if (offer.messages) {
       messages = offer.messages.length;
       const payouts = offer.messages
-        .filter((message) => message.type==='payment');
+        .sort((a, b) => b.sequence - a.sequence)
+        .filter((message) => message.type === 'payment');
       if (payouts.length > 0) {
-        lastPay = payouts[0].amount + strings.nct;
-      } else {
-        lastPay = strings.never;
+        lastPay = web3Utils.fromWei(payouts[0].amount) + strings.nct;
       }
 
       const names = offer.messages
         .filter((message) => message.type==='request')
         .map((message) => message.artifacts)
         .reduce((all, artifacts) => all.concat(artifacts), [])
-        .sort((a, b) => {
-          return a.name > b.name;
-        })
+        .sort()
         .map((artifact) => artifact.name);
       if (names.length > 0) {
         artifacts = names.reduce((accumulator, artifact) => accumulator +', '+ artifact);
@@ -166,7 +164,7 @@ class BountyList extends Component {
         <CardContent>
           <ul>
             <StatRow title={strings.author}
-              content={offer.author}/>
+              content={offer.ambassador}/>
             <StatRow title={strings.expert}
               content={offer.expert}/>
             <StatRow title={strings.lastPay}

@@ -8,6 +8,10 @@ const wallet = { homeNct: '1', sideNct: '1', homeEth: '1', sideEth: '1' };
 const address = 'author';
 
 const mockCreateOffer = jest.fn().mockImplementation(() => {
+  return new Promise(resolve => resolve({}));
+});
+
+const mockOpenOffer = jest.fn().mockImplementation(() => {
   return new Promise(resolve => resolve());
 });
 
@@ -15,7 +19,8 @@ jest.mock('../OfferCreate/http', () => {
   // Works and lets you check for constructor calls:
   return jest.fn().mockImplementation(() => {
     return {
-      createOffer: mockCreateOffer
+      createOffer: mockCreateOffer,
+      openOffer: mockOpenOffer
     };
   });
 });
@@ -30,37 +35,16 @@ beforeEach(() => {
   HttpOfferCreate.mockClear();
   HttpOfferCreate.mockImplementation(() => {
     return {
-      createOffer: mockCreateOffer
+      createOffer: mockCreateOffer,
+      openOffer: mockOpenOffer
     };
   });
+  jest.mock('ip');
 });
 
 it('renders without crashing', () => {
   const wrapper = render(<OfferCreate wallet={wallet} />);
   expect(renderToJson(wrapper)).toMatchSnapshot();
-});
-
-it('disables the button when max reward is less than 0.0625', done => {
-  const wrapper = mount(<OfferCreate address={address} wallet={wallet} />);
-  const instance = wrapper.instance();
-
-  instance.onDurationChanged('300');
-  instance.onExpertChanged('0xAF8302a3786A35abEDdF19758067adc9a23597e5');
-  instance.onRewardChanged('.006');
-
-  wrapper.setState({}, () => {
-    try {
-      expect(
-        wrapper
-          .find('.Offer-Create-Upload')
-          .find('button')
-          .props().disabled
-      ).toBeTruthy();
-      done();
-    } catch (error) {
-      done.fail(error);
-    }
-  });
 });
 
 it('disables the button when duration is 0', done => {
@@ -70,6 +54,7 @@ it('disables the button when duration is 0', done => {
   instance.onDurationChanged('0');
   instance.onExpertChanged('0xAF8302a3786A35abEDdF19758067adc9a23597e5');
   instance.onRewardChanged('1');
+  instance.onWebsocketChanged('8989');
 
   wrapper.setState({}, () => {
     try {
@@ -93,6 +78,7 @@ it('disables the button when duration is negative', done => {
   instance.onDurationChanged('-300');
   instance.onExpertChanged('0xAF8302a3786A35abEDdF19758067adc9a23597e5');
   instance.onRewardChanged('1');
+  instance.onWebsocketChanged('8989');
 
   wrapper.setState({}, () => {
     try {
@@ -116,6 +102,31 @@ it('disables the button when expert address is not an ethereum address', done =>
   instance.onDurationChanged('300');
   instance.onExpertChanged('0x000sdf7h');
   instance.onRewardChanged('1');
+  instance.onWebsocketChanged('8989');
+
+  wrapper.setState({}, () => {
+    try {
+      expect(
+        wrapper
+          .find('.Offer-Create-Upload')
+          .find('button')
+          .props().disabled
+      ).toBeTruthy();
+      done();
+    } catch (error) {
+      done.fail(error);
+    }
+  });
+});
+
+it('disables the button when port is below 1024', done => {
+  const wrapper = mount(<OfferCreate address={address} wallet={wallet} />);
+  const instance = wrapper.instance();
+
+  instance.onDurationChanged('300');
+  instance.onExpertChanged('0xAF8302a3786A35abEDdF19758067adc9a23597e5');
+  instance.onRewardChanged('1');
+  instance.onWebsocketChanged('1023');
 
   wrapper.setState({}, () => {
     try {
@@ -139,6 +150,7 @@ it('enables the button when reward, duration and expert are filled with valid va
   instance.onDurationChanged('300');
   instance.onExpertChanged('0xAF8302a3786A35abEDdF19758067adc9a23597e5');
   instance.onRewardChanged('1');
+  instance.onWebsocketChanged('8989');
 
   wrapper.setState({}, () => {
     try {
@@ -163,6 +175,7 @@ it('calls createOffer when the button is clicked', done => {
   instance.onDurationChanged('300');
   instance.onExpertChanged('0xAF8302a3786A35abEDdF19758067adc9a23597e5');
   instance.onRewardChanged('1');
+  instance.onWebsocketChanged('8989');
 
   wrapper.setState({}, () => {
     wrapper
@@ -178,7 +191,7 @@ it('calls createOffer when the button is clicked', done => {
   });
 });
 
-it('calls http.createOffer when onWalletChangedHandler is called with true', done => {
+it('calls http.createOffer when createOffer is called', done => {
   const wrapper = mount(<OfferCreate address={address} wallet={wallet} />);
   const instance = wrapper.instance();
 
@@ -186,15 +199,17 @@ it('calls http.createOffer when onWalletChangedHandler is called with true', don
     {
       duration: '300',
       reward: '1',
-      expert: '0xAF8302a3786A35abEDdF19758067adc9a23597e5'
+      expert: '0xAF8302a3786A35abEDdF19758067adc9a23597e5',
+      port: '8989'
     },
     () => {
       instance.createOffer().then(() => {
         try {
           expect(mockCreateOffer).toHaveBeenCalledWith(
+            'author',
             '0xAF8302a3786A35abEDdF19758067adc9a23597e5',
-            '1000000000000000000',
-            300
+            300,
+            'ws://127.0.0.1:8989'
           );
           done();
         } catch (error) {
@@ -216,7 +231,8 @@ it('calls prop addOffer if posted successfully', done => {
     {
       duration: '300',
       reward: '1',
-      expert: '0xAF8302a3786A35abEDdF19758067adc9a23597e5'
+      expert: '0xAF8302a3786A35abEDdF19758067adc9a23597e5',
+      port: '8989'
     },
     () => {
       instance.createOffer().then(() => {
@@ -255,7 +271,8 @@ it('calls prop onError when http.createOffer fails', done => {
     {
       duration: '300',
       reward: '1',
-      expert: '0xAF8302a3786A35abEDdF19758067adc9a23597e5'
+      expert: '0xAF8302a3786A35abEDdF19758067adc9a23597e5',
+      port: '8989'
     },
     () => {
       instance.createOffer().then(() => {

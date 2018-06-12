@@ -4,9 +4,10 @@ const strings = {
   locked: 'Account was locked.',
   requestCreateOffer: 'Creating Offer',
   reward: 'Maximum Reward (NCT)',
-  duration: 'Duration (Blocks)',
+  duration: 'Duration (Seconds)',
   expert: "Expert's Ethereum Address",
   openOffer: 'Open Offer Channel',
-  title: 'Enter Expert, max reward and duration.'
+  title: 'Enter Expert, max reward and duration.',
+  port: 'Websocket Port'
 };
 export default strings;
