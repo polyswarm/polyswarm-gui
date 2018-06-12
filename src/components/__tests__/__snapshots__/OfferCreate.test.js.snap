@@ -95,21 +95,6 @@ exports[`renders without crashing 1`] = `
           
         </input>
       </div>
-      <div
-        class="AnimatedInput"
-      >
-        <div>
-          
-        </div>
-        <input
-          class="AnimatedInput-Input"
-          id="port"
-          type="number"
-          value=""
-        >
-          
-        </input>
-      </div>
     </div>
     <div
       class="Offer-Create-Upload"

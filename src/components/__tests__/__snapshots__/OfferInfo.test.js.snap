@@ -52,18 +52,18 @@ exports[`renders without crashing 1`] = `
       >
         <p
           class="Header-Divided"
-          style="font-size:5.714285714285714vw"
+          style="font-size:7.0588235294117645vw"
         >
-          ambassador
+          author
         </p>
         <p
           class="Header-Divided"
-          style="font-size:5.714285714285714vw"
+          style="font-size:7.0588235294117645vw"
         >
           1 NCT 
         </p>
         <p
-          style="font-size:5.714285714285714vw"
+          style="font-size:7.0588235294117645vw"
         >
           1 ETH
         </p>
@@ -81,26 +81,12 @@ exports[`renders without crashing 1`] = `
           <p
             class="StatTitle"
           >
-            Contract Address:
-          </p>
-          <p
-            class="StatContent"
-          >
-            
-          </p>
-        </li>
-        <li
-          class="StatRow-Vertical"
-        >
-          <p
-            class="StatTitle"
-          >
             Author:
           </p>
           <p
             class="StatContent"
           >
-            ambassador
+            author
           </p>
         </li>
         <li
@@ -128,7 +114,7 @@ exports[`renders without crashing 1`] = `
           <p
             class="StatContent"
           >
-            100 Nectar (NCT)
+            0 Nectar (NCT)
           </p>
         </li>
         <li

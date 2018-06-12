@@ -19,7 +19,7 @@ exports[`renders without crashing 1`] = `
             <p
               class="CardHeader-Sub"
             >
-              0.5 Nectar (NCT)
+              .5 Nectar (NCT)
             </p>
           </div>
         </header>
@@ -39,7 +39,7 @@ exports[`renders without crashing 1`] = `
             <p
               class="CardHeader-Sub"
             >
-              0.0625 Nectar (NCT)
+              .0625 Nectar (NCT)
             </p>
           </div>
         </header>

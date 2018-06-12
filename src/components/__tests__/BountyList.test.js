@@ -522,7 +522,7 @@ it('puts the addr and current balances in the header when walletlist and address
   expect(wrapper.find('.Header-Address').text()).toEqual('author1 NCT 1 ETH');
 });
 
-it('displays a StatRow with ambassador', () => {
+it('displays a StatRow with author', () => {
   const bounties = [
     {
       guid: 'asdf',
@@ -530,7 +530,7 @@ it('displays a StatRow with ambassador', () => {
         { type: 'payment', amount: '1000' },
         { type: 'payment', amount: '100' }
       ],
-      ambassador: 'author',
+      author: 'author',
       expert: 'expert',
       resolved: false,
       expired: true,
@@ -583,7 +583,7 @@ it('displays a StatRow with the amount of the most recent payment', () => {
     {
       guid: 'asdf',
       messages: [
-        { type: 'payment', amount: '1000000000000000000000' },
+        { type: 'payment', amount: '1000' },
         { type: 'payment', amount: '100' }
       ],
       author: 'author',

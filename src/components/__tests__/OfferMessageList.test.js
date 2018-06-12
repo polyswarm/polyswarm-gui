@@ -12,22 +12,19 @@ const offer = {
     {
       guid: 'asdf',
       type: 'payment',
-      amount: '500000000000000000',
-      sequence: 5
+      amount: '.5'
     },
     {
       guid: 'fdsa',
       type: 'payment',
-      amount: '62500000000000000',
-      sequence: 4
+      amount: '.0625'
     },
     {
       guid: 'assertion',
       type: 'assertion',
       artifacts: [{ name: 'Malicious', hash: 'asdf' }],
       verdicts: [true],
-      metadata: 'Worm',
-      sequence: 3
+      metadata: 'Worm'
     },
     {
       guid: 'other_assertion',
@@ -37,8 +34,7 @@ const offer = {
         { name: 'Malicious', hash: 'asdf' }
       ],
       verdicts: [false, true],
-      metadata: '',
-      sequence: 2
+      metadata: ''
     },
     {
       guid: 'request',
@@ -46,14 +42,12 @@ const offer = {
       artifacts: [
         { name: 'Malicious', hash: 'asdf' },
         { name: 'Benign', hash: 'fdsa' }
-      ],
-      sequence: 1
+      ]
     },
     {
       guid: 'other_request',
       type: 'request',
-      artifacts: [{ name: 'Malicious', hash: 'asdf' }],
-      sequence: 0
+      artifacts: [{ name: 'Malicious', hash: 'asdf' }]
     }
   ]
 };
@@ -87,9 +81,9 @@ it('displays a payment as just the Pay header and the amount', () => {
   const pay = wrapper.find('.Card').slice(0, 1);
 
   expect(pay.find('.CardHeader-Title').text()).toEqual(
-    'Payment0.5 Nectar (NCT)'
+    'Payment.5 Nectar (NCT)'
   );
-  expect(pay.find('.CardHeader-Sub').text()).toEqual('0.5 Nectar (NCT)');
+  expect(pay.find('.CardHeader-Sub').text()).toEqual('.5 Nectar (NCT)');
 });
 
 it('displays the assertion as the metadata, and assertion per file', () => {
@@ -139,4 +133,3 @@ it('displays a request as a list of files', () => {
       .text()
   ).toEqual('Malicious, Benign');
 });
-[]

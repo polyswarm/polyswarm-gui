@@ -23,23 +23,21 @@ class OfferInfo extends Component {
 
   render() {
     const { props: { offer, address, addRequest, removeRequest, url, wallet,
-      onBackPressed, requestsInProgress, onError, encryptionKey, onAddMessage },
+      onBackPressed, requestsInProgress, onError },
     state: { request, pay } } = this;
 
     // only show actions if signing wallet is same as wallet used to create this
     let headerActions = [];
-    if (address.toUpperCase() === offer.ambassador.toUpperCase()) {
+    if (address.toUpperCase() === offer.author.toUpperCase()) {
       headerActions = [
         {title: 'Pay', onClick: this.onPayClick},
-        {title: 'Request', onClick: this.onRequestClick}
+        {title: 'Request', onClick: this.onRequestClick},
       ];
     }
 
     let last = '0';
     if (offer.messages) {
-      const payments = offer.messages
-        .sort((a, b) => b.sequence - a.sequence)
-        .filter(message => message.type === 'payment');
+      const payments = offer.messages.filter(message => message.type === 'payment').sort((a, b) => a.amount < b.amount);
       last = payments.length > 0 ? payments[0].amount : '0';
     }
 
@@ -55,13 +53,11 @@ class OfferInfo extends Component {
             onBackPressed={this.onBack}
             onError={onError}
             onFilesSent={this.onBack}
-            onAddMessage={onAddMessage}
-            encryptionKey={encryptionKey}
+            addMessage={this.onAddMessage}
             url={url}/>
         )}
         {pay && (
           <OfferPay
-            onAddMessage={onAddMessage}
             offer={offer}
             last={last}
             address={address}
@@ -71,7 +67,6 @@ class OfferInfo extends Component {
             requestsInProgress={requestsInProgress}
             onError={onError}
             onBackPressed={this.onBack}
-            encryptionKey={encryptionKey}
             url={url}/>
         )}
         {!request && !pay && (
@@ -93,6 +88,14 @@ class OfferInfo extends Component {
         )}
       </div>
     );
+  }
+
+  addMessage() {
+    const {props: {onAddMessage, offer}} = this;
+    if (onAddMessage) {
+      // Tells app that this offer has a new message to retrieve.
+      onAddMessage(offer);
+    }
   }
 
   onBack() {

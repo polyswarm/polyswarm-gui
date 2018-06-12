@@ -27,11 +27,10 @@ class App extends Component {
       homeEth: 0,
       sideEth: 0,
       homeNct: 0,
-      sideNct: 0
+      sideNct: 0,
     };
     this.cancel = false;
     this.state = {
-      key: null,
       address: null,
       wallet,
       active: -1,
@@ -42,12 +41,11 @@ class App extends Component {
       first,
       errorMessage: null,
       requestsInProgress: [],
-      modalOpen: true
+      modalOpen: true,
     };
 
     this.onAddBounty = this.onAddBounty.bind(this);
     this.onAddOffer = this.onAddOffer.bind(this);
-    this.onAddMessage = this.onAddMessage.bind(this);
     this.onBackPressed = this.onBackPressed.bind(this);
     this.onRemoveBounty = this.onRemoveBounty.bind(this);
     this.onSelectBounty = this.onSelectBounty.bind(this);
@@ -127,7 +125,7 @@ class App extends Component {
               <OfferCreate
                 {...this.getPropsForChild()}
                 addOffer={this.onAddOffer}
-                onOfferCreated={this.onBackPressed}/>
+                onBountyPosted={this.onBackPressed}/>
             )}
             { relay && (
               <Relay {...this.getPropsForChild()}/>
@@ -147,7 +145,7 @@ class App extends Component {
               <OfferInfo
                 {...this.getPropsForChild()}
                 // This will just kickoff a refresh of this offer
-                onAddMessage={this.onAddMessage}
+                onAddMessage={this.onAddOffer}
                 offer={bounties[active]}/>
             )}
             {errorMessage && errorMessage.length > 0 && (
@@ -164,7 +162,7 @@ class App extends Component {
     const http = this.http;
 
     this.addRequest(strings.requestGetBounty, result.guid);
-    return http.getBounty('home', result)
+    return http.getBounty(result)
       .then(bounty => {
         if (bounty != null) {
           bounty.updated = true;
@@ -179,53 +177,18 @@ class App extends Component {
       });
   }
 
-  onAddMessage(guid, message) {
-    // deep copy so we it won't edit the actual state
-    const bounties = JSON.parse(JSON.stringify(this.state.bounties.slice()));
-    const offers = bounties
-      .filter((value) => value.type === 'offer' && value.guid === guid);
-    if (offers && offers.length == 1) {
-      // Allow expert to replace the URI he listens to.
-      const websocket = message.websocket;
-      if ( websocket && typeof websocket !== 'undefined' ) {
-        offers[0].expertWebsocketUri = websocket;
-      }
-
-      if (message.type !== 'websocket') {
-        // add message the the front
-        offers[0].messages.unshift(message);
-        offers[0].nextSequence = message.sequence + 1;
-      }
-      this.setState({bounties: bounties});
-    }
-  }
-
-  onAddOffer(result, websocket, reward) {
+  onAddOffer(result) {
     const http = this.http;
-    const port = result.port;
 
     this.addRequest(strings.requestGetOffer, result.guid);
-    return http.getOffer('home', result)
-      .then(offer => new Promise(resolve => {
+    return http.getOffer(result)
+      .then(offer => {
         if (offer != null) {
           offer.updated = true;
-          // I would prefer not to have inital be specified here, but there is
-          // no way to grab the balance in polyswarmd, yet.
-          offer.initial = reward;
-          offer.ambassadorWebsocketUri = websocket;
-          offer.expertWebsocketUri = websocket;
-          offer.port = port;
-          offer.nextSequence = 1;
-          offer.messages = [];
           const bounties = this.state.bounties.slice();
           bounties.push(offer);
-          this.setState({bounties: bounties}, resolve);
+          this.setState({bounties: bounties});
         }
-        return offer;
-      }))
-      .then(offer => {
-        http.listenForMessages(offer, this.onAddMessage);
-        return offer;
       })
       .catch(() => {})
       .then(() => {
@@ -254,10 +217,7 @@ class App extends Component {
     this.setState({address, modalOpen: false});
 
     this.http.setAccount(address, keyfile, password)
-      .then((key) => {
-        this.setState({key: key});
-        this.http.listenForTransactions(key);
-      })
+      .then(() => this.http.listenForTransactions())
       .then(() => this.getWallet())
       .catch(() => {});
   }
@@ -373,15 +333,13 @@ class App extends Component {
     const uuid = Uuid();
     this.addRequest(strings.requestAllData, uuid);
     http.listenForAssertions(this.updateOnAssertion);
-    
     const bounties = this.state.bounties.slice();
     const promises = bounties.map((bounty) => {
-      const chain = bounty.chain ? bounty.chain : 'home';
       let promise;
       if (bounty.type === 'offer') {
-        promise = http.getOffer(chain, bounty);
+        promise = http.getOffer(bounty);
       } else {
-        promise = http.getBounty(chain, bounty);
+        promise = http.getBounty(bounty);
       }
       return promise
         .then(b => {
@@ -401,36 +359,23 @@ class App extends Component {
       values.forEach((value) => {
         const foundIndex = bounties.findIndex((bounty) => bounty.guid === value.guid);
         if (foundIndex >= 0) {
-          if (value.type === 'bounty') {
-            bounties[foundIndex] = value;
-          } else {
-            const offer = bounties[foundIndex];
-            // Update the fields, but don't wipe it out because messages are separate
-            offer.address = value.address;
-            offer.closed = value.closed;
-            offer.author = value.ambassador;
-            offer.expert = value.expert;
-            http.listenForMessages(offer, this.onAddMessage);
-          }
+          bounties[foundIndex] = value;
         }
       });
       this.setState({bounties: bounties});
-    })
-      .catch(() => {})
-      .then(() => this.removeRequest(strings.requestAllData, uuid));
+      this.removeRequest(strings.requestAllData, uuid);
+    });
   }
 
   getPropsForChild() {
-    const {host: url, token} = config;
-    const { state: { active, bounties, wallet, requestsInProgress, address, key } } = this;
+    const {host: url} = config;
+    const { state: { active, bounties, wallet, requestsInProgress, address } } = this;
     return({
       url,
-      encryptionKey: key,
       active,
-      wallet,
       address,
       bounties,
-      token: token,
+      wallet,
       requestsInProgress,
       onError: this.onPostError,
       addRequest: this.addRequest,
@@ -445,7 +390,7 @@ class App extends Component {
 
   getWallet() {
     const http = this.http;
-    const chains = ['home'];//, 'side'];
+    const chains = ['home', 'side'];
     const eth = chains.map(chain => http.getEth(chain)
       .then(balance =>
         new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000))
@@ -464,9 +409,9 @@ class App extends Component {
     return Promise.all(promises).then(values => {
       return({
         homeEth: values[0],
-        sideEth: 0,//values[1],
-        homeNct: values[1],//2],
-        sideNct: 0//values[3]
+        sideEth: values[1],
+        homeNct: values[2],
+        sideNct: values[3]
       });
     })
       .then((wallet) => new Promise((resolve, reject) => {

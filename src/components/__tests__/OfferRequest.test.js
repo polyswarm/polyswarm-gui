@@ -25,15 +25,11 @@ const wallet = { homeNct: '1', sideNct: '1', homeEth: '1', sideEth: '1' };
 const address = 'author';
 
 const mockUploadFiles = jest.fn().mockImplementation(() => {
-  return new Promise(resolve => resolve([]));
+  return new Promise(resolve => resolve());
 });
 
 const mockSendRequest = jest.fn().mockImplementation(() => {
   return new Promise(resolve => resolve());
-});
-
-const mockGetList = jest.fn().mockImplementation(() => {
-  return new Promise(resolve => resolve([]));
 });
 
 jest.mock('../OfferRequest/http', () => {
@@ -41,8 +37,7 @@ jest.mock('../OfferRequest/http', () => {
   return jest.fn().mockImplementation(() => {
     return {
       uploadFiles: mockUploadFiles,
-      sendRequest: mockSendRequest,
-      getArtifactsList: mockGetList
+      sendRequest: mockSendRequest
     };
   });
 });
@@ -58,8 +53,7 @@ beforeEach(() => {
   HttpRequest.mockImplementation(() => {
     return {
       uploadFiles: mockUploadFiles,
-      sendRequest: mockSendRequest,
-      getArtifactsList: mockGetList 
+      sendRequest: mockSendRequest
     };
   });
 });
@@ -240,7 +234,6 @@ it('calls send request if upload succeeds', done => {
     instance.sendMessage().then(() => {
       try {
         expect(mockSendRequest).toHaveBeenCalledTimes(1);
-        expect(mockGetList).toHaveBeenCalledTimes(1);
         done();
       } catch (error) {
         done.fail(error);
@@ -255,7 +248,7 @@ it('calls addMessage if sendRequest succeeds', done => {
     <OfferRequest
       offer={offer}
       address={address}
-      onAddMessage={addMessage}
+      addMessage={addMessage}
       wallet={wallet}
     />
   );

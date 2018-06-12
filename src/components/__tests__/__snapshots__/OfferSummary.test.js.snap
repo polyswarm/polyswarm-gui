@@ -10,20 +10,6 @@ exports[`renders without crashing 1`] = `
     <p
       class="StatTitle"
     >
-      Contract Address:
-    </p>
-    <p
-      class="StatContent"
-    >
-      msig
-    </p>
-  </li>
-  <li
-    class="StatRow-Vertical"
-  >
-    <p
-      class="StatTitle"
-    >
       Author:
     </p>
     <p
