@@ -2,7 +2,7 @@
   "name": "polyswarm-gui",
   "description": "Tool to post and manage bounties on the PolySwarm Marketplace running on Ethereum.",
   "author": "Swarm Technologies",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "license": "MIT",
   "main": "src/electron.js",

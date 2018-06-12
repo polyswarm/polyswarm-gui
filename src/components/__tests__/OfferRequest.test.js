@@ -59,7 +59,7 @@ beforeEach(() => {
     return {
       uploadFiles: mockUploadFiles,
       sendRequest: mockSendRequest,
-      getArtifactsList: mockGetList 
+      getArtifactsList: mockGetList
     };
   });
 });
