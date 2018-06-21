@@ -2,11 +2,34 @@
 
 This gui is used to post Bounties, and Offer Channels to the PolySwarm marketplace running on Ethereum.
 
-# Prerequisites
-
-With the newest release, we have moved to running a Sidechain to increase throughput. You now need some NCT & ETH for gas on the main chain, but only to deposit NCT onto the side chain using our relay contract. Once there, we run a POA chain with shorter block times and 0 gas price so there is no need for wallets to have any Eth. 
+With the newest release, we have moved to running a Sidechain to increase throughput. You now need some NCT & ETH for gas on the main chain, but only to deposit NCT onto the side chain using our relay contract. The sidechain operates a bit differently, but still uses polyswarm-gui & polyswarmd. 
 
 You can continue to use the same wallet on both chains. You can transfer, post bounties, and open offer channels on the Sidechain like you would on the Mainchain. Once you are finished, you can withdraw the NCT, minus a fee for us to recuperate the gas price of posting the withdrawal transfer on the Mainchain.
+
+# Prerequisites
+
+* Install and sync geth [(Instructions)](https://github.com/ethereum/go-ethereum/wiki/Installing-Geth)
+* Install and run IPFS [(Instructions)](https://ipfs.io/docs/install/)
+* Install and run polyswarmd [(Instructions)](https://github.com/polyswarm/polyswarmd)
+* Ethereum Wallet & Keyfile [(Instructions to create)](https://github.com/ethereum/go-ethereum/wiki/Managing-your-accounts#creating-an-account)
+* Have some NCT & ETH
+
+## Linux Specific
+
+On linux, you must install libgconf2-4 to launch the view. 
+
+#### .DEB
+
+```bash
+sudo apt-get update
+sudo apt-get install libgconf2-4
+```
+
+#### .RPM
+
+```bash
+sudo yum install GConf2
+```
 
 # Welcome Screen
 
@@ -18,12 +41,14 @@ On first launch, you will be greeted with a welcome screen. Click the 'Get Start
 
 <img style='width: 100%;' src='./docs/img/modal.png'>
 
-Past the welcome screen the application wants you to select an Etherum private key file & unlock it. The application listens for requests from polyswarmd, signs them and pushes them on to
+Past the welcome screen the application wants you to select an Ethereum private key file & unlock it. The application listens for requests from polyswarmd, signs them and pushes them on to
 the chain. 
 
 To choose a key, click the button labeled *Click here to select Ethereum private key file.* If you select a proper file, it will pull the address & populate the field for you. Enter the password, and click unlock. 
 
 Every time you open the application you will have to choose the keyfile & enter your password.
+
+**To find your key file, it is in a folder called `keystore` under the geth data dir. On Linux, the Mainnet keyfiles can be found in `$HOME/.ethereum/keystore`**
 
 # Bounty & Offer List
 
@@ -98,17 +123,15 @@ You can also use the relay without this gui. Send a deposit to the Ethereum main
 
 **You can use the same wallet across both chains.**
 
-**Depositing to the sidechain requires a second geth setup. It must be running on the main chain so that we can submit transactions.**
+**Depositing & posting bounties to the sidechain requires a second geth that is pointing to the sidechain.**
 
 # Running the Application
 
 This application uses Electron to operate as a desktop application, no browser required. We provide .deb, .rpm and .exe versions of the application. Install the appropriate package for the host operating system. (Sorry, no macOS, yet). Before running the application, make sure  both geth and IPFS are running.
 
-Start geth with `geth --rpc --rpcapi "eth,web3,personal,net" --ws --wsaddr "0.0.0.0" --wsport 8546 --wsapi "eth,web3,personal,net,debug" --wsorigins "*"`
-
-We expect geth rpc top be on 8545 and IPFS on 5001.
-
-Once everything is running & configured, run `polyswarm-gui` to launch the application.
+1. Start geth with `geth --rpc --rpcport 8545--rpcapi "eth,web3,personal,net" --ws --wsaddr "0.0.0.0" --wsport 8546 --wsapi "eth,web3,personal,net,debug" --wsorigins "*"`
+2. Start IPFS with `ipfs daemon`
+3. Start the gui with `polyswarm-gui`
 
 When running from source, install node, and electron-forge. Run `electron-forge start` to launch.
 
