@@ -112,18 +112,6 @@ Once everything is running & configured, run `polyswarm-gui` to launch the appli
 
 When running from source, install node, and electron-forge. Run `electron-forge start` to launch.
 
-# Running on Rinkeby
-
-If you need to run tests and need to deploy to Rinkeby for some tests, there are a couple things to change.
-
-1. Add the `--rinkeby` option to geth. 
-2. Edit the polyswarmd.cfg file (example below) with Rinkeby contract addresses (We don't provide any, but new contracts can be deployed with truffle).
-
-```polyswarm.cfg
-NECTAR_TOKEN_ADDRESS = '0x0000000000000000000000000000000000000000'
-BOUNTY_REGISTRY_ADDRESS = '0x0000000000000000000000000000000000000000'
-```
-
 # Bounty Cost
 
 Posting a bounty requires at minimum 1/16 NCT as the reward. The contract adds an additional 1/16 NCT as a fee paid to the Arbiters. This means each bounty costs at minimum 2/16 NCT in addition to the gas for sending transactions. 
