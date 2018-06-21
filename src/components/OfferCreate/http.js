@@ -69,7 +69,7 @@ class HttpOfferCreate {
       .then(body => body.result);
   }
 
-  openOffer(key, token, offer, balance) {
+  openOffer(key, offer, balance) {
     const url = this.url;
     new Promise((resolve, reject) => {
       if (validator.isUUID(offer.guid, 4)) {
@@ -100,7 +100,7 @@ class HttpOfferCreate {
               offerState.push(offer.msig); //  msig address
               offerState.push(balance); // new balance in nectar ambassador
               offerState.push(0); // balance in nectar expert
-              offerState.push(token); // token address
+              offerState.push(0); // token address
               offerState.push(offer.guid); // A globally-unique identifer for the Listing.
               offerState.push(balance); // The Offer Amount.
               offerState.push(0); // Cryptographic hash of the Artifact.

@@ -421,7 +421,7 @@ class App extends Component {
   }
 
   getPropsForChild() {
-    const {host: url, token} = config;
+    const { host: url } = config;
     const { state: { active, bounties, wallet, requestsInProgress, address, key } } = this;
     return({
       url,
@@ -430,7 +430,6 @@ class App extends Component {
       wallet,
       address,
       bounties,
-      token: token,
       requestsInProgress,
       onError: this.onPostError,
       addRequest: this.addRequest,
