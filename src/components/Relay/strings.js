@@ -8,9 +8,7 @@ const strings = {
   nectar: 'Nectar (NCT)',
   main: 'Main Ethereum Chain',
   side: 'PolySwarm Side Chain',
-  relayRequest: 'Relaying Nectar',
-  disabled:
-    'This feature is disabled until the PolySwarm Sidechain goes live very soon.'
+  relayRequest: 'Relaying Nectar'
 };
 
 export default strings;
