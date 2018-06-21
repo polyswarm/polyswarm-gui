@@ -40,23 +40,30 @@ exports[`renders without crashing 1`] = `
     >
       <p
         class="Header-Divided"
-        style="font-size:7.0588235294117645vw"
+        style="font-size:3.6363636363636362vw"
       >
-        author
+        asdf
       </p>
       <p
         class="Header-Divided"
-        style="font-size:7.0588235294117645vw"
+        style="font-size:3.6363636363636362vw"
       >
-        1 NCT 
+        Main: 1 NCT 0 ETH
       </p>
       <p
-        style="font-size:7.0588235294117645vw"
+        style="font-size:3.6363636363636362vw"
       >
-        1 ETH
+        Side: 1 NCT 
       </p>
     </div>
   </header>
+  <div
+    class="ModalPassword"
+  >
+    <div>
+      
+    </div>
+  </div>
   <div
     class="Relay-Content"
   >
@@ -192,18 +199,13 @@ exports[`renders without crashing 1`] = `
             
           </div>
           <input
-            class="AnimatedInput-Input AnimatedInput-Error"
+            class="AnimatedInput-Input"
             id="nectar"
             type="number"
             value=""
           >
             
           </input>
-          <p
-            class="AnimatedInput-ErrorLabel"
-          >
-            This feature is disabled until the PolySwarm Sidechain goes live very soon.
-          </p>
         </div>
       </div>
       <div
