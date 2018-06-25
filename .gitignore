@@ -3,6 +3,9 @@
 # vscode
 .vscode/
 
+# vim
+*.swp
+
 # dependencies
 /node_modules
 
