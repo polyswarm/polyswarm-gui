@@ -10,7 +10,7 @@ import ChainInfo from '../ChainInfo';
 import Header from '../Header';
 import RelayDropdown from '../RelayDropdown';
 // Component imports
-import strings from  './strings.js';
+import strings from './strings.js';
 import HttpRelay from './http';
 
 class Relay extends Component {
@@ -19,7 +19,7 @@ class Relay extends Component {
     this.state = {
       nectar: '',
       selected: 0,
-      nectar_error: strings.disabled,
+      nectar_error: strings.disabled
     };
 
     this.onButtonClick = this.onButtonClick.bind(this);
@@ -32,58 +32,75 @@ class Relay extends Component {
   }
 
   componentDidMount() {
-    const { props: { url } } = this;
+    const {
+      props: { url }
+    } = this;
     this.http = new HttpRelay(url);
   }
 
   render() {
-    const {state: {nectar_error, nectar, selected},
-      props: {address, wallet, onBackPressed, requestsInProgress } } = this;
+    const {
+      state: { nectar_error, nectar, selected },
+      props: { address, wallet, onBackPressed, requestsInProgress }
+    } = this;
 
-    let homeAltered ='0';
-    let sideAltered ='0';
+    let homeAltered = '0';
+    let sideAltered = '0';
     if (wallet.homeNct && wallet.sideNct) {
       let nct = nectar;
       if (!nectar) {
         nct = 0;
       }
-      homeAltered = new BigNumber(wallet.homeNct).minus(new BigNumber(`${selected? '-' : ''}${nct}`)).toString();
-      sideAltered = new BigNumber(wallet.sideNct).plus(new BigNumber(`${selected? '-' : ''}${nct}`)).toString();
+      homeAltered = new BigNumber(wallet.homeNct)
+        .minus(new BigNumber(`${selected ? '-' : ''}${nct}`))
+        .toString();
+      sideAltered = new BigNumber(wallet.sideNct)
+        .plus(new BigNumber(`${selected ? '-' : ''}${nct}`))
+        .toString();
     }
-    return(
-      <div className='Relay'>
-        <Header title={strings.title}
+    return (
+      <div className="Relay">
+        <Header
+          title={strings.title}
           requests={requestsInProgress}
           back={true}
           onBack={onBackPressed}
           address={address}
-          wallet={wallet}/>
-        <div className='Relay-Content'>
-          <div className='Relay-Centered'>
-            <div className='Relay-Chain'>
-              <ChainInfo title={strings.before}
+          wallet={wallet}
+        />
+        <div className="Relay-Content">
+          <div className="Relay-Centered">
+            <div className="Relay-Chain">
+              <ChainInfo
+                title={strings.before}
                 homeName={strings.main}
                 homeBalance={wallet.homeNct}
                 sideName={strings.side}
-                sideBalance={wallet.sideNct} />
-              <ChainInfo title={strings.after}
+                sideBalance={wallet.sideNct}
+              />
+              <ChainInfo
+                title={strings.after}
                 homeName={strings.main}
                 homeBalance={homeAltered}
                 sideName={strings.side}
-                sideBalance={sideAltered} />
+                sideBalance={sideAltered}
+              />
             </div>
-            <div className='Relay-Nectar'>
-              <RelayDropdown onSelectionChanged={this.onSelectionChanged}/>
-              <AnimatedInput type='number'
-                input_id='nectar'
+            <div className="Relay-Nectar">
+              <RelayDropdown onSelectionChanged={this.onSelectionChanged} />
+              <AnimatedInput
+                type="number"
+                input_id="nectar"
                 error={nectar_error}
                 placeholder={strings.nectar}
-                onChange={this.onNectarChanged} />
+                onChange={this.onNectarChanged}
+              />
             </div>
-            <div className='Relay-Button'>
+            <div className="Relay-Button">
               <Button
                 disabled={true || nectar_error || !nectar}
-                onClick={this.onButtonClick} >
+                onClick={this.onButtonClick}
+              >
                 {strings.transfer}
               </Button>
             </div>
@@ -92,37 +109,50 @@ class Relay extends Component {
       </div>
     );
   }
-  
+
   onButtonClick() {
-    const { state: {selected} } =this;
+    const {
+      state: { selected }
+    } = this;
     if (selected == 1) {
       // return this.transfer(false);
     } else {
       // return this.transfer(true);
     }
   }
-  
+
   onNectarChanged(nectar) {
-    const { state: {selected}, props: {wallet}} = this;
+    const {
+      state: { selected },
+      props: { wallet }
+    } = this;
 
     let max = selected == 0 ? wallet.homeNct : wallet.sideNct;
     let error = null;
-    if (nectar && nectar.length > 0 && new BigNumber(nectar).comparedTo(new BigNumber(max)) > 0) {
+    if (
+      nectar &&
+      nectar.length > 0 &&
+      new BigNumber(nectar).comparedTo(new BigNumber(max)) > 0
+    ) {
       error = `${strings.tooHigh}${max}`;
-    } else if (nectar && nectar.length > 0 && new BigNumber(nectar).comparedTo(new BigNumber('0')) <= 0) {
+    } else if (
+      nectar &&
+      nectar.length > 0 &&
+      new BigNumber(nectar).comparedTo(new BigNumber('0')) <= 0
+    ) {
       error = `${strings.tooLow}`;
     }
-    this.setState({nectar: nectar, nectar_error: strings.disabled});
+    this.setState({ nectar: nectar, nectar_error: strings.disabled });
   }
-  
+
   onSelectionChanged(index) {
-    this.setState({selected: index});
+    this.setState({ selected: index });
   }
 
   addRelayRequest(id) {
     const { addRequest } = this.props;
     if (addRequest) {
-      addRequest(strings.relayRequest,id);
+      addRequest(strings.relayRequest, id);
     }
   }
 
@@ -134,12 +164,17 @@ class Relay extends Component {
   }
 
   transfer(isDeposit) {
-    const { state: {nectar, nectar_error}, props: {address} } = this;
+    const {
+      state: { nectar, nectar_error },
+      props: { address }
+    } = this;
 
-    const nectarWei = new BigNumber(nectar).times(new BigNumber('1000000000000000000'));
+    const nectarWei = new BigNumber(nectar).times(
+      new BigNumber('1000000000000000000')
+    );
 
     const http = this.http;
-    if (nectar &&!nectar_error) {
+    if (nectar && !nectar_error) {
       const uuid = Uuid();
       this.addRelayRequest(uuid);
       let promise;
@@ -148,18 +183,16 @@ class Relay extends Component {
       } else {
         promise = http.withdraw(address, nectarWei.toString());
       }
-      return promise
-        .catch(error => this.handleError(error))
-        .then(() => {
-          this.removeRelayRequest(uuid);
-        });
+      return promise.catch(error => this.handleError(error)).then(() => {
+        this.removeRelayRequest(uuid);
+      });
     } else {
-      return new Promise((resolve) => resolve());
+      return new Promise(resolve => resolve());
     }
   }
 
   handleError(error) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       let errorMessage;
       if (!error || !error.message || error.message.length === 0) {
         errorMessage = strings.error;
@@ -169,7 +202,9 @@ class Relay extends Component {
       this.setState({ error: errorMessage });
 
       //Update app
-      const { props: { onError } } = this;
+      const {
+        props: { onError }
+      } = this;
       if (onError) {
         onError(errorMessage);
       }

@@ -1,5 +1,5 @@
 // Vendor Imports
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 // Project Imports
@@ -15,35 +15,35 @@ class CardHeader extends Component {
   }
 
   render() {
-    const {props: {title, subhead, update, remove, view, additionalClasses}} = this;
-    const classname = classNames('CardHeader', additionalClasses, {'update': update });
+    const {
+      props: { title, subhead, update, remove, view, additionalClasses }
+    } = this;
+    const classname = classNames('CardHeader', additionalClasses, {
+      update: update
+    });
     return (
       <header className={classname}>
-        <div className='CardHeader-Title'>
+        <div className="CardHeader-Title">
           {title}
-          {subhead && subhead.length > 0 && (
-            <p className='CardHeader-Sub'>
-              {subhead}
-            </p>
-          )}
+          {subhead &&
+            subhead.length > 0 && <p className="CardHeader-Sub">{subhead}</p>}
         </div>
-        {remove && view && (
-          <Dropdown>
-            <p onClick={this.view}>
-              {strings.view}
-            </p>
-            <p onClick={this.remove}>
-              {strings.delete}
-            </p>
-          </Dropdown>
-        )}
+        {remove &&
+          view && (
+            <Dropdown>
+              <p onClick={this.view}>{strings.view}</p>
+              <p onClick={this.remove}>{strings.delete}</p>
+            </Dropdown>
+          )}
       </header>
     );
   }
 
   remove(e) {
     e.stopPropagation();
-    const {props: { remove }} = this;
+    const {
+      props: { remove }
+    } = this;
     if (remove) {
       remove();
     }
@@ -51,7 +51,9 @@ class CardHeader extends Component {
 
   view(e) {
     e.stopPropagation();
-    const {props: {view}} = this;
+    const {
+      props: { view }
+    } = this;
     if (view) {
       view();
     }
@@ -61,6 +63,6 @@ CardHeader.proptypes = {
   title: PropTypes.string,
   subhead: PropTypes.string,
   remove: PropTypes.func,
-  view: PropTypes.func,
-}
+  view: PropTypes.func
+};
 export default CardHeader;

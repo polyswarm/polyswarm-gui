@@ -1,7 +1,7 @@
 // Vendor imports
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {CSSTransition} from 'react-transition-group';
+import { CSSTransition } from 'react-transition-group';
 // Bounty imports
 import AnimatedInput from '../AnimatedInput';
 import Button from '../Button';
@@ -29,60 +29,73 @@ class ModalPassword extends Component {
   }
 
   render() {
-    const { state: { password_error, address, file, password }, props: { open } } = this;
+    const {
+      state: { password_error, address, file, password },
+      props: { open }
+    } = this;
     const filename = file ? file.name : strings.na;
     let addr = file ? address : strings.na;
     return (
-      <div className='ModalPassword'>
+      <div className="ModalPassword">
         <CSSTransition
           in={open}
           timeout={300}
           mountOnEnter
           unmountOnExit
-          classNames='open'>
+          classNames="open"
+        >
           {state => (
             <React.Fragment>
-              <div key='background' className='ModalBackground' onClick={this.onCloseClick}/>
+              <div
+                key="background"
+                className="ModalBackground"
+                onClick={this.onCloseClick}
+              />
               <CSSTransition
                 in={open && state !== 'exited'}
                 timeout={300}
                 unmountOnExit
-                classNames='slide'>
+                classNames="slide"
+              >
                 {() => (
-                  <div className='ModalContent' key='content'>
-                    <header className='ModalContentHeader'>
+                  <div className="ModalContent" key="content">
+                    <header className="ModalContentHeader">
                       {strings.header}
                     </header>
                     <form>
-                      <FileButton flat
-                        onFileSelected={this.onFileSelected}>
+                      <FileButton flat onFileSelected={this.onFileSelected}>
                         {strings.selectKeystore}
                       </FileButton>
-                      <AnimatedInput input_id='filename'
+                      <AnimatedInput
+                        input_id="filename"
                         readonly={filename}
                         placeholder={strings.addressFile}
-                        type='string'/>
-                      <AnimatedInput input_id='address'
+                        type="string"
+                      />
+                      <AnimatedInput
+                        input_id="address"
                         readonly={addr}
                         placeholder={strings.address}
-                        type='string'/>
-                      <AnimatedInput input_id='password'
+                        type="string"
+                      />
+                      <AnimatedInput
+                        input_id="password"
                         onChange={this.onChangePassword}
                         error={password_error}
                         placeholder={strings.password}
                         onKeyPress={this.onKeyPress}
-                        type='password'/>
+                        type="password"
+                      />
                     </form>
-                    <span className='Modal-Button-Bar'>
-                      <Button flat
-                        disabled={!password || password_error}
-                        onClick={this.onUnlockClick}>
-                        {strings.unlock}
-                      </Button>
+                    <span className="Modal-Button-Bar">
                       <Button
                         flat
-                        cancel
-                        onClick={this.onCloseClick}>
+                        disabled={!password || password_error}
+                        onClick={this.onUnlockClick}
+                      >
+                        {strings.unlock}
+                      </Button>
+                      <Button flat cancel onClick={this.onCloseClick}>
                         {strings.cancel}
                       </Button>
                     </span>
@@ -97,7 +110,9 @@ class ModalPassword extends Component {
   }
 
   onKeySelected(keyfile, address, password) {
-    const { props: { onKeySelected }} = this;
+    const {
+      props: { onKeySelected }
+    } = this;
     if (onKeySelected) {
       onKeySelected(keyfile, address, password);
     }
@@ -106,22 +121,23 @@ class ModalPassword extends Component {
   onFileSelected(files) {
     if (files.length > 0) {
       const file = files[0];
-      this.parseAddress(file)
-        .then(address => {
-          this.setState({address, file});
-        });
+      this.parseAddress(file).then(address => {
+        this.setState({ address, file });
+      });
     }
   }
 
   onChangePassword(password) {
     this.setState({ password: password });
     if (!password || password.length == 0) {
-      this.setState({password_error: strings.mustHavePw});
+      this.setState({ password_error: strings.mustHavePw });
     }
   }
 
   onCloseClick() {
-    const { props: { onModalRequestClose } } = this;
+    const {
+      props: { onModalRequestClose }
+    } = this;
     if (onModalRequestClose) {
       onModalRequestClose();
     }
@@ -135,7 +151,9 @@ class ModalPassword extends Component {
   }
 
   onUnlockClick() {
-    const { state: { password, file, address } } = this;
+    const {
+      state: { password, file, address }
+    } = this;
     if (password && password.length >= 0 && file && address) {
       this.onKeySelected(file, address, password);
     }
@@ -150,16 +168,15 @@ class ModalPassword extends Component {
         }
         const parsed = JSON.parse(data);
 
-        resolve('0x'+parsed.address);
+        resolve('0x' + parsed.address);
       });
     });
-    
   }
 }
 
 ModalPassword.proptypes = {
   open: PropTypes.bool,
   onKeySelected: PropTypes.func,
-  onModalRequestClose: PropTypes.func,
+  onModalRequestClose: PropTypes.func
 };
 export default ModalPassword;

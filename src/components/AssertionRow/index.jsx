@@ -10,8 +10,12 @@ import strings from './strings';
 
 class AssertionRow extends Component {
   render() {
-    const { props: { assertion, artifacts } } = this;
-    const worstVerdict = assertion.verdicts.reduce((accumulator, verdict) => accumulator || verdict);
+    const {
+      props: { assertion, artifacts }
+    } = this;
+    const worstVerdict = assertion.verdicts.reduce(
+      (accumulator, verdict) => accumulator || verdict
+    );
     const verdictClass = classNames({
       'Assertion-Malignant': worstVerdict,
       'Assertion-Benign': !worstVerdict
@@ -24,21 +28,22 @@ class AssertionRow extends Component {
 
     return (
       <Card key={title}>
-        <CardHeader additionalClasses={verdictClass}
+        <CardHeader
+          additionalClasses={verdictClass}
           title={title}
           update={false}
-          subhead={subheader}/>
+          subhead={subheader}
+        />
         <CardContent>
           <ul>
-            <StatRow title={strings.metadata}
-              content={assertion.metadata}/>
+            <StatRow title={strings.metadata} content={assertion.metadata} />
             {artifacts.map((file, index) => {
-              const verdict = assertion.verdicts[index] ? strings.bad : strings.good;
+              const verdict = assertion.verdicts[index]
+                ? strings.bad
+                : strings.good;
               const filename = artifacts[index].name;
-              return(
-                <StatRow key={filename}
-                  title={filename}
-                  content={verdict} />
+              return (
+                <StatRow key={filename} title={filename} content={verdict} />
               );
             })}
           </ul>
@@ -54,11 +59,10 @@ class AssertionRow extends Component {
       return 'Benign';
     }
   }
-
 }
 
 AssertionRow.proptypes = {
   assertion: PropTypes.object.isRequired,
-  artifacts: PropTypes.array,
+  artifacts: PropTypes.array
 };
 export default AssertionRow;

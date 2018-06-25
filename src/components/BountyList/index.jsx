@@ -1,5 +1,5 @@
 // Vendor Imports
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import web3Utils from 'web3-utils';
 // Project Imports
@@ -19,38 +19,49 @@ class BountyList extends Component {
   }
 
   render() {
-    const {props: {bounties, requestsInProgress, wallet, address,
-      onCreateBounty, onCreateOffer, onOpenRelay, onRequestWalletChange }} = this;
+    const {
+      props: {
+        bounties,
+        requestsInProgress,
+        wallet,
+        address,
+        onCreateBounty,
+        onCreateOffer,
+        onOpenRelay,
+        onRequestWalletChange
+      }
+    } = this;
 
     const headerActions = [
-      {title: strings.newBounty, onClick: onCreateBounty},
-      {title: strings.newOffer, onClick: onCreateOffer},
-      {title: strings.relay, onClick: onOpenRelay},
-      {title: strings.changeWallet, onClick: onRequestWalletChange},
+      { title: strings.newBounty, onClick: onCreateBounty },
+      { title: strings.newOffer, onClick: onCreateOffer },
+      { title: strings.relay, onClick: onOpenRelay },
+      { title: strings.changeWallet, onClick: onRequestWalletChange }
     ];
     return (
-      <div className='BountyList'>
-        <Header title={strings.title}
+      <div className="BountyList">
+        <Header
+          title={strings.title}
           requests={requestsInProgress}
           back={false}
           actions={headerActions}
           address={address}
-          wallet={wallet}/>
-        <div className='BountyList-Content'>
+          wallet={wallet}
+        />
+        <div className="BountyList-Content">
           <ul>
-            {bounties && bounties.map((bounty, index) => {
-              if (bounty.type === 'bounty') {
-                return(this.renderBounty(bounty, index));
-              } else {
-                return(this.renderOffer(bounty, index));
-              }
-            })}
+            {bounties &&
+              bounties.map((bounty, index) => {
+                if (bounty.type === 'bounty') {
+                  return this.renderBounty(bounty, index);
+                } else {
+                  return this.renderOffer(bounty, index);
+                }
+              })}
           </ul>
           {(!bounties || bounties.length === 0) && (
-            <div className='BountyList-Placeholder'>
-              <h3>
-                {strings.empty}
-              </h3>
+            <div className="BountyList-Placeholder">
+              <h3>{strings.empty}</h3>
             </div>
           )}
         </div>
@@ -59,14 +70,18 @@ class BountyList extends Component {
   }
 
   onBountySelected(index) {
-    const {props: {onBountySelected}} = this;
+    const {
+      props: { onBountySelected }
+    } = this;
     if (onBountySelected) {
       onBountySelected(index);
     }
   }
 
   onBountyRemoved(index) {
-    const {props: {onBountyRemoved}} = this;
+    const {
+      props: { onBountyRemoved }
+    } = this;
     if (onBountyRemoved) {
       onBountyRemoved(index);
     }
@@ -87,16 +102,18 @@ class BountyList extends Component {
     }
     let artifacts = '';
     if (bounty.artifacts && bounty.artifacts.length > 0) {
-      artifacts = bounty.artifacts.map((artifact) => artifact.name).reduce((csv, name) => csv + ', ' + name);
+      artifacts = bounty.artifacts
+        .map(artifact => artifact.name)
+        .reduce((csv, name) => csv + ', ' + name);
     }
     let assertions = 0;
     if (bounty && bounty.assertions) {
       assertions = bounty.assertions.length;
     }
     return (
-      <Card key={title}
-        onClick={() => this.onBountySelected(index)}>
-        <CardHeader title={title}
+      <Card key={title} onClick={() => this.onBountySelected(index)}>
+        <CardHeader
+          title={title}
           update={bounty.updated}
           subhead={subheader}
           remove={() => this.onBountyRemoved(index)}
@@ -104,12 +121,9 @@ class BountyList extends Component {
         />
         <CardContent>
           <ul>
-            <StatRow title={strings.author}
-              content={bounty.author}/>
-            <StatRow title={strings.assertions}
-              content={assertions}/>
-            <StatRow title={strings.files}
-              content={artifacts}/>
+            <StatRow title={strings.author} content={bounty.author} />
+            <StatRow title={strings.assertions} content={assertions} />
+            <StatRow title={strings.files} content={artifacts} />
           </ul>
         </CardContent>
       </Card>
@@ -136,26 +150,28 @@ class BountyList extends Component {
       messages = offer.messages.length;
       const payouts = offer.messages
         .sort((a, b) => b.sequence - a.sequence)
-        .filter((message) => message.type === 'payment');
+        .filter(message => message.type === 'payment');
       if (payouts.length > 0) {
         lastPay = web3Utils.fromWei(payouts[0].amount) + strings.nct;
       }
 
       const names = offer.messages
-        .filter((message) => message.type==='request')
-        .map((message) => message.artifacts)
+        .filter(message => message.type === 'request')
+        .map(message => message.artifacts)
         .reduce((all, artifacts) => all.concat(artifacts), [])
         .sort()
-        .map((artifact) => artifact.name);
+        .map(artifact => artifact.name);
       if (names.length > 0) {
-        artifacts = names.reduce((accumulator, artifact) => accumulator +', '+ artifact);
+        artifacts = names.reduce(
+          (accumulator, artifact) => accumulator + ', ' + artifact
+        );
       }
     }
 
     return (
-      <Card key={title}
-        onClick={() => this.onBountySelected(index)}>
-        <CardHeader title={title}
+      <Card key={title} onClick={() => this.onBountySelected(index)}>
+        <CardHeader
+          title={title}
           update={offer.updated}
           subhead={subheader}
           remove={() => this.onBountyRemoved(index)}
@@ -163,16 +179,11 @@ class BountyList extends Component {
         />
         <CardContent>
           <ul>
-            <StatRow title={strings.author}
-              content={offer.ambassador}/>
-            <StatRow title={strings.expert}
-              content={offer.expert}/>
-            <StatRow title={strings.lastPay}
-              content={lastPay}/>
-            <StatRow title={strings.messages}
-              content={messages}/>
-            <StatRow title={strings.files}
-              content={artifacts}/>
+            <StatRow title={strings.author} content={offer.ambassador} />
+            <StatRow title={strings.expert} content={offer.expert} />
+            <StatRow title={strings.lastPay} content={lastPay} />
+            <StatRow title={strings.messages} content={messages} />
+            <StatRow title={strings.files} content={artifacts} />
           </ul>
         </CardContent>
       </Card>
@@ -188,6 +199,6 @@ BountyList.proptypes = {
   onCreateOffer: PropTypes.func,
   requestsInProgress: PropTypes.array,
   wallet: PropTypes.object,
-  onRequestWalletChange: PropTypes.func,
+  onRequestWalletChange: PropTypes.func
 };
 export default BountyList;

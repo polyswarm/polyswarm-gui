@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import {CSSTransition} from 'react-transition-group';
+import { CSSTransition } from 'react-transition-group';
 // Project imports
 // Component imports
 
@@ -12,7 +12,7 @@ class AnimatedInput extends Component {
     this.state = {
       focused: false,
       value: '',
-      first: true,
+      first: true
     };
 
     this.onBlur = this.onBlur.bind(this);
@@ -22,40 +22,48 @@ class AnimatedInput extends Component {
   }
 
   componentDidMount() {
-    this.setState({first: false});
+    this.setState({ first: false });
   }
 
   static getDerivedStateFromProps(nextProps) {
-    const {readonly} = nextProps;
+    const { readonly } = nextProps;
     if (readonly) {
-      return {value: readonly};
+      return { value: readonly };
     } else {
       return null;
     }
   }
 
   render() {
-    const {state: {focused, value, first}, 
-      props: {placeholder, error, input_id, type, readonly} } = this;
+    const {
+      state: { focused, value, first },
+      props: { placeholder, error, input_id, type, readonly }
+    } = this;
     const guaranteedType = type || 'text';
     const inputClass = classNames('AnimatedInput-Input', {
       'AnimatedInput-Error': error,
       'AnimatedInput-Readonly': readonly
     });
     return (
-      <div className='AnimatedInput'>
+      <div className="AnimatedInput">
         <CSSTransition
-          in={(!first && value != null && typeof value != 'undefined' && `${value}`.length > 0) || focused}
+          in={
+            (!first &&
+              value != null &&
+              typeof value != 'undefined' &&
+              `${value}`.length > 0) ||
+            focused
+          }
           timeout={300}
-          classNames='label'> 
+          classNames="label"
+        >
           {() => (
             <React.Fragment>
-              {(!first && (
-                <label className='AnimatedInput-Label'
-                  htmlFor={input_id}>
+              {!first && (
+                <label className="AnimatedInput-Label" htmlFor={input_id}>
                   {placeholder}
                 </label>
-              ))}
+              )}
             </React.Fragment>
           )}
         </CSSTransition>
@@ -68,37 +76,38 @@ class AnimatedInput extends Component {
           onKeyPress={this.onKeyPress}
           onBlur={this.onBlur}
           onFocus={this.onFocus}
-          onChange={this.onChange}/>
-        {error && (
-          <p className='AnimatedInput-ErrorLabel'>
-            {error}
-          </p>
-        )}
+          onChange={this.onChange}
+        />
+        {error && <p className="AnimatedInput-ErrorLabel">{error}</p>}
       </div>
     );
   }
 
   onBlur() {
-    this.setState({focused: false});
+    this.setState({ focused: false });
   }
 
   onChange(e) {
-    const {props: {onChange, readonly}} = this;
+    const {
+      props: { onChange, readonly }
+    } = this;
     const value = e.target.value;
     if (onChange) {
       onChange(value);
     }
     if (!readonly) {
-      this.setState({value: value});
+      this.setState({ value: value });
     }
   }
 
   onFocus() {
-    this.setState({focused: true});
+    this.setState({ focused: true });
   }
 
   onKeyPress(event) {
-    const {props: {onKeyPress}} = this;
+    const {
+      props: { onKeyPress }
+    } = this;
     if (onKeyPress) {
       onKeyPress(event);
     }
@@ -123,6 +132,6 @@ AnimatedInput.proptypes = {
   error: PropTypes.string,
   type: PropTypes.string,
   input_id: PropTypes.string,
-  placeholder: PropTypes.string,
+  placeholder: PropTypes.string
 };
 export default AnimatedInput;

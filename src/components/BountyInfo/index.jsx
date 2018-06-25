@@ -7,23 +7,24 @@ import BountySummary from '../BountySummary';
 import Header from '../Header';
 
 class BountyInfo extends Component {
-
   render() {
-    const { props: { bounty, requestsInProgress, onBackPressed, wallet,
-      address } } = this;
+    const {
+      props: { bounty, requestsInProgress, onBackPressed, wallet, address }
+    } = this;
 
     return (
-      <div className='Bounty-Info'>
-        <Header title={bounty.guid}
+      <div className="Bounty-Info">
+        <Header
+          title={bounty.guid}
           requests={requestsInProgress}
           back={true}
           onBack={onBackPressed}
           address={address}
-          wallet={wallet}/>
-        <div className='Bounty-Info-Container'>
+          wallet={wallet}
+        />
+        <div className="Bounty-Info-Container">
           <BountySummary bounty={bounty} />
-          <AssertionList className='Bounty-Info-Assertions'
-            bounty={bounty} />
+          <AssertionList className="Bounty-Info-Assertions" bounty={bounty} />
         </div>
       </div>
     );
@@ -36,6 +37,6 @@ BountyInfo.propTypes = {
   onRequestWalletChange: PropTypes.func,
   wallet: PropTypes.object,
   requestsInProgress: PropTypes.array,
-  address: PropTypes.string,
+  address: PropTypes.string
 };
 export default BountyInfo;

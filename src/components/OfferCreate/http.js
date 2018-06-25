@@ -92,34 +92,34 @@ class HttpOfferCreate {
       .then(
         () =>
           new Promise((resolve, reject) => {
-            if ( balance && balance > 0 ) {
+            if (balance && balance > 0) {
               resolve();
             } else {
               reject('Balance must be above 0.');
             }
-          }))
-      .then(
-        () => {
-          const body = JSON.stringify({
-            close_flag: 0,
-            nonce: 0,
-            ambassador: offer.ambassador,
-            expert: offer.expert,
-            msig_address: offer.msig,
-            ambassador_balance: new BigNumber(balance).toNumber(),
-            expert_balance: 0,
-            guid: offer.guid,
-            offer_amount: new BigNumber(balance).toNumber()
-          });
-          const account = this.getUrlAccount(offer.ambassador);
-          return fetch(url + '/offers/state' + account, {
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            method: 'post',
-            body: body
-          });
-        })
+          })
+      )
+      .then(() => {
+        const body = JSON.stringify({
+          close_flag: 0,
+          nonce: 0,
+          ambassador: offer.ambassador,
+          expert: offer.expert,
+          msig_address: offer.msig,
+          ambassador_balance: new BigNumber(balance).toNumber(),
+          expert_balance: 0,
+          guid: offer.guid,
+          offer_amount: new BigNumber(balance).toNumber()
+        });
+        const account = this.getUrlAccount(offer.ambassador);
+        return fetch(url + '/offers/state' + account, {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          method: 'post',
+          body: body
+        });
+      })
       .then(response => {
         if (response.ok) {
           return response;
@@ -135,8 +135,7 @@ class HttpOfferCreate {
       .then(state => {
         const buff_key = etherutils.toBuffer(key);
         let msg =
-          '0x' +
-          etherutils.keccak(etherutils.toBuffer(state)).toString('hex');
+          '0x' + etherutils.keccak(etherutils.toBuffer(state)).toString('hex');
         msg =
           '0x' +
           etherutils

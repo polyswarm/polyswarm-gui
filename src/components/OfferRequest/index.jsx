@@ -15,7 +15,7 @@ class OfferRequest extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      files: [],
+      files: []
     };
     this.onClearAll = this.onClearAll.bind(this);
     this.onClickHandler = this.onClickHandler.bind(this);
@@ -29,30 +29,38 @@ class OfferRequest extends Component {
   }
 
   componentDidMount() {
-    const { props: { url } } = this;
+    const {
+      props: { url }
+    } = this;
     this.http = new HttpRequest(url);
   }
 
   render() {
-    const { state: { files } } = this;
-    const { props: { offer, address, requestsInProgress, 
-      wallet, onBackPressed } } = this;
-    
+    const {
+      state: { files }
+    } = this;
+    const {
+      props: { offer, address, requestsInProgress, wallet, onBackPressed }
+    } = this;
+
     return (
-      <div className='OfferRequest'>
-        <Header title={`${strings.title}${offer.expert}`}
+      <div className="OfferRequest">
+        <Header
+          title={`${strings.title}${offer.expert}`}
           requests={requestsInProgress}
           back={true}
           onBack={onBackPressed}
           address={address}
-          wallet={wallet}/>
-        <div className='OfferRequest-Content'>
-          <div className='OfferRequest-Files'>
+          wallet={wallet}
+        />
+        <div className="OfferRequest-Content">
+          <div className="OfferRequest-Files">
             <h2>{strings.instructions}</h2>
-            <div className='OfferRequest-Button'>
+            <div className="OfferRequest-Button">
               <Button
-                disabled={ !files || files.length == 0 }
-                onClick={this.onClickHandler}>
+                disabled={!files || files.length == 0}
+                onClick={this.onClickHandler}
+              >
                 {`Send ${files.length} files.`}
               </Button>
             </div>
@@ -60,7 +68,8 @@ class OfferRequest extends Component {
             <FileList
               files={files}
               clear={this.onClearAll}
-              removeFile={this.onFileRemoved}/>
+              removeFile={this.onFileRemoved}
+            />
           </div>
         </div>
       </div>
@@ -68,20 +77,22 @@ class OfferRequest extends Component {
   }
 
   onClearAll() {
-    this.setState({ files: []});
+    this.setState({ files: [] });
   }
-  
+
   onClickHandler() {
     this.sendMessage();
   }
-  
+
   onError(message) {
-    const { props: { onError } } = this;
+    const {
+      props: { onError }
+    } = this;
     if (onError) {
       onError(message);
     }
   }
-  
+
   onFileRemoved(index) {
     const files = this.state.files.slice();
     if (index >= 0 && index < files.length) {
@@ -89,9 +100,11 @@ class OfferRequest extends Component {
       this.setState({ files: files });
     }
   }
-  
+
   onFilesSent() {
-    const {props: {onFilesSent}} = this;
+    const {
+      props: { onFilesSent }
+    } = this;
     if (onFilesSent) {
       onFilesSent();
     }
@@ -119,7 +132,9 @@ class OfferRequest extends Component {
 
   sendMessage() {
     const files = this.state.files.slice();
-    const {props: {encryptionKey, offer, onAddMessage} } = this;
+    const {
+      props: { encryptionKey, offer, onAddMessage }
+    } = this;
 
     const sequence = offer.nextSequence;
     const http = this.http;
@@ -127,13 +142,15 @@ class OfferRequest extends Component {
       const uuid = Uuid();
       this.addSendMessageRequest(uuid);
       this.setState({ files: [] });
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         this.onFilesSent();
         resolve();
       })
         .then(() => http.uploadFiles(files))
-        .then(artifact => http.sendRequest(encryptionKey, offer, sequence, artifact)
-          .then(() => artifact)
+        .then(artifact =>
+          http
+            .sendRequest(encryptionKey, offer, sequence, artifact)
+            .then(() => artifact)
         )
         .then(artifact => http.getArtifactsList(artifact))
         .then(files => {

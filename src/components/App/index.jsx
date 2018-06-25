@@ -1,7 +1,7 @@
 // Vendor imports
 import React, { Component } from 'react';
 import Uuid from 'uuid/v4';
-import {CSSTransition} from 'react-transition-group';
+import { CSSTransition } from 'react-transition-group';
 import BigNumber from 'bignumber.js';
 // Bounty imports
 import BountyCreate from '../BountyCreate';
@@ -21,7 +21,7 @@ import ModalPassword from '../ModalPassword';
 class App extends Component {
   constructor(props) {
     super(props);
-    const {bounties, first} = this.preloadLocalStorage();
+    const { bounties, first } = this.preloadLocalStorage();
     this.http = new HttpApp(config.host, config.websocket_host);
     const wallet = {
       homeEth: 0,
@@ -68,10 +68,13 @@ class App extends Component {
   }
 
   componentDidUpdate(_, prevState) {
-    const { state: { bounties } } = this;
+    const {
+      state: { bounties }
+    } = this;
     const { bounties: prevBounties } = prevState;
-    const storageOutOfSync =  JSON.stringify(bounties) !== JSON.stringify(prevBounties);
-    if(storageOutOfSync) {
+    const storageOutOfSync =
+      JSON.stringify(bounties) !== JSON.stringify(prevBounties);
+    if (storageOutOfSync) {
       this.storeBounties(bounties);
     }
   }
@@ -80,8 +83,10 @@ class App extends Component {
     this.getData();
     this.getWallet();
     this.timer = setInterval(() => {
-      const {state: { first }} = this;
-      if (!first ) {
+      const {
+        state: { first }
+      } = this;
+      if (!first) {
         this.getWallet();
       }
     }, 5000);
@@ -96,64 +101,87 @@ class App extends Component {
   }
 
   render() {
-    const { state: { active, bounties, createBounty, createOffer, first, 
-      errorMessage, relay, modalOpen } } = this;
+    const {
+      state: {
+        active,
+        bounties,
+        createBounty,
+        createOffer,
+        first,
+        errorMessage,
+        relay,
+        modalOpen
+      }
+    } = this;
 
     return (
-      <div className='App'>
+      <div className="App">
         <CSSTransition
           in={first}
           timeout={200}
           mountonEnter
           unmountOnExit
-          classNames='fade'>
-          {() => (
-            <Welcome onClick={this.onCloseWelcome}/>
-          )}
+          classNames="fade"
+        >
+          {() => <Welcome onClick={this.onCloseWelcome} />}
         </CSSTransition>
         {!first && (
           <React.Fragment>
             <ModalPassword
               open={modalOpen}
               onModalRequestClose={this.onModalRequestClose}
-              onKeySelected={this.onKeySelected}/>
-            { createBounty && (
+              onKeySelected={this.onKeySelected}
+            />
+            {createBounty && (
               <BountyCreate
                 {...this.getPropsForChild()}
                 addBounty={this.onAddBounty}
-                onBountyPosted={this.onBackPressed}/>
+                onBountyPosted={this.onBackPressed}
+              />
             )}
-            { createOffer && (
+            {createOffer && (
               <OfferCreate
                 {...this.getPropsForChild()}
                 addOffer={this.onAddOffer}
-                onOfferCreated={this.onBackPressed}/>
+                onOfferCreated={this.onBackPressed}
+              />
             )}
-            { relay && (
-              <Relay {...this.getPropsForChild()}/>
-            )}
-            { !createBounty && !createOffer && !relay && active < 0 && (
-              <BountyList
-                {...this.getPropsForChild()}
-                onBountySelected={this.onSelectBounty}
-                onBountyRemoved={this.onRemoveBounty}/>
-            )}
-            { !createBounty && active >=0 && bounties[active].type === 'bounty' && (
-              <BountyInfo
-                {...this.getPropsForChild()}
-                bounty={bounties[active]}/>
-            )}
-            { !createOffer && active >=0 && bounties[active].type === 'offer' && (
-              <OfferInfo
-                {...this.getPropsForChild()}
-                // This will just kickoff a refresh of this offer
-                onAddMessage={this.onAddMessage}
-                offer={bounties[active]}/>
-            )}
-            {errorMessage && errorMessage.length > 0 && (
-              <Snackbar message={errorMessage}
-                onDismiss={this.onErrorDismissed}/>
-            )}
+            {relay && <Relay {...this.getPropsForChild()} />}
+            {!createBounty &&
+              !createOffer &&
+              !relay &&
+              active < 0 && (
+                <BountyList
+                  {...this.getPropsForChild()}
+                  onBountySelected={this.onSelectBounty}
+                  onBountyRemoved={this.onRemoveBounty}
+                />
+              )}
+            {!createBounty &&
+              active >= 0 &&
+              bounties[active].type === 'bounty' && (
+                <BountyInfo
+                  {...this.getPropsForChild()}
+                  bounty={bounties[active]}
+                />
+              )}
+            {!createOffer &&
+              active >= 0 &&
+              bounties[active].type === 'offer' && (
+                <OfferInfo
+                  {...this.getPropsForChild()}
+                  // This will just kickoff a refresh of this offer
+                  onAddMessage={this.onAddMessage}
+                  offer={bounties[active]}
+                />
+              )}
+            {errorMessage &&
+              errorMessage.length > 0 && (
+                <Snackbar
+                  message={errorMessage}
+                  onDismiss={this.onErrorDismissed}
+                />
+              )}
           </React.Fragment>
         )}
       </div>
@@ -164,13 +192,14 @@ class App extends Component {
     const http = this.http;
 
     this.addRequest(strings.requestGetBounty, result.guid);
-    return http.getBounty('home', result)
+    return http
+      .getBounty('home', result)
       .then(bounty => {
         if (bounty != null) {
           bounty.updated = true;
           const bounties = this.state.bounties.slice();
           bounties.push(bounty);
-          this.setState({bounties: bounties});
+          this.setState({ bounties: bounties });
         }
       })
       .catch(() => {})
@@ -182,12 +211,13 @@ class App extends Component {
   onAddMessage(guid, message) {
     // deep copy so we it won't edit the actual state
     const bounties = JSON.parse(JSON.stringify(this.state.bounties.slice()));
-    const offers = bounties
-      .filter((value) => value.type === 'offer' && value.guid === guid);
+    const offers = bounties.filter(
+      value => value.type === 'offer' && value.guid === guid
+    );
     if (offers && offers.length == 1) {
       // Allow expert to replace the URI he listens to.
       const websocket = message.websocket;
-      if ( websocket && typeof websocket !== 'undefined' ) {
+      if (websocket && typeof websocket !== 'undefined') {
         offers[0].expertWebsocketUri = websocket;
       }
 
@@ -196,7 +226,7 @@ class App extends Component {
         offers[0].messages.unshift(message);
         offers[0].nextSequence = message.sequence + 1;
       }
-      this.setState({bounties: bounties});
+      this.setState({ bounties: bounties });
     }
   }
 
@@ -205,24 +235,28 @@ class App extends Component {
     const port = result.port;
 
     this.addRequest(strings.requestGetOffer, result.guid);
-    return http.getOffer('home', result)
-      .then(offer => new Promise(resolve => {
-        if (offer != null) {
-          offer.updated = true;
-          // I would prefer not to have inital be specified here, but there is
-          // no way to grab the balance in polyswarmd, yet.
-          offer.initial = reward;
-          offer.ambassadorWebsocketUri = websocket;
-          offer.expertWebsocketUri = websocket;
-          offer.port = port;
-          offer.nextSequence = 1;
-          offer.messages = [];
-          const bounties = this.state.bounties.slice();
-          bounties.push(offer);
-          this.setState({bounties: bounties}, resolve);
-        }
-        return offer;
-      }))
+    return http
+      .getOffer('home', result)
+      .then(
+        offer =>
+          new Promise(resolve => {
+            if (offer != null) {
+              offer.updated = true;
+              // I would prefer not to have inital be specified here, but there is
+              // no way to grab the balance in polyswarmd, yet.
+              offer.initial = reward;
+              offer.ambassadorWebsocketUri = websocket;
+              offer.expertWebsocketUri = websocket;
+              offer.port = port;
+              offer.nextSequence = 1;
+              offer.messages = [];
+              const bounties = this.state.bounties.slice();
+              bounties.push(offer);
+              this.setState({ bounties: bounties }, resolve);
+            }
+            return offer;
+          })
+      )
       .then(offer => {
         http.listenForMessages(offer, this.onAddMessage);
         return offer;
@@ -243,19 +277,20 @@ class App extends Component {
   }
 
   onCreateBounty() {
-    this.setState({createBounty: true, active: -1});
+    this.setState({ createBounty: true, active: -1 });
   }
 
   onCreateOffer() {
-    this.setState({createOffer: true, active: -1});
+    this.setState({ createOffer: true, active: -1 });
   }
 
   onKeySelected(keyfile, address, password) {
-    this.setState({address, modalOpen: false});
+    this.setState({ address, modalOpen: false });
 
-    this.http.setAccount(address, keyfile, password)
-      .then((key) => {
-        this.setState({key: key});
+    this.http
+      .setAccount(address, keyfile, password)
+      .then(key => {
+        this.setState({ key: key });
         this.http.listenForTransactions(key);
       })
       .then(() => this.getWallet())
@@ -263,39 +298,43 @@ class App extends Component {
   }
 
   onModalRequestClose() {
-    const {state: {address}} = this;
+    const {
+      state: { address }
+    } = this;
     if (address) {
-      this.setState({modalOpen: false});
+      this.setState({ modalOpen: false });
     }
   }
 
   onCloseWelcome() {
-    this.setState({first: false});
+    this.setState({ first: false });
     this.markSeen();
   }
-  
+
   onErrorDismissed() {
-    this.setState({errorMessage: null});
+    this.setState({ errorMessage: null });
   }
-  
+
   onOpenRelay() {
-    this.setState({relay: true, active: -1});
+    this.setState({ relay: true, active: -1 });
   }
 
   onPostError(message) {
-    this.setState({errorMessage: message});
+    this.setState({ errorMessage: message });
   }
 
   onRemoveBounty(index) {
     const bounties = this.state.bounties.slice();
-    const { state: {active}} = this;
+    const {
+      state: { active }
+    } = this;
     if (index !== null && index >= 0 && index < bounties.length) {
       bounties.splice(index, 1);
       let activeValue = active;
       if (active >= bounties.length) {
         activeValue = active - 1;
       }
-      this.setState({active: activeValue, bounties: bounties});
+      this.setState({ active: activeValue, bounties: bounties });
     }
   }
 
@@ -310,41 +349,41 @@ class App extends Component {
     const bounties = JSON.parse(JSON.stringify(this.state.bounties.slice()));
     if (index !== null && index >= 0 && index < bounties.length) {
       bounties[index].updated = false;
-      this.setState({active: index, bounties: bounties});
+      this.setState({ active: index, bounties: bounties });
     }
   }
 
   onRequestWalletChange() {
-    this.setState({modalOpen: true});
+    this.setState({ modalOpen: true });
   }
 
-  removeRequest(title, id/*, success*/) {
+  removeRequest(title, id /*, success*/) {
     const requestsInProgress = this.state.requestsInProgress.slice();
-    const index = requestsInProgress.findIndex((obj) => obj.id == id);
-    if (index >= 0 ) {
+    const index = requestsInProgress.findIndex(obj => obj.id == id);
+    if (index >= 0) {
       requestsInProgress.splice(index, 1);
-      this.setState({requestsInProgress: requestsInProgress});
+      this.setState({ requestsInProgress: requestsInProgress });
       // TODO notify users of the success of the request
     }
   }
 
   addRequest(title, id) {
     const requestsInProgress = this.state.requestsInProgress.slice();
-    requestsInProgress.push({title: title, id: id});
-    this.setState({requestsInProgress: requestsInProgress});
+    requestsInProgress.push({ title: title, id: id });
+    this.setState({ requestsInProgress: requestsInProgress });
   }
 
   updateOnAssertion(assertion) {
     const bounties = this.state.bounties.slice();
     const guid = assertion.guid;
-    const index = bounties.findIndex((bounty) => bounty.guid === guid);
+    const index = bounties.findIndex(bounty => bounty.guid === guid);
     if (index >= 0) {
       const bounty = bounties[index];
       const a = {
         author: assertion.author,
         bid: assertion.bid,
         metadata: assertion.metadata,
-        verdicts: assertion.verdicts,
+        verdicts: assertion.verdicts
       };
       bounty.assertions.push(a);
       const modified = bounty.artifacts.map((file, index) => {
@@ -365,7 +404,7 @@ class App extends Component {
       bounty.update = true;
       bounties[index] = bounty;
     }
-    this.setState({bounties: bounties});
+    this.setState({ bounties: bounties });
   }
 
   getData() {
@@ -373,9 +412,9 @@ class App extends Component {
     const uuid = Uuid();
     this.addRequest(strings.requestAllData, uuid);
     http.listenForAssertions(this.updateOnAssertion);
-    
+
     const bounties = this.state.bounties.slice();
-    const promises = bounties.map((bounty) => {
+    const promises = bounties.map(bounty => {
       const chain = bounty.chain ? bounty.chain : 'home';
       let promise;
       if (bounty.type === 'offer') {
@@ -383,47 +422,51 @@ class App extends Component {
       } else {
         promise = http.getBounty(chain, bounty);
       }
-      return promise
-        .then(b => {
-          if (b == null) {
-            return bounty;
-          }
-          b.updated = bounty.updated;
-          if (JSON.stringify(b) !== JSON.stringify(bounty) || bounty.updated) {
-            b.updated = true;
-          }
-          return b;
-        });
-    });
-    return Promise.all(promises).then((values) => {
-      // get updated state after download finishes
-      const bounties = this.state.bounties.slice();
-      values.forEach((value) => {
-        const foundIndex = bounties.findIndex((bounty) => bounty.guid === value.guid);
-        if (foundIndex >= 0) {
-          if (value.type === 'bounty') {
-            bounties[foundIndex] = value;
-          } else {
-            const offer = bounties[foundIndex];
-            // Update the fields, but don't wipe it out because messages are separate
-            offer.address = value.address;
-            offer.closed = value.closed;
-            offer.author = value.ambassador;
-            offer.expert = value.expert;
-            http.listenForMessages(offer, this.onAddMessage);
-          }
+      return promise.then(b => {
+        if (b == null) {
+          return bounty;
         }
+        b.updated = bounty.updated;
+        if (JSON.stringify(b) !== JSON.stringify(bounty) || bounty.updated) {
+          b.updated = true;
+        }
+        return b;
       });
-      this.setState({bounties: bounties});
-    })
+    });
+    return Promise.all(promises)
+      .then(values => {
+        // get updated state after download finishes
+        const bounties = this.state.bounties.slice();
+        values.forEach(value => {
+          const foundIndex = bounties.findIndex(
+            bounty => bounty.guid === value.guid
+          );
+          if (foundIndex >= 0) {
+            if (value.type === 'bounty') {
+              bounties[foundIndex] = value;
+            } else {
+              const offer = bounties[foundIndex];
+              // Update the fields, but don't wipe it out because messages are separate
+              offer.address = value.address;
+              offer.closed = value.closed;
+              offer.author = value.ambassador;
+              offer.expert = value.expert;
+              http.listenForMessages(offer, this.onAddMessage);
+            }
+          }
+        });
+        this.setState({ bounties: bounties });
+      })
       .catch(() => {})
       .then(() => this.removeRequest(strings.requestAllData, uuid));
   }
 
   getPropsForChild() {
     const { host: url } = config;
-    const { state: { active, bounties, wallet, requestsInProgress, address, key } } = this;
-    return({
+    const {
+      state: { active, bounties, wallet, requestsInProgress, address, key }
+    } = this;
+    return {
       url,
       encryptionKey: key,
       active,
@@ -439,45 +482,54 @@ class App extends Component {
       removeRequest: this.removeRequest,
       onCreateBounty: this.onCreateBounty,
       onRequestWalletChange: this.onRequestWalletChange
-    });
+    };
   }
 
   getWallet() {
     const http = this.http;
-    const chains = ['home'];//, 'side'];
-    const eth = chains.map(chain => http.getEth(chain)
-      .then(balance =>
-        new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000))
-      )
-      .then((b) => `${b.toNumber()}`)
+    const chains = ['home']; //, 'side'];
+    const eth = chains.map(chain =>
+      http
+        .getEth(chain)
+        .then(balance =>
+          new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000))
+        )
+        .then(b => `${b.toNumber()}`)
     );
 
-    const nct = chains.map(chain => http.getNct(chain)
-      .then(balance =>
-        new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000))
-      )
-      .then((b) => `${b.toNumber()}`)
+    const nct = chains.map(chain =>
+      http
+        .getNct(chain)
+        .then(balance =>
+          new BigNumber(balance).dividedBy(new BigNumber(1000000000000000000))
+        )
+        .then(b => `${b.toNumber()}`)
     );
 
     const promises = eth.concat(nct);
-    return Promise.all(promises).then(values => {
-      return({
-        homeEth: values[0],
-        sideEth: 0,//values[1],
-        homeNct: values[1],//2],
-        sideNct: 0//values[3]
-      });
-    })
-      .then((wallet) => new Promise((resolve, reject) => {
-        if (this.cancel) {
-          reject();
-        } else {
-          resolve(wallet);
-        }
-      }))
-      .then((wallet) => new Promise(resolve =>
-        this.setState({wallet: wallet}, resolve)
-      ))
+    return Promise.all(promises)
+      .then(values => {
+        return {
+          homeEth: values[0],
+          sideEth: 0, //values[1],
+          homeNct: values[1], //2],
+          sideNct: 0 //values[3]
+        };
+      })
+      .then(
+        wallet =>
+          new Promise((resolve, reject) => {
+            if (this.cancel) {
+              reject();
+            } else {
+              resolve(wallet);
+            }
+          })
+      )
+      .then(
+        wallet =>
+          new Promise(resolve => this.setState({ wallet: wallet }, resolve))
+      )
       .catch(() => {});
   }
 
@@ -492,7 +544,7 @@ class App extends Component {
       localStorage.setItem('x', 'y');
       localStorage.removeItem('x');
       return true;
-    } catch(e) {
+    } catch (e) {
       return false;
     }
   }
@@ -507,9 +559,9 @@ class App extends Component {
     if (this.hasLocalStorage) {
       const bounties = JSON.parse(localStorage.getItem('bounties')) || [];
       const first = !JSON.parse(localStorage.getItem('seen'));
-      return {bounties, first};
+      return { bounties, first };
     } else {
-      return {bounties: [], first: true};
+      return { bounties: [], first: true };
     }
   }
 }

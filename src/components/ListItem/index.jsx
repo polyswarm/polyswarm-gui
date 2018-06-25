@@ -9,7 +9,7 @@ class ListItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      hover: false,
+      hover: false
     };
 
     this.onClickHandler = this.onClickHandler.bind(this);
@@ -18,53 +18,64 @@ class ListItem extends Component {
     this.onMouseLeave = this.onMouseLeave.bind(this);
   }
 
-  render () {
-    const { props: { children, remove, active, alert, alternate }, state: { hover } } = this;
+  render() {
+    const {
+      props: { children, remove, active, alert, alternate },
+      state: { hover }
+    } = this;
     const className = ListItem.computeClassName(active, alternate);
-    return(
-      <li className={className}
+    return (
+      <li
+        className={className}
         onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}>
+        onMouseLeave={this.onMouseLeave}
+      >
         <div>
-          {alert && (
-            <div className='alert'/>
-          )}
-          <span className='ListItem-Child'
-            onClick={this.onClickHandler}>
+          {alert && <div className="alert" />}
+          <span className="ListItem-Child" onClick={this.onClickHandler}>
             {children}
           </span>
         </div>
-        {remove && hover && (
-          <span className='ListItem-Remove'>
-            <RemoveButton onClick={this.onRemoveHandler}>
-              <img className='redx' src='../public/img/red-x.svg' alt={strings.remove}/>
-            </RemoveButton>
-          </span>
-        )}
+        {remove &&
+          hover && (
+            <span className="ListItem-Remove">
+              <RemoveButton onClick={this.onRemoveHandler}>
+                <img
+                  className="redx"
+                  src="../public/img/red-x.svg"
+                  alt={strings.remove}
+                />
+              </RemoveButton>
+            </span>
+          )}
       </li>
     );
   }
 
   onClickHandler() {
-    const { props: { onClick } } = this;
+    const {
+      props: { onClick }
+    } = this;
     if (onClick) {
       onClick();
     }
   }
 
   onRemoveHandler() {
-    const { props: { remove } } = this;
+    const {
+      props: { remove }
+    } = this;
     if (remove) {
       remove();
     }
   }
 
   onMouseEnter() {
-    this.setState({hover: true});
+    this.setState({ hover: true });
   }
 
   onMouseLeave() {
-    this.setState({hover: false});
+    this.setState({ hover: false });
   }
 
   static computeClassName(active, alternate) {
@@ -80,7 +91,7 @@ class ListItem extends Component {
 
 ListItem.proptypes = {
   item: PropTypes.string.isRequired,
-  remove: PropTypes.func,
+  remove: PropTypes.func
 };
 
 export default ListItem;

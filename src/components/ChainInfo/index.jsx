@@ -8,21 +8,27 @@ import strings from './strings.js';
 
 class ChainInfo extends Component {
   render() {
-    const {props: {title, homeName, homeBalance, sideName, sideBalance}} = this;
+    const {
+      props: { title, homeName, homeBalance, sideName, sideBalance }
+    } = this;
     return (
-      <div className='ChainInfo'>
-        <div className='ChainInfo-Title'>
+      <div className="ChainInfo">
+        <div className="ChainInfo-Title">
           <h3>{title}</h3>
         </div>
-        <div className='ChainInfo-Content'>
+        <div className="ChainInfo-Content">
           <p>{strings.balances}</p>
           <ul>
-            <StatRow vertical
+            <StatRow
+              vertical
               title={homeName}
-              content={`${homeBalance}${strings.nectar}`}/>
-            <StatRow vertical
+              content={`${homeBalance}${strings.nectar}`}
+            />
+            <StatRow
+              vertical
               title={sideName}
-              content={`${sideBalance}${strings.nectar}`}/>
+              content={`${sideBalance}${strings.nectar}`}
+            />
           </ul>
         </div>
       </div>
