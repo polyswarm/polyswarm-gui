@@ -16,26 +16,27 @@ class RelayDropdown extends Component {
   }
 
   render() {
-    const {state: {selected}} = this;
-    return(
-      <div className='RelayDropdown'>
-        <p className='RelayDropdown-Selection'>
+    const {
+      state: { selected }
+    } = this;
+    return (
+      <div className="RelayDropdown">
+        <p className="RelayDropdown-Selection">
           {selected == 0 ? strings.deposit : strings.withdraw}
         </p>
-        <div className='RelayDropdown-Choices'>
-          <p onClick={() => this.onSelectionChanged(0)}>
-            {strings.deposit}
-          </p>
-          <p onClick={() => this.onSelectionChanged(1)}>
-            {strings.withdraw}
-          </p>
+        <div className="RelayDropdown-Choices">
+          <p onClick={() => this.onSelectionChanged(0)}>{strings.deposit}</p>
+          <p onClick={() => this.onSelectionChanged(1)}>{strings.withdraw}</p>
         </div>
       </div>
     );
   }
 
   onSelectionChanged(index) {
-    const {props: {onSelectionChanged}, state: {selected}} = this;
+    const {
+      props: { onSelectionChanged },
+      state: { selected }
+    } = this;
     if (index == selected) {
       return;
     }
@@ -43,9 +44,8 @@ class RelayDropdown extends Component {
     if (onSelectionChanged) {
       onSelectionChanged(index);
     }
-    this.setState({selected: index});
+    this.setState({ selected: index });
   }
-
 }
 RelayDropdown.proptypes = {
   onSelectionChanged: PropTypes.func

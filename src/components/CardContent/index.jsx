@@ -1,5 +1,5 @@
 // Vendor imports
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 // Project imports
@@ -8,15 +8,11 @@ import PropTypes from 'prop-types';
 
 class CardContent extends Component {
   render() {
-    const {props: {children}} = this;
-    return (
-      <div className='CardContent'>
-        {children}
-      </div>
-    );
+    const {
+      props: { children }
+    } = this;
+    return <div className="CardContent">{children}</div>;
   }
 }
-CardContent.proptypes = {
-
-};
+CardContent.proptypes = {};
 export default CardContent;

@@ -14,12 +14,14 @@ class Welcome extends Component {
 
   render() {
     return (
-      <div className='Welcome'>
-        <div className='Welcome-Jumbo'>
+      <div className="Welcome">
+        <div className="Welcome-Jumbo">
           <h1>{strings.welcome}</h1>
-          <h2>The first <em>decentralized</em> antivirus marketplace.</h2>
+          <h2>
+            The first <em>decentralized</em> antivirus marketplace.
+          </h2>
           <p>{strings.moreInfo}</p>
-          <Button className='Welcome-Close' onClick={this.onClickHandler}>
+          <Button className="Welcome-Close" onClick={this.onClickHandler}>
             {strings.getStarted}
           </Button>
         </div>
@@ -28,7 +30,9 @@ class Welcome extends Component {
   }
 
   onClickHandler() {
-    const { props: { onClick } } = this;
+    const {
+      props: { onClick }
+    } = this;
     if (onClick) {
       onClick();
     }
@@ -36,6 +40,6 @@ class Welcome extends Component {
 }
 
 Welcome.propTypes = {
-  onClick: PropTypes.func,
+  onClick: PropTypes.func
 };
 export default Welcome;

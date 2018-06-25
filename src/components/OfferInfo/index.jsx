@@ -13,7 +13,7 @@ class OfferInfo extends Component {
     super(props);
     this.state = {
       request: false,
-      pay: false,
+      pay: false
     };
 
     this.onBack = this.onBack.bind(this);
@@ -22,16 +22,29 @@ class OfferInfo extends Component {
   }
 
   render() {
-    const { props: { offer, address, addRequest, removeRequest, url, wallet,
-      onBackPressed, requestsInProgress, onError, encryptionKey, onAddMessage },
-    state: { request, pay } } = this;
+    const {
+      props: {
+        offer,
+        address,
+        addRequest,
+        removeRequest,
+        url,
+        wallet,
+        onBackPressed,
+        requestsInProgress,
+        onError,
+        encryptionKey,
+        onAddMessage
+      },
+      state: { request, pay }
+    } = this;
 
     // only show actions if signing wallet is same as wallet used to create this
     let headerActions = [];
     if (address.toUpperCase() === offer.ambassador.toUpperCase()) {
       headerActions = [
-        {title: 'Pay', onClick: this.onPayClick},
-        {title: 'Request', onClick: this.onRequestClick}
+        { title: 'Pay', onClick: this.onPayClick },
+        { title: 'Request', onClick: this.onRequestClick }
       ];
     }
 
@@ -44,9 +57,10 @@ class OfferInfo extends Component {
     }
 
     return (
-      <div className='OfferInfo'>
+      <div className="OfferInfo">
         {request && (
-          <OfferRequest offer={offer}
+          <OfferRequest
+            offer={offer}
             address={address}
             wallet={wallet}
             addRequest={addRequest}
@@ -57,7 +71,8 @@ class OfferInfo extends Component {
             onFilesSent={this.onBack}
             onAddMessage={onAddMessage}
             encryptionKey={encryptionKey}
-            url={url}/>
+            url={url}
+          />
         )}
         {pay && (
           <OfferPay
@@ -72,39 +87,45 @@ class OfferInfo extends Component {
             onError={onError}
             onBackPressed={this.onBack}
             encryptionKey={encryptionKey}
-            url={url}/>
+            url={url}
+          />
         )}
-        {!request && !pay && (
-          <div className='Offer-Info'>
-            <Header title={offer.guid}
-              requests={requestsInProgress}
-              back={true}
-              onBack={onBackPressed}
-              address={address}
-              wallet={wallet}
-              actions={headerActions}/>
-            
-            <div className='Offer-Info-Container'>
-              <OfferSummary offer={offer}/>
-              <OfferMessageList className='Offer-Info-Messages'
-                offer={offer} />
+        {!request &&
+          !pay && (
+            <div className="Offer-Info">
+              <Header
+                title={offer.guid}
+                requests={requestsInProgress}
+                back={true}
+                onBack={onBackPressed}
+                address={address}
+                wallet={wallet}
+                actions={headerActions}
+              />
+
+              <div className="Offer-Info-Container">
+                <OfferSummary offer={offer} />
+                <OfferMessageList
+                  className="Offer-Info-Messages"
+                  offer={offer}
+                />
+              </div>
             </div>
-          </div>
-        )}
+          )}
       </div>
     );
   }
 
   onBack() {
-    this.setState({request: false, pay: false});
+    this.setState({ request: false, pay: false });
   }
 
   onPayClick() {
-    this.setState({pay: true});
+    this.setState({ pay: true });
   }
 
   onRequestClick() {
-    this.setState({request: true});
+    this.setState({ request: true });
   }
 }
 
@@ -117,6 +138,6 @@ OfferInfo.propTypes = {
   removeRequest: PropTypes.func,
   url: PropTypes.string,
   onBackPressed: PropTypes.func,
-  requestsInProgress: PropTypes.array,
+  requestsInProgress: PropTypes.array
 };
 export default OfferInfo;

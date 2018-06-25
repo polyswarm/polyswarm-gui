@@ -10,16 +10,18 @@ class RequestSpinner extends Component {
     const { requests } = this.props;
 
     return (
-      <span className='RequestSpinner'>
-        {requests && requests.length > 0 && (
-          <img className='RequestSpinner-Icon'
-            src='../public/img/nct-coin.png'
-            alt={strings.token}/>
-        )}
+      <span className="RequestSpinner">
+        {requests &&
+          requests.length > 0 && (
+            <img
+              className="RequestSpinner-Icon"
+              src="../public/img/nct-coin.png"
+              alt={strings.token}
+            />
+          )}
       </span>
     );
   }
-
 }
 RequestSpinner.proptypes = {
   requests: PropTypes.array

@@ -8,11 +8,16 @@ class RemoveButton extends Component {
     this.onClickHandler = this.onClickHandler.bind(this);
   }
 
-  render () {
-    const { props: { children } } = this;
+  render() {
+    const {
+      props: { children }
+    } = this;
     return (
-      <button { ...this.props} className='Remove-Button'
-        onClick={this.onClickHandler}>
+      <button
+        {...this.props}
+        className="Remove-Button"
+        onClick={this.onClickHandler}
+      >
         {children}
       </button>
     );
@@ -20,7 +25,9 @@ class RemoveButton extends Component {
 
   onClickHandler(e) {
     e.stopPropagation();
-    const { props: { onClick } } = this;
+    const {
+      props: { onClick }
+    } = this;
     if (onClick) {
       onClick();
     }
@@ -28,7 +35,7 @@ class RemoveButton extends Component {
 }
 
 RemoveButton.proptypes = {
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired
 };
 
 export default RemoveButton;

@@ -11,15 +11,16 @@ import StatRow from '../StatRow';
 import strings from './strings';
 
 class OfferMessageList extends Component {
-
   render() {
-    const { props: { offer } } = this;
+    const {
+      props: { offer }
+    } = this;
     const messages = offer.messages || [];
     messages.sort((a, b) => b.sequence - a.sequence);
     return (
-      <div className='OfferMessageList'>
+      <div className="OfferMessageList">
         <ul>
-          {messages.map((message) => {
+          {messages.map(message => {
             let card = null;
             if (message.type === 'request') {
               card = this.renderRequest(message);
@@ -29,14 +30,12 @@ class OfferMessageList extends Component {
               // payment
               card = this.renderPayment(message);
             }
-            return (card);
+            return card;
           })}
         </ul>
-        {( messages.length === 0) && (
-          <div className='OfferMessageList-Placeholder'>
-            <h3>
-              {strings.empty}
-            </h3>
+        {messages.length === 0 && (
+          <div className="OfferMessageList-Placeholder">
+            <h3>{strings.empty}</h3>
           </div>
         )}
       </div>
@@ -46,17 +45,14 @@ class OfferMessageList extends Component {
   renderRequest(message) {
     const artifacts = message.artifacts;
     const artifactList = artifacts
-      .map((artifact) => artifact.name)
+      .map(artifact => artifact.name)
       .reduce((accumulator, name) => `${accumulator}, ${name}`);
-    return(
+    return (
       <Card key={message.sequence}>
-        <CardHeader
-          title={strings.request}
-        />
+        <CardHeader title={strings.request} />
         <CardContent>
           <ul>
-            <StatRow title={strings.files}
-              content={artifactList}/>
+            <StatRow title={strings.files} content={artifactList} />
           </ul>
         </CardContent>
       </Card>
@@ -66,12 +62,14 @@ class OfferMessageList extends Component {
   renderAssertion(message) {
     const artifacts = message.artifacts || [];
     const verdicts = message.verdicts || [];
-    const worstVerdict = verdicts.reduce((accumulator, verdict) => accumulator || verdict);
+    const worstVerdict = verdicts.reduce(
+      (accumulator, verdict) => accumulator || verdict
+    );
     const verdictClass = classNames({
       'Assertion-Malignant': worstVerdict,
       'Assertion-Benign': !worstVerdict
     });
-    return(
+    return (
       <Card key={message.sequence}>
         <CardHeader
           additionalClasses={verdictClass}
@@ -79,16 +77,17 @@ class OfferMessageList extends Component {
         />
         <CardContent>
           <ul>
-            <StatRow title={strings.metadata}
-              content={message.metadata}/>
-            {artifacts && artifacts.map((artifact, index) => {
-              return (
-                <StatRow 
-                  key={artifact.name}
-                  title={artifact.name}
-                  content={verdicts[index] ? strings.malicious : strings.safe}/>
-              );
-            })}
+            <StatRow title={strings.metadata} content={message.metadata} />
+            {artifacts &&
+              artifacts.map((artifact, index) => {
+                return (
+                  <StatRow
+                    key={artifact.name}
+                    title={artifact.name}
+                    content={verdicts[index] ? strings.malicious : strings.safe}
+                  />
+                );
+              })}
           </ul>
         </CardContent>
       </Card>
@@ -97,7 +96,7 @@ class OfferMessageList extends Component {
 
   renderPayment(message) {
     const amount = web3Utils.fromWei(message.amount);
-    return(
+    return (
       <Card key={message.sequence}>
         <CardHeader
           title={strings.payment}
@@ -109,6 +108,6 @@ class OfferMessageList extends Component {
 }
 
 OfferMessageList.proptypes = {
-  offer: PropTypes.object.isRequired,
+  offer: PropTypes.object.isRequired
 };
 export default OfferMessageList;

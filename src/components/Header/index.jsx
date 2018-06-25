@@ -15,7 +15,9 @@ class Header extends Component {
   }
 
   render() {
-    const { props: { title, back, requests, actions: a, wallet, address } } = this;
+    const {
+      props: { title, back, requests, actions: a, wallet, address }
+    } = this;
     let image_path = '../public/img/polyswarm-white.svg';
     if (back) {
       image_path = '../public/img/back-arrow.svg';
@@ -25,36 +27,41 @@ class Header extends Component {
     const eth = `${wallet.homeEth}${strings.eth}`;
     const together = address + nct + eth;
 
-    const ratio = address && address.length > 0 && wallet.homeEth.length > 0 && wallet.homeNct.length > 0 ? 120 / together.length : -1;
+    const ratio =
+      address &&
+      address.length > 0 &&
+      wallet.homeEth.length > 0 &&
+      wallet.homeNct.length > 0
+        ? 120 / together.length
+        : -1;
     const actions = a || [];
 
     return (
-      <header className='Header'>
-        <div className='Header-Row'>
-          <div className='Header-Title'>
-            <img onClick={this.onBack}
-              className='Header-Logo'
+      <header className="Header">
+        <div className="Header-Row">
+          <div className="Header-Title">
+            <img
+              onClick={this.onBack}
+              className="Header-Logo"
               src={image_path}
-              alt={strings.logo}/>
+              alt={strings.logo}
+            />
             <h3>{title}</h3>
-            <RequestSpinner requests={requests}/>
+            <RequestSpinner requests={requests} />
           </div>
-          <div className='Header-Actions'>
-            {actions.slice(0, 2).map((action) => {
-              return(
-                <Button key={action.title}
-                  onClick={action.onClick}
-                  header>
+          <div className="Header-Actions">
+            {actions.slice(0, 2).map(action => {
+              return (
+                <Button key={action.title} onClick={action.onClick} header>
                   {action.title}
                 </Button>
               );
             })}
             {actions.slice(2).length > 0 && (
               <Dropdown light>
-                {actions.slice(2).map((action) => {
-                  return(
-                    <p key={action.title}
-                      onClick={action.onClick}>
+                {actions.slice(2).map(action => {
+                  return (
+                    <p key={action.title} onClick={action.onClick}>
                       {action.title}
                     </p>
                   );
@@ -63,18 +70,16 @@ class Header extends Component {
             )}
           </div>
         </div>
-        <div className='Header-Address'>
+        <div className="Header-Address">
           {ratio > 0 && (
             <React.Fragment>
-              <p className='Header-Divided' style={{'fontSize' : `${ratio}vw`}}>
+              <p className="Header-Divided" style={{ fontSize: `${ratio}vw` }}>
                 {address}
               </p>
-              <p className='Header-Divided' style={{'fontSize' : `${ratio}vw`}}>
+              <p className="Header-Divided" style={{ fontSize: `${ratio}vw` }}>
                 {nct}
               </p>
-              <p style={{'fontSize' : `${ratio}vw`}}>
-                {eth}
-              </p>
+              <p style={{ fontSize: `${ratio}vw` }}>{eth}</p>
             </React.Fragment>
           )}
         </div>
@@ -83,22 +88,28 @@ class Header extends Component {
   }
 
   onBack() {
-    const { props: { onBack } } = this;
-    if(onBack) {
+    const {
+      props: { onBack }
+    } = this;
+    if (onBack) {
       onBack();
-    } 
+    }
   }
 
   onBountyClickHandler() {
-    const { props: { onClick } } = this;
-    if(onClick) {
+    const {
+      props: { onClick }
+    } = this;
+    if (onClick) {
       onClick();
     }
   }
 
   onOfferClickHandler() {
-    const { props: { onOfferClick } } = this;
-    if(onOfferClick) {
+    const {
+      props: { onOfferClick }
+    } = this;
+    if (onOfferClick) {
       onOfferClick();
     }
   }
@@ -112,6 +123,6 @@ Header.propTypes = {
   onRequestWalletChange: PropTypes.func,
   requests: PropTypes.array,
   wallet: PropTypes.object,
-  address: PropTypes.string,
+  address: PropTypes.string
 };
 export default Header;

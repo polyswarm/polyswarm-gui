@@ -33,36 +33,47 @@ class OfferPay extends Component {
   }
 
   componentDidMount() {
-    const { props: { url } } = this;
+    const {
+      props: { url }
+    } = this;
     this.http = new HttpOfferPay(url);
   }
 
   render() {
-    const { state: { reward, reward_error } } = this;
-    const { props: { offer, wallet, address, requestsInProgress, onBackPressed, } } = this;
+    const {
+      state: { reward, reward_error }
+    } = this;
+    const {
+      props: { offer, wallet, address, requestsInProgress, onBackPressed }
+    } = this;
 
     const title = strings.title + offer.expert;
-    
+
     return (
-      <div className='OfferPay'>
-        <Header title={title}
+      <div className="OfferPay">
+        <Header
+          title={title}
           requests={requestsInProgress}
           back={true}
           onBack={onBackPressed}
           address={address}
-          wallet={wallet}/>
-        <div className='OfferPay-Content'>
-          <div className='OfferPay-Center'>
+          wallet={wallet}
+        />
+        <div className="OfferPay-Content">
+          <div className="OfferPay-Center">
             <h2>{strings.instructions}</h2>
-            <AnimatedInput type='number'
+            <AnimatedInput
+              type="number"
               onChange={this.onRewardChanged}
               error={reward_error}
               placeholder={strings.reward}
-              input_id='reward'/>
-            <div className='OfferPay-Upload'>
+              input_id="reward"
+            />
+            <div className="OfferPay-Upload">
               <Button
                 disabled={!reward || reward_error}
-                onClick={this.onClickHandler}>
+                onClick={this.onClickHandler}
+              >
                 {strings.pay}
               </Button>
             </div>
@@ -75,16 +86,20 @@ class OfferPay extends Component {
   onClickHandler() {
     this.payExpert();
   }
-  
+
   onRewardChanged(reward) {
-    this.setState({reward: reward}, () => {
+    this.setState({ reward: reward }, () => {
       this.validateFields();
     });
   }
 
   payExpert() {
-    const { state: {reward, reward_error } } = this;
-    const { props: { offer, onBackPressed, encryptionKey, onAddMessage } } = this;
+    const {
+      state: { reward, reward_error }
+    } = this;
+    const {
+      props: { offer, onBackPressed, encryptionKey, onAddMessage }
+    } = this;
 
     const rewardWei = web3Utils.toWei(reward);
     const sequence = offer.nextSequence;
@@ -118,7 +133,9 @@ class OfferPay extends Component {
           this.setState({ error: errorMessage });
 
           //Update app
-          const { props: {  onError } } = this;
+          const {
+            props: { onError }
+          } = this;
           if (onError) {
             onError(errorMessage);
           }
@@ -146,16 +163,27 @@ class OfferPay extends Component {
   }
 
   validateFields() {
-    const {state: {reward}} = this;
-    const {props: {last}} = this;
+    const {
+      state: { reward }
+    } = this;
+    const {
+      props: { last }
+    } = this;
     const min = new BigNumber('0');
     const lastPay = new BigNumber(last);
-    if (reward && new BigNumber(web3Utils.toWei(reward)).comparedTo(min) <= 0 ) {
-      this.setState({reward_error: 'Reward must be more than 0 NCT.'});
-    } else if (reward && new BigNumber(web3Utils.toWei(reward)).comparedTo(lastPay) <= 0 ) {
-      this.setState({reward_error: `Reward must be higher than last payment of ${web3Utils.fromWei(last)}.`});
+    if (reward && new BigNumber(web3Utils.toWei(reward)).comparedTo(min) <= 0) {
+      this.setState({ reward_error: 'Reward must be more than 0 NCT.' });
+    } else if (
+      reward &&
+      new BigNumber(web3Utils.toWei(reward)).comparedTo(lastPay) <= 0
+    ) {
+      this.setState({
+        reward_error: `Reward must be higher than last payment of ${web3Utils.fromWei(
+          last
+        )}.`
+      });
     } else {
-      this.setState({reward_error: null});
+      this.setState({ reward_error: null });
     }
   }
 }

@@ -1,5 +1,5 @@
 // Vendor imports
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 // Component imports
@@ -11,26 +11,34 @@ class FileButton extends Component {
   }
 
   render() {
-    const {props: {flat, multiple, children} } = this;
-    const labelClass = classNames({'flat': flat, 'LabelButton': !flat});
-    return(
+    const {
+      props: { flat, multiple, children }
+    } = this;
+    const labelClass = classNames({ flat: flat, LabelButton: !flat });
+    return (
       <React.Fragment>
-        <input id='file'
-          ref={((input)=> this.input = input)}
-          className='hidden'
-          type='file'
+        <input
+          id="file"
+          ref={input => (this.input = input)}
+          className="hidden"
+          type="file"
           onChange={this.onFileChanged}
-          multiple={multiple}/>
-        <label 
-          className={labelClass}
-          htmlFor='file'>{children}</label>
+          multiple={multiple}
+        />
+        <label className={labelClass} htmlFor="file">
+          {children}
+        </label>
       </React.Fragment>
     );
   }
 
   onFileChanged(event) {
-    const {onFileSelected} = this.props;
-    if (onFileSelected && event.target.files && event.target.files.length >= 1) {
+    const { onFileSelected } = this.props;
+    if (
+      onFileSelected &&
+      event.target.files &&
+      event.target.files.length >= 1
+    ) {
       const files = [];
       for (var i = 0; i < event.target.files.length; i++) {
         files.push(event.target.files[i]);
@@ -43,6 +51,6 @@ class FileButton extends Component {
 
 FileButton.propTypes = {
   onFileSelected: PropTypes.func,
-  multiple: PropTypes.bool,
+  multiple: PropTypes.bool
 };
 export default FileButton;

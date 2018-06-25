@@ -1,5 +1,5 @@
 // Vendor imports
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // Bounty imports
 import FileButton from '../FileButton';
@@ -17,19 +17,21 @@ class DropTarget extends Component {
   }
 
   render() {
-    return(
-      <div className='Drop-Target'
-        ref={(target) => {this.target = target;}}
+    return (
+      <div
+        className="Drop-Target"
+        ref={target => {
+          this.target = target;
+        }}
         onDrop={this.onDropHandler}
         onDragOver={this.onDragOverHandler}
         onDragEnter={this.onDragEnterHandler}
-        onDragLeave={this.onDragLeaveHandler}>
+        onDragLeave={this.onDragLeaveHandler}
+      >
         <div>
           <p>{strings.dragAndDrop}</p>
           <form>
-            <FileButton 
-              multiple
-              onFileSelected={this.onFileSelectedHandler}>
+            <FileButton multiple onFileSelected={this.onFileSelectedHandler}>
               {strings.selectFile}
             </FileButton>
           </form>
@@ -39,7 +41,9 @@ class DropTarget extends Component {
   }
 
   onDropHandler(event) {
-    const { props: { onFilesSelected } } = this;
+    const {
+      props: { onFilesSelected }
+    } = this;
     // Don't want file to open
     event.preventDefault();
 
@@ -82,7 +86,9 @@ class DropTarget extends Component {
   }
 
   onFileSelectedHandler(file) {
-    const { props: { onFilesSelected } } = this;
+    const {
+      props: { onFilesSelected }
+    } = this;
     if (onFilesSelected) {
       onFilesSelected(file);
     }
@@ -98,6 +104,6 @@ class DropTarget extends Component {
 }
 
 DropTarget.propTypes = {
-  onFilesSelected: PropTypes.func,
+  onFilesSelected: PropTypes.func
 };
 export default DropTarget;

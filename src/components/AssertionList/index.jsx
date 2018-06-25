@@ -6,35 +6,39 @@ import AssertionRow from '../AssertionRow';
 import strings from './strings';
 
 class AssertionList extends Component {
-
   render() {
-    const { props: { bounty } } = this;
+    const {
+      props: { bounty }
+    } = this;
     const artifacts = bounty.artifacts || [];
     const assertions = bounty.assertions || [];
-    
+
     return (
-      <div className='AssertionList'>
+      <div className="AssertionList">
         <ul>
-          {
-            /*
+          {/*
               * FIXME We need some sort of time/block number for the assertions.
               * Using index in the key, is bad form (and issues warnings.)
               */
-            assertions.map((assertion, index) => {
-              return (
-                <AssertionRow
-                  key={assertion.author+assertion.bid+assertion.metadata+assertion.verdict+index}
-                  assertion={assertion}
-                  artifacts={artifacts}/>
-              );
-            })
-          }
+          assertions.map((assertion, index) => {
+            return (
+              <AssertionRow
+                key={
+                  assertion.author +
+                  assertion.bid +
+                  assertion.metadata +
+                  assertion.verdict +
+                  index
+                }
+                assertion={assertion}
+                artifacts={artifacts}
+              />
+            );
+          })}
         </ul>
-        {( assertions.length === 0) && (
-          <div className='Assertion-Placeholder'>
-            <h3>
-              {strings.empty}
-            </h3>
+        {assertions.length === 0 && (
+          <div className="Assertion-Placeholder">
+            <h3>{strings.empty}</h3>
           </div>
         )}
       </div>
@@ -42,6 +46,6 @@ class AssertionList extends Component {
   }
 }
 AssertionRow.proptypes = {
-  bounty: PropTypes.object.isRequired,
+  bounty: PropTypes.object.isRequired
 };
 export default AssertionList;

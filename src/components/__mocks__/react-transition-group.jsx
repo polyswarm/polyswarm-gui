@@ -5,23 +5,18 @@ import PropTypes from 'prop-types';
 class CSSTransition extends Component {
   render() {
     const show = this.props.in;
-    const {props: {children}} = this;
-    return (
-      <div>
-        {show && (
-          <div>
-            {children('entered')}
-          </div>
-        )}
-      </div>
-    );
+    const {
+      props: { children }
+    } = this;
+    return <div>{show && <div>{children('entered')}</div>}</div>;
   }
 
   onExited() {
-    const {props: {onExited}} = this;
+    const {
+      props: { onExited }
+    } = this;
     onExited();
   }
-
 }
 CSSTransition.proptypes = {
   children: PropTypes.func
@@ -29,22 +24,20 @@ CSSTransition.proptypes = {
 
 class TransitionGroup extends Component {
   render() {
-    const {props: {children}} = this;
+    const {
+      props: { children }
+    } = this;
     let modified;
     if (children != null) {
       modified = React.Children.map(children, child => {
         if (child != null) {
-          return React.cloneElement(child, {in: true});
+          return React.cloneElement(child, { in: true });
         } else {
           return child;
         }
       });
     }
-    return(
-      <div>
-        {modified}
-      </div>
-    );
+    return <div>{modified}</div>;
   }
 }
-export {CSSTransition, TransitionGroup};
+export { CSSTransition, TransitionGroup };
