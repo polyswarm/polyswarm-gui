@@ -106,7 +106,7 @@ This application uses Electron to operate as a desktop application, no browser r
 
 Start geth with `geth --rpc --rpcapi "eth,web3,personal,net" --ws --wsaddr "0.0.0.0" --wsport 8546 --wsapi "eth,web3,personal,net,debug" --wsorigins "*"`
 
-We expect geth rpc top be on 8545 and IPFS on 5001.
+We expect geth rpc to be on 8545 and IPFS on 5001.
 
 Once everything is running & configured, run `polyswarm-gui` to launch the application.
 
