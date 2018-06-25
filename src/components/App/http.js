@@ -362,9 +362,8 @@ class HttpApp {
     websocket.on('connection', ws => {
       ws.onmessage = event => {
         const data = JSON.parse(event.data);
-        console.info(data);
 
-        const { fromSocketUri: websocket, state, v, r, s } = data;
+        const { from_socket: websocket, state, v, r, s } = data;
 
         let hash =
           '0x' + etherutils.keccak(etherutils.toBuffer(state)).toString('hex');

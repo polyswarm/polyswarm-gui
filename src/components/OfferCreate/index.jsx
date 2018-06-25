@@ -131,7 +131,7 @@ class OfferCreate extends Component {
   createOffer() {
     const { state: {expert, expert_error, reward, reward_error, duration,
       duration_error, port, port_error} } = this;
-    const { props: { addOffer, address, onOfferCreated, encryptionKey, token } } = this;
+    const { props: { addOffer, address, onOfferCreated, encryptionKey } } = this;
 
     const rewardWei = web3Utils.toWei(reward);
 
@@ -155,7 +155,9 @@ class OfferCreate extends Component {
           }
           return result;
         })
-        .then((result) => http.openOffer(encryptionKey, token, result, rewardWei))
+        .then((result) => {
+          return http.openOffer(encryptionKey, result, rewardWei);
+        })
         .catch(error => {
           this.setState({creating: false});
           let errorMessage;
