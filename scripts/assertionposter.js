@@ -48,7 +48,7 @@ wss.on('connection', function connection(ws) {
 const ws = new WebSocket('ws://localhost:8989');
 
 ws.onopen = () => {
-  const enc_key = keythereum.importFromFile('0x18AA9b01E74981004f190E1066BaC5fD78222b28',
+  const enc_key = keythereum.importFromFile('0x18aa9b01e74981004f190e1066bac5fd78222b28',
     '/home/user/.ethereum/priv_testnet');
   const key = keythereum.recover('password', enc_key);/*, key => {
     resolve(key);
@@ -84,8 +84,8 @@ ws.onopen = () => {
   let v = sig.v;
 
   const body = JSON.stringify({
-    toSocketUri: `ws://${ip.address()}:8989`,
-    fromSocketUri: `ws://${ip.address()}:9090`,
+    to_socket: `ws://${ip.address()}:8989`,
+    from_socket: `ws://${ip.address()}:9090`,
     state,
     v,
     r,
